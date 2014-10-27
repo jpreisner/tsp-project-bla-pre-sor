@@ -83,6 +83,7 @@ public class GraphManager {
 		}	
 	}
 
+	/* Trouvée sur internet, à changer peut-ètre*/
 	private static void setConstraint3(Graph graph, IloCplex cplex, IloNumVar[][] x) {
 		try {
 			IloNumVar[] u = cplex.numVarArray(graph.getNbNode(), 0, Double.MAX_VALUE);

@@ -4,8 +4,8 @@ import java.util.List;
 
 public class Vertex {
 	
-	public int name;
-	public List<Edge> listEdge;
+	private int name;
+	private List<Edge> listEdge;
 
 	public Vertex(int name, List<Edge> listEdge) {
 		super();

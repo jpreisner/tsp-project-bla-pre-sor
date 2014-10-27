@@ -19,7 +19,7 @@ public class XmlReader {
 		SAXBuilder sxb = new SAXBuilder();
 		Document document = null;
 		try {
-			document = sxb.build(new File("br17.xml"));
+			document = sxb.build(new File(path));
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -62,6 +62,6 @@ public class XmlReader {
 	}
 
 	public static void main(String[] args) {
-		buildGraphFromXml(null);
+		buildGraphFromXml("br17.xml");
 	}
 }

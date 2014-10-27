@@ -16,6 +16,9 @@ import pne.project.tsp.beans.Graph;
 public class XmlReader {
 
 	public static Graph buildGraphFromXml(String path) {
+		//FIXME taille dynamique
+		double[][] tabInt = new double[50][50];
+			
 		SAXBuilder sxb = new SAXBuilder();
 		Document document = null;
 		try {
@@ -27,7 +30,7 @@ public class XmlReader {
 
 		Element racine = document.getRootElement();
 		List<Element> graph = racine.getChildren("graph");
-
+		int i=1;
 		/* Vertex */
 		for (Element elemGraph : graph) {
 			List<Content> listVertex = elemGraph.getContent();
@@ -51,17 +54,21 @@ public class XmlReader {
 								e.printStackTrace();
 							}
 							int node = Integer.parseInt(Edge.getValue());
-							System.out.println("Cout pour le noeud : "+node+", "+costToLink+".");
+							tabInt[i-1][node] = costToLink;
+							System.out.println("Cout du noeud "+i+" au noeud : "+node+",  "+costToLink+".");
 						}
 					}	
+					i++;
+
 				}
 			}
 
 		}
-		return null;
+		Graph result = new Graph(tabInt);
+		return result ;
 	}
 
 	public static void main(String[] args) {
-		buildGraphFromXml("br17.xml");
+		buildGraphFromXml("att48.xml");
 	}
 }

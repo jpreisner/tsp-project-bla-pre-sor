@@ -12,6 +12,7 @@ import org.jdom2.Element;
 import org.jdom2.input.SAXBuilder;
 
 import pne.project.tsp.beans.Graph;
+import pne.project.tsp.managers.GraphManager;
 
 public class XmlReader {
 
@@ -58,7 +59,7 @@ public class XmlReader {
 							}
 							int node = Integer.parseInt(Edge.getValue());
 							tabInt[i-1][node] = costToLink;
-							System.out.println("Cout du noeud "+i+" au noeud : "+node+",  "+costToLink+".");
+//							System.out.println("Cout du noeud "+i+" au noeud : "+node+",  "+costToLink+".");
 						}
 					}	
 					i++;
@@ -72,6 +73,7 @@ public class XmlReader {
 	}
 
 	public static void main(String[] args) {
-		buildGraphFromXml("att48.xml");
+		Graph g1 = buildGraphFromXml("att48.xml");
+		GraphManager.writeLinearProgram(g1,"D:/result.txt");
 	}
 }

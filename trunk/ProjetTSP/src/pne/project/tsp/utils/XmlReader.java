@@ -16,9 +16,6 @@ import pne.project.tsp.beans.Graph;
 public class XmlReader {
 
 	public static Graph buildGraphFromXml(String path) {
-		//FIXME taille dynamique
-		double[][] tabInt = new double[50][50];
-			
 		SAXBuilder sxb = new SAXBuilder();
 		Document document = null;
 		try {
@@ -30,6 +27,12 @@ public class XmlReader {
 
 		Element racine = document.getRootElement();
 		List<Element> graph = racine.getChildren("graph");
+		
+		String[] sGraphSize = racine.getChild("description").getValue().split(" ");
+		int graphSize = Integer.parseInt(sGraphSize[0]);
+		double[][] tabInt = new double[graphSize][graphSize];
+
+		
 		int i=1;
 		/* Vertex */
 		for (Element elemGraph : graph) {
@@ -64,7 +67,7 @@ public class XmlReader {
 			}
 
 		}
-		Graph result = new Graph(tabInt);
+		Graph result = new Graph(tabInt,graphSize);
 		return result ;
 	}
 

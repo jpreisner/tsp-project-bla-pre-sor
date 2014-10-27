@@ -24,6 +24,7 @@ public class TPex1 {
             cplex.output().println(x[0]);
             cplex.output().println(x[1]);
             cplex.output().println(x[2]);
+            System.out.println("bit");
 
     
          }

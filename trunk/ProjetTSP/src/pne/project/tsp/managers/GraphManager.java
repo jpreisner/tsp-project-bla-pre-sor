@@ -8,23 +8,28 @@ import pne.project.tsp.beans.Graph;
 
 public class GraphManager {
 
-	public static void writeLinearProgram(Graph graph,String pathFileToExport) {
+	/**
+	 * Method called to write Linear program with graph in param and write it in file in param.
+	 * @param i_graph
+	 * @param o_pathFileToExport
+	 */
+	public static void writeLinearProgram(Graph i_graph,String o_pathFileToExport) {
 		IloCplex cplex;
 		try {
 			cplex = new IloCplex();
 
-			IloNumVar[][] x = new IloNumVar[graph.getNbNode()][];
-			for (int i = 0; i < graph.getNbNode(); i++) {
-				x[i] = cplex.boolVarArray(graph.getNbNode());
+			IloNumVar[][] x = new IloNumVar[i_graph.getNbNode()][];
+			for (int i = 0; i < i_graph.getNbNode(); i++) {
+				x[i] = cplex.boolVarArray(i_graph.getNbNode());
 			}
 
-			setObjectiveFonction(graph, cplex, x);
-			setConstraint1(graph, cplex, x);
-			setConstraint2(graph, cplex, x);
-			setConstraint3(graph, cplex,x);
+			setObjectiveFonction(i_graph, cplex, x);
+			setConstraint1(i_graph, cplex, x);
+			setConstraint2(i_graph, cplex, x);
+			setConstraint3(i_graph, cplex,x);
 			
 			cplex.solve();
-			cplex.writeSolution(pathFileToExport);
+			cplex.writeSolution(o_pathFileToExport);
 			
 			cplex.end();
 		} catch (IloException e) {
@@ -32,6 +37,12 @@ public class GraphManager {
 		}
 	}
 
+	/**
+	 * Write objective function
+	 * @param graph
+	 * @param cplex
+	 * @param x
+	 */
 	private static void setObjectiveFonction(Graph graph, IloCplex cplex, IloNumVar[][] x) {
 		IloLinearNumExpr objectiveFunction;
 		try {
@@ -51,6 +62,12 @@ public class GraphManager {
 		}
 	}
 
+	/**
+	 * Write the first constraint : each node have only one edge going out
+	 * @param graph
+	 * @param cplex
+	 * @param x
+	 */
 	private static void setConstraint1(Graph graph, IloCplex cplex, IloNumVar[][] x) {
 		try {
 			for (int i = 0; i < graph.getNbNode(); i++) {
@@ -67,6 +84,12 @@ public class GraphManager {
 		}
 	}
 
+	/**
+	 * Write the second constraint : each node have only one edge going in
+	 * @param graph
+	 * @param cplex
+	 * @param x
+	 */
 	private static void setConstraint2(Graph graph, IloCplex cplex, IloNumVar[][] x) {
 		try {
 			for (int j = 0; j < graph.getNbNode(); j++) {
@@ -83,7 +106,12 @@ public class GraphManager {
 		}	
 	}
 
-	/* Trouvée sur internet, à changer peut-ètre*/
+	/**
+	 * Write the third constraint : the path chozen does'nt contains sub-cycle in it.
+	 * @param graph
+	 * @param cplex
+	 * @param x
+	 */
 	private static void setConstraint3(Graph graph, IloCplex cplex, IloNumVar[][] x) {
 		try {
 			IloNumVar[] u = cplex.numVarArray(graph.getNbNode(), 0, Double.MAX_VALUE);
@@ -103,4 +131,5 @@ public class GraphManager {
 			e.printStackTrace();
 		}	
 	}
+
 }

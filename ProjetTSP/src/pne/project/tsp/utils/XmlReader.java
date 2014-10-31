@@ -16,27 +16,43 @@ import pne.project.tsp.managers.GraphManager;
 
 public class XmlReader {
 
-	public static Graph buildGraphFromXml(String path) {
+	/**
+	 * 
+	 * @param filePath
+	 * @return Graph obtains from xml file in param.
+	 */
+	public static Graph buildGraphFromXml(String filePath) {
 		SAXBuilder sxb = new SAXBuilder();
 		Document document = null;
 		try {
-			document = sxb.build(new File(path));
+			document = sxb.build(new File(filePath));
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		Element racine = document.getRootElement();
-		List<Element> graph = racine.getChildren("graph");
+		Element rootElement = document.getRootElement();
+		List<Element> i_graphElement = rootElement.getChildren("graph");
 		
-		String[] sGraphSize = racine.getChild("description").getValue().split(" ");
-		int graphSize = Integer.parseInt(sGraphSize[0]);
-		double[][] tabInt = new double[graphSize][graphSize];
+		String[] sGraphSize = rootElement.getChild("description").getValue().split(" ");
+		int iGraphSize = Integer.parseInt(sGraphSize[0]);
+		double[][] io_tabInt = new double[iGraphSize][iGraphSize];
+		
+		return fillGraphWithParam(i_graphElement,io_tabInt, iGraphSize);		
 
-		
+	}
+
+	/**
+	 * 
+	 * @param i_graphElement
+	 * @param io_tabInt
+	 * @param iGraphSize
+	 * @return Graph with tableAdja
+	 */
+	private static Graph fillGraphWithParam(List<Element> i_graphElement, double[][] io_tabInt, int iGraphSize) {
 		int i=1;
 		/* Vertex */
-		for (Element elemGraph : graph) {
+		for (Element elemGraph : i_graphElement) {
 			List<Content> listVertex = elemGraph.getContent();
 
 			/* Vertex */
@@ -54,26 +70,23 @@ public class XmlReader {
 							try {
 								costToLink = cost.getDoubleValue();
 							} catch (DataConversionException e) {
-								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
 							int node = Integer.parseInt(Edge.getValue());
-							tabInt[i-1][node] = costToLink;
-//							System.out.println("Cout du noeud "+i+" au noeud : "+node+",  "+costToLink+".");
+							io_tabInt[i-1][node] = costToLink;
+							System.out.println("Cout du noeud "+i+" au noeud : "+node+",  "+costToLink+".");
 						}
 					}	
 					i++;
-
 				}
 			}
-
 		}
-		Graph result = new Graph(tabInt,graphSize);
-		return result ;
+		Graph result = new Graph(io_tabInt,iGraphSize);
+		return result ;		
 	}
 
 	public static void main(String[] args) {
-		Graph g1 = buildGraphFromXml("att48.xml");
-		GraphManager.writeLinearProgram(g1,"D:/result.txt");
+		Graph g1 = buildGraphFromXml("att4.xml");
+		GraphManager.writeLinearProgram(g1,"D:/results.txt");
 	}
 }

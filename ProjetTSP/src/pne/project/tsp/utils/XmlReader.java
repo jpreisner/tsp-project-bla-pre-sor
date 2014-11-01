@@ -50,7 +50,7 @@ public class XmlReader {
 	 * @return Graph with tableAdja
 	 */
 	private static Graph fillGraphWithParam(List<Element> i_graphElement, double[][] io_tabInt, int iGraphSize) {
-		int i=1;
+		int i=0;
 		/* Vertex */
 		for (Element elemGraph : i_graphElement) {
 			List<Content> listVertex = elemGraph.getContent();
@@ -73,8 +73,8 @@ public class XmlReader {
 								e.printStackTrace();
 							}
 							int node = Integer.parseInt(Edge.getValue());
-							io_tabInt[i-1][node] = costToLink;
-							System.out.println("Cout du noeud "+(i-1)+" au noeud : "+node+",  "+costToLink+".");
+							io_tabInt[i][node] = costToLink;
+							System.out.println("Cout du noeud "+(i)+" au noeud : "+node+",  "+costToLink+".");
 						}
 					}	
 					i++;
@@ -86,7 +86,7 @@ public class XmlReader {
 	}
 
 	public static void main(String[] args) {
-		Graph g1 = buildGraphFromXml("att4.xml");
+		Graph g1 = buildGraphFromXml("br17.xml");
 		GraphManager.writeLinearProgram(g1,"D:/results.txt");
 	}
 }

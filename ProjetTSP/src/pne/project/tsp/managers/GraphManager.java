@@ -27,16 +27,17 @@ public class GraphManager {
 			for (int i = 0; i < i_graph.getNbNode(); i++) {
 				x[i] = cplex.boolVarArray(i_graph.getNbNode(),varName[i]);
 			}
+			IloNumVar[] u = cplex.numVarArray(i_graph.getNbNode(), 0, Double.MAX_VALUE);
 
-			for (int i = 0; i < i_graph.getNbNode(); i++) {
-				for (int j = 0; j < i_graph.getNbNode(); j++) {
-					System.out.println("i = "+i+",j = "+j+x[i][j]);
-				}
-			}
+//			for (int i = 0; i < i_graph.getNbNode(); i++) {
+//				for (int j = 0; j < i_graph.getNbNode(); j++) {
+//					System.out.println("i = "+i+",j = "+j+x[i][j]);
+//				}
+//			}
 			setObjectiveFonction(i_graph, cplex, x);
-			setConstraint1(i_graph, cplex, x);
-			setConstraint2(i_graph, cplex, x);
-			setConstraint3(i_graph, cplex,x);
+			setConstraintOuterEdge(i_graph, cplex, x);
+			setConstraintInnerEdge(i_graph, cplex, x);
+			setConstraintSubCycle(i_graph, cplex,x,u);
 			
 			cplex.exportModel("lpex1.lp");
 			
@@ -52,7 +53,7 @@ public class GraphManager {
 	private static void initVarNameTab(int nbNode, String[][] varName) {
 		for(int i=0;i<nbNode;i++){
 			for(int j=0;j<nbNode;j++){
-				varName[i][j]="x"+(i+1)+(j+1);
+				varName[i][j]="x"+i+";"+j;
 			}
 		}
 	}
@@ -88,7 +89,7 @@ public class GraphManager {
 	 * @param cplex
 	 * @param x
 	 */
-	private static void setConstraint1(Graph graph, IloCplex cplex, IloNumVar[][] x) {
+	private static void setConstraintOuterEdge(Graph graph, IloCplex cplex, IloNumVar[][] x) {
 		try {
 			for (int i = 0; i < graph.getNbNode(); i++) {
 				IloLinearNumExpr expr = cplex.linearNumExpr();
@@ -110,7 +111,7 @@ public class GraphManager {
 	 * @param cplex
 	 * @param x
 	 */
-	private static void setConstraint2(Graph graph, IloCplex cplex, IloNumVar[][] x) {
+	private static void setConstraintInnerEdge(Graph graph, IloCplex cplex, IloNumVar[][] x) {
 		try {
 			for (int j = 0; j < graph.getNbNode(); j++) {
 				IloLinearNumExpr expr = cplex.linearNumExpr();
@@ -131,18 +132,18 @@ public class GraphManager {
 	 * @param graph
 	 * @param cplex
 	 * @param x
+	 * @param u 
 	 */
-	private static void setConstraint3(Graph graph, IloCplex cplex, IloNumVar[][] x) {
+	private static void setConstraintSubCycle(Graph graph, IloCplex cplex, IloNumVar[][] x, IloNumVar[] u) {
 		try {
-			IloNumVar[] u = cplex.numVarArray(graph.getNbNode(), 0, Double.MAX_VALUE);
 
-			for (int i = 0; i < graph.getNbNode(); i++) {
-				for (int j = 0; j < graph.getNbNode(); j++) {
+			for (int i = 1; i < graph.getNbNode(); i++) {
+				for (int j = 1; j < graph.getNbNode(); j++) {
 					if (i != j) {
 						IloLinearNumExpr expr = cplex.linearNumExpr();
 						expr.addTerm(1.0, u[i]);
 						expr.addTerm(-1.0, u[j]);
-						expr.addTerm(1.0, x[i][j]);
+						expr.addTerm(graph.getNbNode()-1, x[i][j]);
 						cplex.addLe(expr, graph.getNbNode()-2);
 					}
 				}

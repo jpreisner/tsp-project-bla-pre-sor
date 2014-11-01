@@ -19,14 +19,26 @@ public class GraphManager {
 			cplex = new IloCplex();
 
 			IloNumVar[][] x = new IloNumVar[i_graph.getNbNode()][];
+			
+			/* Variables Initialisation*/
+			String[][] varName = new String[i_graph.getNbNode()][i_graph.getNbNode()];
+			initVarNameTab(i_graph.getNbNode(),varName);
+
 			for (int i = 0; i < i_graph.getNbNode(); i++) {
-				x[i] = cplex.boolVarArray(i_graph.getNbNode());
+				x[i] = cplex.boolVarArray(i_graph.getNbNode(),varName[i]);
 			}
 
+			for (int i = 0; i < i_graph.getNbNode(); i++) {
+				for (int j = 0; j < i_graph.getNbNode(); j++) {
+					System.out.println("i = "+i+",j = "+j+x[i][j]);
+				}
+			}
 			setObjectiveFonction(i_graph, cplex, x);
 			setConstraint1(i_graph, cplex, x);
 			setConstraint2(i_graph, cplex, x);
 			setConstraint3(i_graph, cplex,x);
+			
+			cplex.exportModel("lpex1.lp");
 			
 			cplex.solve();
 			cplex.writeSolution(o_pathFileToExport);
@@ -34,6 +46,14 @@ public class GraphManager {
 			cplex.end();
 		} catch (IloException e) {
 			e.printStackTrace();
+		}
+	}
+
+	private static void initVarNameTab(int nbNode, String[][] varName) {
+		for(int i=0;i<nbNode;i++){
+			for(int j=0;j<nbNode;j++){
+				varName[i][j]="x"+(i+1)+(j+1);
+			}
 		}
 	}
 

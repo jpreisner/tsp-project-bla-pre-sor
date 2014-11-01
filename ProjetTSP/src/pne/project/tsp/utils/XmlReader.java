@@ -74,7 +74,7 @@ public class XmlReader {
 							}
 							int node = Integer.parseInt(Edge.getValue());
 							io_tabInt[i-1][node] = costToLink;
-							System.out.println("Cout du noeud "+i+" au noeud : "+node+",  "+costToLink+".");
+							System.out.println("Cout du noeud "+(i-1)+" au noeud : "+node+",  "+costToLink+".");
 						}
 					}	
 					i++;

@@ -2,6 +2,8 @@ package pne.project.tsp.utils;
 
 import java.io.File;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.jdom2.Attribute;
 import org.jdom2.Content;
@@ -17,7 +19,6 @@ import pne.project.tsp.managers.GraphManager;
 public class XmlReader {
 
 	/**
-	 * 
 	 * @param filePath
 	 * @return Graph obtains from xml file in param.
 	 */
@@ -34,8 +35,13 @@ public class XmlReader {
 		Element rootElement = document.getRootElement();
 		List<Element> i_graphElement = rootElement.getChildren("graph");
 		
-		String[] sGraphSize = rootElement.getChild("description").getValue().split(" ");
-		int iGraphSize = Integer.parseInt(sGraphSize[0]);
+		/* finding graph size in filePath */
+		Pattern p = Pattern.compile("\\d+");
+		Matcher m = p.matcher(filePath); 
+		m.find();
+		int iGraphSize = Integer.parseInt(m.group());
+		
+
 		double[][] io_tabInt = new double[iGraphSize][iGraphSize];
 		
 		return fillGraphWithParam(i_graphElement,io_tabInt, iGraphSize);		
@@ -86,7 +92,7 @@ public class XmlReader {
 	}
 
 	public static void main(String[] args) {
-		Graph g1 = buildGraphFromXml("br17.xml");
+		Graph g1 = buildGraphFromXml("att48.xml");
 		GraphManager.writeLinearProgram(g1,"D:/results.txt");
 	}
 }

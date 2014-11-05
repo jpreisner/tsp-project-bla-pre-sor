@@ -1,4 +1,4 @@
-package pne.project.tsp.itf;
+package pne.project.tsp.view;
 
 public class GraphCanvas {
 

@@ -39,8 +39,7 @@ public class XmlReader {
 		Pattern p = Pattern.compile("\\d+");
 		Matcher m = p.matcher(filePath); 
 		m.find();
-		int iGraphSize = Integer.parseInt(m.group());
-		
+		int iGraphSize = Integer.parseInt(m.group());		
 
 		double[][] io_tabInt = new double[iGraphSize][iGraphSize];
 		
@@ -80,7 +79,7 @@ public class XmlReader {
 							}
 							int node = Integer.parseInt(Edge.getValue());
 							io_tabInt[i][node] = costToLink;
-							System.out.println("Cout du noeud "+(i)+" au noeud : "+node+",  "+costToLink+".");
+//							System.out.println("Cout du noeud "+(i)+" au noeud : "+node+",  "+costToLink+".");
 						}
 					}	
 					i++;
@@ -91,8 +90,4 @@ public class XmlReader {
 		return result ;		
 	}
 
-	public static void main(String[] args) {
-		Graph g1 = buildGraphFromXml("att48.xml");
-		GraphManager.writeLinearProgram(g1,"D:/results.txt");
-	}
 }

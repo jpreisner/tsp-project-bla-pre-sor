@@ -1,5 +1,7 @@
 package pne.project.tsp.managers;
 
+import java.util.ArrayList;
+
 import ilog.concert.IloException;
 import ilog.concert.IloLinearNumExpr;
 import ilog.concert.IloNumVar;
@@ -29,11 +31,6 @@ public class GraphManager {
 			}
 			IloNumVar[] u = cplex.numVarArray(i_graph.getNbNode(), 0, Double.MAX_VALUE);
 
-//			for (int i = 0; i < i_graph.getNbNode(); i++) {
-//				for (int j = 0; j < i_graph.getNbNode(); j++) {
-//					System.out.println("i = "+i+",j = "+j+x[i][j]);
-//				}
-//			}
 			setObjectiveFonction(i_graph, cplex, x);
 			setConstraintOuterEdge(i_graph, cplex, x);
 			setConstraintInnerEdge(i_graph, cplex, x);
@@ -50,6 +47,11 @@ public class GraphManager {
 		}
 	}
 
+	/**
+	 * Method called to initialize all edge variable names
+	 * @param nbNode
+	 * @param varName
+	 */
 	private static void initVarNameTab(int nbNode, String[][] varName) {
 		for(int i=0;i<nbNode;i++){
 			for(int j=0;j<nbNode;j++){
@@ -92,13 +94,13 @@ public class GraphManager {
 	private static void setConstraintOuterEdge(Graph graph, IloCplex cplex, IloNumVar[][] x) {
 		try {
 			for (int i = 0; i < graph.getNbNode(); i++) {
-				IloLinearNumExpr expr = cplex.linearNumExpr();
+				IloLinearNumExpr constraint = cplex.linearNumExpr();
 				for (int j = 0; j < graph.getNbNode(); j++) {
 					if (i != j) {
-						expr.addTerm(1.0, x[i][j]);
+						constraint.addTerm(1.0, x[i][j]);
 					}
 				}
-				cplex.addEq(1.0, expr);
+				cplex.addEq(1.0, constraint);
 			}
 		} catch (IloException e) {
 			e.printStackTrace();
@@ -114,13 +116,14 @@ public class GraphManager {
 	private static void setConstraintInnerEdge(Graph graph, IloCplex cplex, IloNumVar[][] x) {
 		try {
 			for (int j = 0; j < graph.getNbNode(); j++) {
-				IloLinearNumExpr expr = cplex.linearNumExpr();
+				IloLinearNumExpr constraint = cplex.linearNumExpr();
 				for (int i = 0; i < graph.getNbNode(); i++) {
 					if (i != j) {
-						expr.addTerm(1.0, x[i][j]);
+						constraint.addTerm(1.0, x[i][j]);
+//						System.out.println(x[i][j].getName().substring(1).split(";")[0]);
 					}
 				}
-				cplex.addEq(1.0, expr);
+				cplex.addEq(1.0, constraint);
 			}
 		} catch (IloException e) {
 			e.printStackTrace();
@@ -141,7 +144,7 @@ public class GraphManager {
 				for (int j = 1; j < graph.getNbNode(); j++) {
 					if (i != j) {
 						IloLinearNumExpr expr = cplex.linearNumExpr();
-						expr.addTerm(1.0, u[i]);
+						ArrayList<IloNumVar> test = new ArrayList<IloNumVar>();
 						expr.addTerm(-1.0, u[j]);
 						expr.addTerm(graph.getNbNode()-1, x[i][j]);
 						cplex.addLe(expr, graph.getNbNode()-2);

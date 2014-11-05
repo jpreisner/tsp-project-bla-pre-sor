@@ -19,6 +19,9 @@ public class Graph {
 		return nbNode;
 	}
 	
+	/**
+	 * @return Adjascence table of the graph
+	 */
 	public double[][] getTabAdja() {
 		return tabAdja;
 	}

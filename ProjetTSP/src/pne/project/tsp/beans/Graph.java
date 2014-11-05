@@ -2,8 +2,8 @@ package pne.project.tsp.beans;
 
 public class Graph {
 
-	double[][] tabAdja;
-	int nbNode;
+	private double[][] tabAdja;
+	private int nbNode;
 	
 	/**
 	 * Initial Constructor

@@ -5,7 +5,6 @@ import ilog.concert.IloLinearNumExpr;
 import ilog.concert.IloNumVar;
 import ilog.cplex.IloCplex;
 
-import java.awt.List;
 import java.util.ArrayList;
 
 import pne.project.tsp.beans.Graph;

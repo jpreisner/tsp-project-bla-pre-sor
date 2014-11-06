@@ -2,10 +2,10 @@ package pne.project.tsp.utils;
 
 public class BoundsGraph {
 
-	private int xMin;
-	private int xMax;
-	private int yMin;
-	private int yMax;
+	private double xMin;
+	private double xMax;
+	private double yMin;
+	private double yMax;
 	
 	public BoundsGraph() {
 		this.xMin = 0;
@@ -14,28 +14,28 @@ public class BoundsGraph {
 		this.yMax = 0;
 	}
 	
-	public int getxMin() {
+	public double getxMin() {
 		return xMin;
 	}
-	public void setxMin(int xMin) {
+	public void setxMin(double xMin) {
 		this.xMin = xMin;
 	}
-	public int getxMax() {
+	public double getxMax() {
 		return xMax;
 	}
-	public void setxMax(int xMax) {
+	public void setxMax(double xMax) {
 		this.xMax = xMax;
 	}
-	public int getyMin() {
+	public double getyMin() {
 		return yMin;
 	}
-	public void setyMin(int yMin) {
+	public void setyMin(double yMin) {
 		this.yMin = yMin;
 	}
-	public int getyMax() {
+	public double getyMax() {
 		return yMax;
 	}
-	public void setyMax(int yMax) {
+	public void setyMax(double yMax) {
 		this.yMax = yMax;
 	}
 	

@@ -3,7 +3,6 @@ package pne.project.tsp.view;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -16,11 +15,11 @@ public class GraphView {
 	// private GraphCanvas gc;
 	private static final int frameHeight = 600;
 	private static final int frameWidth = 850;
-	private static int[][] tmp;
+	private static double[][] tmp;
 	private static BoundsGraph boundsGraph;
 	private static Graph graph;
 
-	public GraphView(int[][] nodePositions, BoundsGraph boundsGraph, Graph graph) {
+	public GraphView(double[][] nodePositions, BoundsGraph boundsGraph, Graph graph) {
 		GraphView.tmp = nodePositions;
 		GraphView.boundsGraph = boundsGraph;
 		GraphView.graph = graph;
@@ -51,7 +50,6 @@ public class GraphView {
 
 		@Override
 		public void paintComponent(final Graphics g) {
-
 			double ratioHeight = boundsGraph.getyMax() / (double) frameHeight;
 			double ratiowidth = (double) boundsGraph.getxMax()
 					/ (double) frameWidth;
@@ -61,13 +59,10 @@ public class GraphView {
 			for (int i = 0; i < graph.getNbNode(); i++) {
 				for (int j = 0; j < graph.getNbNode(); j++) {
 					if (i != j && graph.getTabAdja()[i][j] != 0) {
-						g.drawLine(tmp[j][0] / (int) ratiowidth, tmp[j][1]
-								/ (int) ratioHeight, tmp[i][0]
-								/ (int) ratiowidth, tmp[i][1]
-								/ (int) ratioHeight);
+						g.drawLine((int)( tmp[j][0] / ratiowidth), (int)( tmp[j][1] / ratioHeight),
+								   (int)( tmp[i][0] / ratiowidth), (int)( tmp[i][1]	/ ratioHeight));
 						// System.out.println(tmp[j][0] + " " +
 						// tmp[j][1]+", "+tmp[i][0] + " " + tmp[i][1]);
-
 					}
 				}
 			}
@@ -75,12 +70,9 @@ public class GraphView {
 			/* NODE PRINTING */
 			g.setColor(Color.RED);
 			for (int j = 0; j < tmp.length; j++) {
-				g.fillRect(tmp[j][0] / (int) ratiowidth, tmp[j][1]
-						/ (int) ratioHeight, 5, 5);
+				g.fillRect((int)( tmp[j][0] / ratiowidth), (int)( tmp[j][1] / ratioHeight), 5, 5);
 				// System.out.println(tmp[j][0] + " " + tmp[j][1]);
 			}
-
 		}
-
 	}
 }

@@ -36,18 +36,11 @@ public class GraphManager {
 			 */
 			IloNumVar[] u = cplex.numVarArray(i_graph.getNbNode(), 0, Double.MAX_VALUE);
 
-//			for (int i = 0; i < i_graph.getNbNode(); i++) {
-//				for (int j = 0; j < i_graph.getNbNode(); j++) {
-//					System.out.println("i = "+i+",j = "+j+x[i][j]);
-//				}
-//			}
 			setObjectiveFonction(i_graph, cplex, x);
 			setConstraintOuterEdge(i_graph, cplex, x);
 			setConstraintInnerEdge(i_graph, cplex, x);
-			//setConstraintSubCycle(i_graph, cplex,x,u);
-			
-			setConstraintSubCycle(i_graph, cplex,x);
-			
+			setConstraintSubCycle(i_graph, cplex,x,u);
+					
 			cplex.exportModel("lpex1.lp");
 			
 			cplex.solve();
@@ -150,7 +143,7 @@ public class GraphManager {
 	 * @param cplex
 	 * @param x
 	 * @param u 
-
+	 */
 	
 	private static void setConstraintSubCycle(Graph graph, IloCplex cplex, IloNumVar[][] x, IloNumVar[] u) {
 		try {
@@ -170,7 +163,7 @@ public class GraphManager {
 		}	
 	}
 	
-	*/
+	
 	
 	
 	
@@ -181,14 +174,14 @@ public class GraphManager {
 	 * @param i
 	 * @return
 	 */
-	private static boolean contains_i(ArrayList<IloNumVar> tabConst, int i){
-		for(IloNumVar x : tabConst){
-			if(Integer.parseInt(x.getName().substring(1).split(";")[0]) == i){
-				return true;
-			}
-		}
-		return false;
-	}
+//	private static boolean contains_i(ArrayList<IloNumVar> tabConst, int i){
+//		for(IloNumVar x : tabConst){
+//			if(Integer.parseInt(x.getName().substring(1).split(";")[0]) == i){
+//				return true;
+//			}
+//		}
+//		return false;
+//	}
 	
 	
 	/** Contrainte n°3 (sous-tours) : on va regarder pour chaque xij tous les sous-tours possibles 
@@ -201,63 +194,63 @@ public class GraphManager {
 	 * 
 	 * */
 	 
-	private static void setConstraintSubCycle(Graph graph, IloCplex cplex, IloNumVar[][] x) {
-		int i,j;
-		ArrayList<IloNumVar> tabConst = new ArrayList<IloNumVar>();
-		for(i=0;i<graph.getNbNode()-1;i++){
-			for(j=i+1;j<graph.getNbNode();j++){
-				tabConst.clear();	// on efface la liste des variables car on passe a un indice qui n'a rien a voir avec les indices precedents
-				setConstraintSubCycleRecursif(graph,cplex,tabConst,x,i,j,i);
-				
-			}
-		}
-		
-	}
+//	private static void setConstraintSubCycle(Graph graph, IloCplex cplex, IloNumVar[][] x) {
+//		int i,j;
+//		ArrayList<IloNumVar> tabConst = new ArrayList<IloNumVar>();
+//		for(i=0;i<graph.getNbNode()-1;i++){
+//			for(j=i+1;j<graph.getNbNode();j++){
+//				tabConst.clear();	// on efface la liste des variables car on passe a un indice qui n'a rien a voir avec les indices precedents
+//				setConstraintSubCycleRecursif(graph,cplex,tabConst,x,i,j,i);
+//				
+//			}
+//		}
+//		
+//	}
 
 	// init_I permet de connaitre quel est le dernier indice i
-	private static void setConstraintSubCycleRecursif(Graph graph, IloCplex cplex, 
-			ArrayList<IloNumVar> tabConst, IloNumVar[][] x, int i, int j, int init_I) {
-				
-		//System.out.println("On regarde (i=" + i + ", j=" + j + ")");
-		try{
-			if(graph.getTabAdja()[i][j]!=0 && graph.getTabAdja()[j][init_I]!=0 && (tabConst.size()+2)<graph.getNbNode()){
-				IloLinearNumExpr expr = cplex.linearNumExpr();
-				for(IloNumVar strExpr : tabConst){
-					expr.addTerm(1.0, strExpr);	
-				}
-				expr.addTerm(1.0, x[i][j]);
-				expr.addTerm(1.0, x[j][init_I]);
-				
-				System.out.println("l'expression de la contrainte : " + expr + "<=" + (tabConst.size()+1));
-				cplex.addLe(expr, (tabConst.size()+1));
-				
-				tabConst.add(x[i][j]);
-//				System.out.println("tabConst="+tabConst);
-				i=j;
-				for(j=init_I+1;j<graph.getNbNode();j++){
-					
-					if((tabConst.size()+2)>=graph.getNbNode()){
-//						System.out.println("On est ds le break pour (i=" + i + ", j=" + j +") et taille tabConst=" + (tabConst.size()) + " et tabConst = " + tabConst);
-						break;
-					}
-					
-					if(contains_i(tabConst, j) == false && j!=i){
-						setConstraintSubCycleRecursif(graph,cplex,tabConst,x,i,j,init_I);
-						//System.out.println("avant remove1 pour (i=" + i + ", j=" + j + ": " + tabConst);
-						//tabConst.remove((tabConst.size()-1));
-						//System.out.println("apres remove1 pour (i=" + i + ", j=" + j + ") : " + tabConst);
-					}
-					
-				}
-//				System.out.println("avant remove2: " + tabConst);
-				tabConst.remove((tabConst.size()-1));
-//				System.out.println("apres remove2 pour (i=" + i + ", j=" + j + ") : " + tabConst);
-
-			}
-		}catch(IloException e){
-			
-		}
-	}
+//	private static void setConstraintSubCycleRecursif(Graph graph, IloCplex cplex, 
+//			ArrayList<IloNumVar> tabConst, IloNumVar[][] x, int i, int j, int init_I) {
+//				
+//		//System.out.println("On regarde (i=" + i + ", j=" + j + ")");
+//		try{
+//			if(graph.getTabAdja()[i][j]!=0 && graph.getTabAdja()[j][init_I]!=0 && (tabConst.size()+2)<graph.getNbNode()){
+//				IloLinearNumExpr expr = cplex.linearNumExpr();
+//				for(IloNumVar strExpr : tabConst){
+//					expr.addTerm(1.0, strExpr);	
+//				}
+//				expr.addTerm(1.0, x[i][j]);
+//				expr.addTerm(1.0, x[j][init_I]);
+//				
+//				System.out.println("l'expression de la contrainte : " + expr + "<=" + (tabConst.size()+1));
+//				cplex.addLe(expr, (tabConst.size()+1));
+//				
+//				tabConst.add(x[i][j]);
+////				System.out.println("tabConst="+tabConst);
+//				i=j;
+//				for(j=init_I+1;j<graph.getNbNode();j++){
+//					
+//					if((tabConst.size()+2)>=graph.getNbNode()){
+////						System.out.println("On est ds le break pour (i=" + i + ", j=" + j +") et taille tabConst=" + (tabConst.size()) + " et tabConst = " + tabConst);
+//						break;
+//					}
+//					
+//					if(contains_i(tabConst, j) == false && j!=i){
+//						setConstraintSubCycleRecursif(graph,cplex,tabConst,x,i,j,init_I);
+//						//System.out.println("avant remove1 pour (i=" + i + ", j=" + j + ": " + tabConst);
+//						//tabConst.remove((tabConst.size()-1));
+//						//System.out.println("apres remove1 pour (i=" + i + ", j=" + j + ") : " + tabConst);
+//					}
+//					
+//				}
+////				System.out.println("avant remove2: " + tabConst);
+//				tabConst.remove((tabConst.size()-1));
+////				System.out.println("apres remove2 pour (i=" + i + ", j=" + j + ") : " + tabConst);
+//
+//			}
+//		}catch(IloException e){
+//			
+//		}
+//	}
 	
 	
 	/*

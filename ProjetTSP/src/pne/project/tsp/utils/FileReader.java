@@ -66,11 +66,12 @@ public class FileReader {
 							}
 
 							i++;
-							// System.out.println(line);
+							 System.out.println(line);
 
 							line = scanner.nextLine();
 						} catch (NumberFormatException e) {
-							break;
+							scanner.close();
+							return tabPos;
 						}
 					}
 				}
@@ -80,6 +81,7 @@ public class FileReader {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
+		return tabPos;
 
 		// for(int j=0;j<tabSize;j++){
 		// for(int k=0;k<2;k++){
@@ -87,7 +89,6 @@ public class FileReader {
 		// }
 		// }
 
-		return tabPos;
 	}
 
 	/**

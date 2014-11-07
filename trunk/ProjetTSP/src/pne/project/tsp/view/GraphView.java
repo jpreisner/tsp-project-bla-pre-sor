@@ -12,6 +12,8 @@ import pne.project.tsp.utils.BoundsGraph;
 
 public class GraphView {
 
+	private JFrame frame;
+	private TabView tv;
 	// private GraphCanvas gc;
 	private static final int frameHeight = 600;
 	private static final int frameWidth = 850;
@@ -25,7 +27,7 @@ public class GraphView {
 		GraphView.graph = graph;
 	}
 
-	public void buildCardLayout() {
+	public void printGraph() {
 		final JFrame frame = new JFrame("TSP");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -50,28 +52,27 @@ public class GraphView {
 
 		@Override
 		public void paintComponent(final Graphics g) {
-			double ratioHeight = boundsGraph.getyMax() / (double) frameHeight;
-			double ratiowidth = (double) boundsGraph.getxMax()
-					/ (double) frameWidth;
-
-			/* EDGES PRINTING */
+			double ratioHeight = (boundsGraph.getyMax() - boundsGraph.getyMin())  / (double) frameHeight;
+			double ratiowidth = (boundsGraph.getxMax() - boundsGraph.getxMin())	/ (double) frameWidth;
+		
+			// EDGES PRINTING
 			g.setColor(Color.gray);
 			for (int i = 0; i < graph.getNbNode(); i++) {
 				for (int j = 0; j < graph.getNbNode(); j++) {
 					if (i != j && graph.getTabAdja()[i][j] != 0) {
-						g.drawLine((int)( tmp[j][0] / ratiowidth), (int)( tmp[j][1] / ratioHeight),
-								   (int)( tmp[i][0] / ratiowidth), (int)( tmp[i][1]	/ ratioHeight));
+						g.drawLine((int)( tmp[j][0] * ratiowidth), (int)( tmp[j][1] * ratioHeight),
+								   (int)( tmp[i][0] * ratiowidth), (int)( tmp[i][1]	* ratioHeight));
 						// System.out.println(tmp[j][0] + " " +
 						// tmp[j][1]+", "+tmp[i][0] + " " + tmp[i][1]);
 					}
 				}
 			}
 			
-			/* NODE PRINTING */
+			// NODE PRINTING
 			g.setColor(Color.RED);
 			for (int j = 0; j < tmp.length; j++) {
-				g.fillRect((int)( tmp[j][0] / ratiowidth), (int)( tmp[j][1] / ratioHeight), 5, 5);
-				// System.out.println(tmp[j][0] + " " + tmp[j][1]);
+				g.fillRect((int)( tmp[j][0] * ratiowidth), (int)( tmp[j][1] * ratioHeight), 5, 5);
+				 System.out.println(tmp[j][0] + " " + tmp[j][1]);
 			}
 		}
 	}

@@ -11,6 +11,9 @@ import pne.project.tsp.beans.Graph;
 import pne.project.tsp.utils.BoundsGraph;
 
 public class GraphView {
+	/**
+	 *  A revoir -> normalement c'est dans canvas qu'on dessine
+	 */
 
 	private JFrame frame;
 	private TabView tv;

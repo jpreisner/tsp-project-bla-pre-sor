@@ -9,6 +9,13 @@ public class MainControler {
 	public MainControler(MainView mv) {
 		this.mv = mv;
 	}
+	
+	/**
+	 * Ajouter une méthode qui permet de gérer le cas où on clique sur 
+	 *     - Créer son PVC
+	 *     - Charger un PVC
+	 *     - Quitter
+	 */
 
 	public MainView getMv() {
 		return mv;

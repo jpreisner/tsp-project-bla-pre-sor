@@ -19,7 +19,7 @@ import pne.project.tsp.beans.Graph;
 
 public class FileReader {
 
-	/**
+	/** read a tsp file and gives nodes positions
 	 * @param filePath
 	 * @return int[][] corresponding to node positions
 	 */
@@ -91,7 +91,7 @@ public class FileReader {
 
 	}
 
-	/**
+	/** read a xml file and build the graph
 	 * @param filePath
 	 * @return Graph obtains from xml file in param.
 	 */

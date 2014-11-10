@@ -11,7 +11,7 @@ public class Test {
 	public static void main(String[] args) {
 //		BoundsGraph boundsGraph = new BoundsGraph();
 		Graph g1 = FileReader.buildGraphFromXml("data/XML/ulysses16.xml");
-		GraphManager.writeLinearProgram(g1, "D:/results.txt");
+		GraphManager.writeLinearProgram(g1, "C:/Users/Julien/Desktop/results.txt");
 //		double[][] nodePositions = FileReader.getPositionsFromTsp(
 //				"data/TSP/ulysses16.tsp", boundsGraph);
 //

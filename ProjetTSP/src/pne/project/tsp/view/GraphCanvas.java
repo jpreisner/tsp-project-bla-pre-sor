@@ -1,7 +1,10 @@
 package pne.project.tsp.view;
 
+import java.awt.BasicStroke;
 import java.awt.Canvas;
+import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -23,8 +26,35 @@ public class GraphCanvas extends Canvas{
 	}
 	
 	@Override
-	public void paint(Graphics g) {
+	public void paint(Graphics graphics) {
+		Graphics2D g = (Graphics2D)graphics ;
+		
 		// Dessiner tous les elements
+		
+		// Dessin des noeuds present dans listNode
+		for(NodeView node : listNode){
+			// contour
+			g.setColor(node.getColorDraw());
+			g.draw(node.getCircle());
+			
+			// remplissage
+			g.setColor(node.getColorFill());
+			g.fill(node.getCircle());
+			
+			// numéro du noeud
+			g.setColor(node.getColorText());
+			// pb : drawString prend que des float, alors qu'on a des double
+			g.drawString(Integer.toString(node.getNumber()), (float) node.getCircle().getCenterX(), (float) node.getCircle().getCenterY());
+	
+			// Dessin des aretes
+			for(NodeView nodeJ : listNode){
+				g.setColor(Color.GRAY);	// couleur des aretes
+				if(!(node.equals(nodeJ))){
+					// pb : drawLine prend que des int, alors qu'on a des double
+					g.drawLine((int) node.getCircle().getCenterX(), (int) node.getCircle().getCenterY(), (int) nodeJ.getCircle().getCenterX(), (int) nodeJ.getCircle().getCenterY());
+				}
+			}
+		}
 	}
 
 	public boolean getIsCreateMode() {

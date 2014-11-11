@@ -1,19 +1,69 @@
 package pne.project.tsp.view;
 
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
+import java.util.ArrayList;
 
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 
-import pne.project.tsp.beans.Graph;
-import pne.project.tsp.utils.BoundsGraph;
+/**
+ * 
+ * Faire le truc d'IG pour les dessins
+ *
+ */
 
 public class GraphView {
+	private JFrame frame;
+	private GraphCanvas canvas;
+	
+	/**
+	 * Constructor
+	 * @param titre
+	 * @param width
+	 * @param height
+	 */
+	
+	// ce que je dois faire: passer en parametre le graphe pour dessiner le graphe
+	public GraphView(String titre, int width, int height){
+		frame = new JFrame(titre);
+		frame.setSize(width, height);
+		
+		// A enlever : c'est juste pour tester
+		ArrayList <NodeView> listNode = new ArrayList<NodeView>();
+		int i;
+		int x=10;
+		int y=10;
+		int d=50;
+		Color fill = Color.RED;
+		Color draw = Color.BLACK;
+		Color text = Color.WHITE;
+		for(i=0; i<5; i++){
+			listNode.add(new NodeView((x*i+d*i)*((i+1)%2), (y*i+d*i)*(i%2), d, i, fill, draw, text));	// j'ai fais au hasard
+		}
+		// fin de ce qu'il faut enlever
+		
+		canvas = new GraphCanvas(false, listNode);
+		canvas.setBackground(Color.WHITE) ;
+		frame.add(canvas) ;
+	
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
+		frame.setVisible(true);
+	}
+	
+	public static void main(String[] args) {
+		GraphView view = new GraphView("Affichage grille", 800, 600);
+	}
+	
+}
+
+
+	
+	
+	
+	
+	
 	/**
 	 *  A revoir -> normalement c'est dans canvas qu'on dessine
-	 */
+	 
 
 	private JFrame frame;
 	private TabView tv;
@@ -79,4 +129,5 @@ public class GraphView {
 			}
 		}
 	}
-}
+	
+	*/

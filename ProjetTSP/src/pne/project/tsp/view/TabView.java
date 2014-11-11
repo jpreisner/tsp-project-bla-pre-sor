@@ -42,13 +42,5 @@ public class TabView {
 	public void setAdjaMatrix(JTable adjaMatrix) {
 		this.adjaMatrix = adjaMatrix;
 	}
-
-	public JScrollPane getSc() {
-		return sc;
-	}
-
-	public void setSc(JScrollPane sc) {
-		this.sc = sc;
-	}
 	
 }

@@ -17,7 +17,7 @@ public class MatrixCellRenderer implements TableCellRenderer {
 			editor.setText(value.toString());
 		}
 		editor.setEditable(false);
-		if (row == col) {
+		if (row + 1 == col) {
 			editor.setBackground(Color.GRAY);
 		}
 		return editor;

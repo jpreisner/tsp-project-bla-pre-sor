@@ -16,7 +16,7 @@ public class GraphManager {
 	 * @param i_graph
 	 * @param o_pathFileToExport
 	 */
-	public static void writeLinearProgram(Graph i_graph,String o_pathFileToExport) {
+	public static void writeLinearProgram(Graph i_graph,String o_pathModelToExport,String o_pathFileToExport) {
 		IloCplex cplex;
 		try {
 			cplex = new IloCplex();
@@ -41,7 +41,7 @@ public class GraphManager {
 			setConstraintInnerEdge(i_graph, cplex, x);
 			setConstraintSubCycle(i_graph, cplex,x,u);
 					
-			cplex.exportModel("lpex1.lp");
+			cplex.exportModel(o_pathModelToExport);
 			
 			cplex.solve();
 			cplex.writeSolution(o_pathFileToExport);

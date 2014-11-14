@@ -44,7 +44,23 @@ public class GraphManager {
 			cplex.exportModel(o_pathModelToExport);
 			
 			cplex.solve();
-			cplex.writeSolution(o_pathFileToExport);
+			
+//			cplex.writeSolution(o_pathFileToExport);
+			
+			/* RESULTS*/
+			double[][] tabResult = new double[i_graph.getNbNode()][i_graph.getNbNode()];
+			for(int i=0;i<i_graph.getNbNode();i++){
+				tabResult[i] = cplex.getValues(x[i]);
+			}			
+			
+			System.out.println("RESULTAT FINAL : ");
+			for(int i=0;i<i_graph.getNbNode();i++){
+				for(int j=0;j<i_graph.getNbNode();j++){
+					if(tabResult[i][j]==1){
+						System.out.println("arête "+x[i][j]);
+					}
+				}			
+			}
 			
 			cplex.end();
 		} catch (IloException e) {
@@ -73,10 +89,8 @@ public class GraphManager {
 
 			for (int i = 0; i < graph.getNbNode(); i++) {
 				for (int j = 0; j < graph.getNbNode(); j++) {
-					if (i != j) {
 						//System.out.println("(" + graph.getTabAdja()[i][j] + ", " + x[i][j] + ")");
 						objectiveFunction.addTerm(graph.getTabAdja()[i][j],	x[i][j]);
-					}
 				}
 			}
 

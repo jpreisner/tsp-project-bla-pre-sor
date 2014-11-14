@@ -7,13 +7,13 @@ import java.awt.geom.Ellipse2D;
 public class NodeView extends Component{
 	
 	private Ellipse2D circle;
-	private int number;
+	private int id;
 	private Color colorFill;	// couleur interieur
 	private Color colorDraw;	// couleur contour
 	private Color colorText;
 	
 	public NodeView(float x, float y, float d, int number, Color fill, Color draw, Color text){
-		this.number = number;
+		this.id = number;
 		colorFill = fill;
 		colorDraw = draw;
 		colorText = text;
@@ -29,12 +29,12 @@ public class NodeView extends Component{
 		this.circle = circle;
 	}
 
-	public int getNumber() {
-		return number;
+	public int getID() {
+		return id;
 	}
 
-	public void setNumber(int number) {
-		this.number = number;
+	public void setID(int id) {
+		this.id = id;
 	}
 
 	public Color getColorFill() {

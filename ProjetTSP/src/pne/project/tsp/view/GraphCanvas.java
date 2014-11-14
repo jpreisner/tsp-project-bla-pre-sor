@@ -1,6 +1,5 @@
 package pne.project.tsp.view;
 
-import java.awt.BasicStroke;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -11,14 +10,14 @@ import javax.swing.JButton;
 
 public class GraphCanvas extends Canvas{
 
-	private boolean isCreateMode;
+	private boolean isResolved;
 	private JButton solve;
-	private JButton end;
+	private JButton startMenu;
 	private JButton quit;
 	private ArrayList <NodeView> listNode;
 	
-	public GraphCanvas(boolean isCreateMode, ArrayList <NodeView> listNode) {
-		this.isCreateMode = isCreateMode;
+	public GraphCanvas(boolean isResolved, ArrayList <NodeView> listNode) {
+		this.isResolved = isResolved;
 		this.listNode = listNode;
 		
 		// Créer les 3 boutons
@@ -44,7 +43,7 @@ public class GraphCanvas extends Canvas{
 			// numéro du noeud
 			g.setColor(node.getColorText());
 			// pb : drawString prend que des float, alors qu'on a des double
-			g.drawString(Integer.toString(node.getNumber()), (float) node.getCircle().getCenterX(), (float) node.getCircle().getCenterY());
+			g.drawString(Integer.toString(node.getID()), (float) node.getCircle().getCenterX(), (float) node.getCircle().getCenterY());
 	
 			// Dessin des aretes
 			for(NodeView nodeJ : listNode){
@@ -57,12 +56,12 @@ public class GraphCanvas extends Canvas{
 		}
 	}
 
-	public boolean getIsCreateMode() {
-		return isCreateMode;
+	public boolean getIsResolved() {
+		return isResolved;
 	}
 
-	public void setIsCreateMode(boolean isCreateMode) {
-		this.isCreateMode = isCreateMode;
+	public void setIsResolved(boolean isResolved) {
+		this.isResolved = isResolved;
 	}
 
 	public JButton getSolve() {
@@ -73,12 +72,12 @@ public class GraphCanvas extends Canvas{
 		this.solve = solve;
 	}
 
-	public JButton getEnd() {
-		return end;
+	public JButton getStartMenu() {
+		return startMenu;
 	}
 
-	public void setEnd(JButton end) {
-		this.end = end;
+	public void setStartMenu(JButton startMenu) {
+		this.startMenu = startMenu;
 	}
 
 	public JButton getQuit() {

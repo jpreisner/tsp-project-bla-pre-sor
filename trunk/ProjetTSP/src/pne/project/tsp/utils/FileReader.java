@@ -2,6 +2,7 @@ package pne.project.tsp.utils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -163,5 +164,5 @@ public class FileReader {
 		Graph result = new Graph(io_tabInt, iGraphSize);
 		return result;
 	}
-
+	
 }

@@ -5,6 +5,8 @@ import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
+import pne.project.tsp.beans.Graph;
+
 /**
  * 
  * Faire le truc d'IG pour les dessins
@@ -23,7 +25,7 @@ public class GraphView {
 	 */
 	
 	// ce que je dois faire: passer en parametre le graphe pour dessiner le graphe
-	public GraphView(String titre, int width, int height){
+	public GraphView(String titre, int width, int height, Graph graph){
 		frame = new JFrame(titre);
 		frame.setSize(width, height);
 		
@@ -41,6 +43,9 @@ public class GraphView {
 		}
 		// fin de ce qu'il faut enlever
 		
+		// a mettre pour de vrai :
+		//ArrayList<NodeView> listNode = displayGraph(graph);
+		
 		canvas = new GraphCanvas(false, listNode);
 		canvas.setBackground(Color.WHITE) ;
 		frame.add(canvas) ;
@@ -49,17 +54,29 @@ public class GraphView {
 		frame.setVisible(true);
 	}
 	
+	public ArrayList<NodeView> displayGraph(Graph graph){
+		ArrayList<NodeView> listNode = new ArrayList<NodeView>();
+		
+		// a changer
+		int d=50;	
+		Color fill = Color.RED;
+		Color draw = Color.BLACK;
+		Color text = Color.WHITE;
+
+		// Placer les noeuds --> trouver la formule ou librairie
+		// JGraph : http://www.zdnet.fr/actualites/dessiner-facilement-des-graphes-en-java-avec-jgraph-39115715.htm
+		// http://cyberzoide.developpez.com/graphviz/
+		// http://graphstream-project.org/
+		
+		return listNode;
+	}
+	
 	public static void main(String[] args) {
-		GraphView view = new GraphView("Affichage grille", 800, 600);
+		GraphView view = new GraphView("Affichage grille", 800, 600, null);
 	}
 	
 }
 
-
-	
-	
-	
-	
 	
 	/**
 	 *  A revoir -> normalement c'est dans canvas qu'on dessine

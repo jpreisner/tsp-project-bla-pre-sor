@@ -6,6 +6,7 @@ import ilog.concert.IloNumVar;
 import ilog.cplex.IloCplex;
 
 import java.util.HashMap;
+import java.util.Scanner;
 
 import pne.project.tsp.beans.Graph;
 
@@ -17,6 +18,11 @@ public class GraphManager {
 	 * @param o_pathFileToExport
 	 */
 	public static void writeLinearProgram(Graph i_graph,String o_pathModelToExport,String o_pathFileToExport) {
+		System.out.println("1 - utiliser la méthode plans-coupants\n2 - utiliser l'autre méthode");
+		Scanner s = new Scanner(System.in);
+		int choix = s.nextInt();
+		
+		
 		IloCplex cplex;
 		try {
 			cplex = new IloCplex();
@@ -39,51 +45,62 @@ public class GraphManager {
 			setObjectiveFonction(i_graph, cplex, x);
 			setConstraintOuterEdge(i_graph, cplex, x);
 			setConstraintInnerEdge(i_graph, cplex, x);
-					
-			cplex.solve();			
-			/* RESULTS*/
-			double[][] tabResult = new double[i_graph.getNbNode()][i_graph.getNbNode()];
-			for(int i=0;i<i_graph.getNbNode();i++){
-				tabResult[i] = cplex.getValues(x[i]);
-			}			
-			
-			System.out.println("Avant la méthode des plans coupants : ");
-			for(int i=0;i<i_graph.getNbNode();i++){
-				for(int j=0;j<i_graph.getNbNode();j++){
-					if(tabResult[i][j]==1){
-						System.out.println("arête "+x[i][j]);
-					}
-				}			
-			}
-			
-			int cpt=0;
-			while(addNewSubCycleConstraint(i_graph.getNbNode(), cplex, x, tabResult)){
-				cpt++;
-				/* désactive l'affichage de cplex (ralentit les traitements)*/
+			if(choix == 1){
 				cplex.setOut(null);
-				cplex.solve();
-
-				// Enregistrement du résultat dans tabResult
-				tabResult = new double[i_graph.getNbNode()][i_graph.getNbNode()];
+				cplex.solve();			
+				double[][] tabResult = new double[i_graph.getNbNode()][i_graph.getNbNode()];
 				for(int i=0;i<i_graph.getNbNode();i++){
 					tabResult[i] = cplex.getValues(x[i]);
 				}			
-			}
-			
-			System.out.println("Après la méthode des plans coupants : ");
-			for(int i=0;i<i_graph.getNbNode();i++){
-				for(int j=0;j<i_graph.getNbNode();j++){
-					if(tabResult[i][j]==1){
-						System.out.println("arête "+x[i][j]);
-					}
-				}			
-			}
-			
-			System.out.println("cpt=" + cpt);
-			System.out.println("valeur chemin optimal : "+cplex.getObjValue());
-			cplex.exportModel(o_pathModelToExport);
-			cplex.writeSolution(o_pathFileToExport);
+				int cpt=0;
+				while(addNewSubCycleConstraint(i_graph.getNbNode(), cplex, x, tabResult)){
+					cpt++;
+					/* désactive l'affichage de cplex (ralentit les traitements)*/
+					cplex.setOut(null);
+					cplex.solve();
 
+					// Enregistrement du résultat dans tabResult
+					tabResult = new double[i_graph.getNbNode()][i_graph.getNbNode()];
+					for(int i=0;i<i_graph.getNbNode();i++){
+						tabResult[i] = cplex.getValues(x[i]);
+					}			
+				}
+				
+				System.out.println("Après la méthode des plans coupants : ");
+				for(int i=0;i<i_graph.getNbNode();i++){
+					for(int j=0;j<i_graph.getNbNode();j++){
+						if(tabResult[i][j]==1){
+							System.out.println("arête "+x[i][j]);
+						}
+					}			
+				}
+				
+				System.out.println("cpt=" + cpt);
+				System.out.println("valeur chemin optimal : "+cplex.getObjValue());
+				cplex.exportModel(o_pathModelToExport);
+				cplex.writeSolution(o_pathFileToExport);
+			}
+			else{
+				cplex.setOut(null);
+				setConstraintSubCycle(i_graph, cplex, x, u);
+				cplex.solve();
+				// Enregistrement du résultat dans tabResult
+				double[][] tabResult = new double[i_graph.getNbNode()][i_graph.getNbNode()];
+				for(int i=0;i<i_graph.getNbNode();i++){
+					tabResult[i] = cplex.getValues(x[i]);
+				}
+				System.out.println("Après l'autre méthode : ");
+				for(int i=0;i<i_graph.getNbNode();i++){
+					for(int j=0;j<i_graph.getNbNode();j++){
+						if(tabResult[i][j]==1){
+							System.out.println("arête "+x[i][j]);
+						}
+					}			
+				}
+				System.out.println("valeur chemin optimal : "+cplex.getObjValue());
+				cplex.exportModel(o_pathModelToExport);
+				cplex.writeSolution(o_pathFileToExport);
+			}
 			cplex.end();
 		} catch (IloException e) {
 			e.printStackTrace();

@@ -13,13 +13,9 @@ public class GraphControler {
 	
 	/**
 	 *  Ajouter une méthode qui permet de savoir si :
-	 *    - on clique sur Terminer (le mode Créer son PVC)
+	 *    - on clique sur Terminer
 	 *    - on clique sur Résoudre
 	 *    - on clique sur Quitter
-	 *    
-	 *    - on clique dans la fenetre du graphe pour ajouter des noeuds (mode Créer son PVC)
-	 * 
-	 * /!\ Enlever "dropNode" dans UML?
 	 */
 
 	public GraphView getGv() {

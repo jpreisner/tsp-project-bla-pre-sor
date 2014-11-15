@@ -1,13 +1,11 @@
 package pne.project.tsp.managers;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import ilog.concert.IloException;
 import ilog.concert.IloLinearNumExpr;
 import ilog.concert.IloNumVar;
 import ilog.cplex.IloCplex;
 
+import java.util.HashMap;
 
 import pne.project.tsp.beans.Graph;
 
@@ -43,14 +41,8 @@ public class GraphManager {
 			setObjectiveFonction(i_graph, cplex, x);
 			setConstraintOuterEdge(i_graph, cplex, x);
 			setConstraintInnerEdge(i_graph, cplex, x);
-			//setConstraintSubCycle(i_graph, cplex,x,u);
 					
-			cplex.exportModel(o_pathModelToExport);
-			
-			cplex.solve();
-			
-//			cplex.writeSolution(o_pathFileToExport);
-			
+			cplex.solve();			
 			/* RESULTS*/
 			double[][] tabResult = new double[i_graph.getNbNode()][i_graph.getNbNode()];
 			for(int i=0;i<i_graph.getNbNode();i++){
@@ -67,9 +59,10 @@ public class GraphManager {
 			}
 			
 			int cpt=0;
-			while(cpt < 2 && addNewSubCycleConstraint(i_graph.getNbNode(), cplex, x, tabResult)){
+			while(addNewSubCycleConstraint(i_graph.getNbNode(), cplex, x, tabResult)){
 				cpt++;
-				cplex.exportModel(o_pathModelToExport);
+				/* désactive l'affichage de cplex (ralentit les traitements)*/
+				cplex.setOut(null);
 				cplex.solve();
 
 				// Enregistrement du résultat dans tabResult
@@ -77,25 +70,23 @@ public class GraphManager {
 				for(int i=0;i<i_graph.getNbNode();i++){
 					tabResult[i] = cplex.getValues(x[i]);
 				}			
-				
-				
-				// Affichage
-				System.out.println("RESULTAT FINAL : ");
-				for(int i=0;i<i_graph.getNbNode();i++){
-					for(int j=0;j<i_graph.getNbNode();j++){
-						if(tabResult[i][j]==1){
-							System.out.println("arête "+x[i][j]);
-						}
-					}			
-				}
-				
-				
 			}
-		
 			
+			System.out.println("Après la méthode des plans coupants : ");
+			for(int i=0;i<i_graph.getNbNode();i++){
+				for(int j=0;j<i_graph.getNbNode();j++){
+					if(tabResult[i][j]==1){
+						System.out.println("arête "+x[i][j]);
+					}
+				}			
+			}
 			
-			cplex.end();
 			System.out.println("cpt=" + cpt);
+			System.out.println("valeur chemin optimal : "+cplex.getObjValue());
+			cplex.exportModel(o_pathModelToExport);
+			cplex.writeSolution(o_pathFileToExport);
+
+			cplex.end();
 		} catch (IloException e) {
 			e.printStackTrace();
 		}
@@ -117,7 +108,6 @@ public class GraphManager {
 		
 		while(cpt<nbNode && i_saved<nbNode){
 			j = searchIndiceJ(tabResult, i, nbNode);
-			//System.out.println("Pour i_saved="+i_saved+" | ("+i+","+j+") et cpt="+cpt);
 			
 			// si j = -1, ca veut dire que tous les noeuds xij pour j=0,...,n-1 sont = à 0
 			if(j == -1){
@@ -130,19 +120,16 @@ public class GraphManager {
 				// dans le cas ou on rencontre un sous-tour
 				if(j == i_saved && cpt<nbNode){
 					try {
-						//System.out.println("HashMap = " + listVariables);
-						//System.out.print("Sous-tours! : ");
+						
 						// ajout de la contrainte
 						IloLinearNumExpr expr = cplex.linearNumExpr();
 						for(Integer indice_i : listVariables.keySet()){
 							indice_j = listVariables.get(indice_i);
-							//System.out.print(" (" + indice_i + "," + indice_j + ")");
 							
 							expr.addTerm(1.0, x[indice_i][indice_j]);
 							// on ne regarde plus les variables comprises dans le sous-tour
 							tabResult[indice_i][indice_j] = 0;
 						}
-						//System.out.println("");
 						cplex.addLe(expr, cpt-1);
 						
 						// mise a jour des variables
@@ -153,7 +140,6 @@ public class GraphManager {
 						hasSubCycle = true;
 						
 					} catch (IloException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
@@ -163,16 +149,7 @@ public class GraphManager {
 				}
 			}
 		}
-		
-		if(hasSubCycle == false){
-			System.out.println("Solution optimale !");
-			System.out.print("Chemin = ");
-			for(Integer indice_i : listVariables.keySet()){
-				indice_j = listVariables.get(indice_i);
-				System.out.print("(" + indice_i + "," + indice_j + ") ; ");
-			}
-			System.out.println("");
-		}
+
 		return hasSubCycle;
 	}
 	

@@ -16,6 +16,7 @@ import pne.project.tsp.beans.Graph;
 public class GraphView {
 	private JFrame frame;
 	private GraphCanvas canvas;
+	private TabView adjaMatrix;
 	
 	/**
 	 * Constructor

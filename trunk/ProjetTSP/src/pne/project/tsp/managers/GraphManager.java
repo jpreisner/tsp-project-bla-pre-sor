@@ -11,8 +11,6 @@ import pne.project.tsp.beans.Graph;
 
 public class GraphManager {
 	
-	
-
 	/**
 	 * Method called to write Linear program with graph in param and write it in file in param.
 	 * @param i_graph

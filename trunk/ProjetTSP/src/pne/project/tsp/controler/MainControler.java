@@ -12,9 +12,9 @@ public class MainControler {
 	
 	/**
 	 * Ajouter une méthode qui permet de gérer le cas où on clique sur 
-	 *     - Créer son PVC
 	 *     - Charger un PVC
 	 *     - Quitter
+	 *     (ActionListeners)
 	 */
 
 	public MainView getMv() {

@@ -1,13 +1,16 @@
 package pne.project.tsp.controler;
 
+import pne.project.tsp.beans.Graph;
 import pne.project.tsp.view.GraphView;
 
 public class GraphControler {
 
 	private GraphView gv;
+	private Graph graph;
 
-	public GraphControler(GraphView gv, boolean isCreateMode) {
+	public GraphControler(GraphView gv, boolean isCreateMode,Graph graph) {
 		this.gv = gv;
+		this.graph = graph;
 		// Faire passer le boolean dans GraphView
 	}
 	
@@ -16,6 +19,7 @@ public class GraphControler {
 	 *    - on clique sur Terminer
 	 *    - on clique sur Résoudre
 	 *    - on clique sur Quitter
+	 *    (ActionListeners)
 	 */
 
 	public GraphView getGv() {
@@ -24,6 +28,10 @@ public class GraphControler {
 
 	public void setGv(GraphView gv) {
 		this.gv = gv;
+	}
+
+	public Graph getGraph() {
+		return graph;
 	}
 
 }

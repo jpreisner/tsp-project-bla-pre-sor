@@ -69,12 +69,12 @@ public class GraphManager {
 				System.out.println("Après la méthode des plans coupants : ");
 				for(int i=0;i<i_graph.getNbNode();i++){
 					for(int j=0;j<i_graph.getNbNode();j++){
+						
 						if(tabResult[i][j]==1){
 							System.out.println("arête "+x[i][j]);
 						}
 					}			
 				}
-				
 				System.out.println("cpt=" + cpt);
 				System.out.println("valeur chemin optimal : "+cplex.getObjValue());
 				cplex.exportModel(o_pathModelToExport);
@@ -97,6 +97,7 @@ public class GraphManager {
 						}
 					}			
 				}
+				
 				System.out.println("valeur chemin optimal : "+cplex.getObjValue());
 				cplex.exportModel(o_pathModelToExport);
 				cplex.writeSolution(o_pathFileToExport);
@@ -128,6 +129,7 @@ public class GraphManager {
 			if(j == -1){
 				i_saved++;
 				i = i_saved;
+				cpt=0;
 			}
 			else{
 				cpt++;
@@ -145,6 +147,7 @@ public class GraphManager {
 							// on ne regarde plus les variables comprises dans le sous-tour
 							tabResult[indice_i][indice_j] = 0;
 						}
+						//System.out.println(expr + "<=" + (cpt-1));
 						cplex.addLe(expr, cpt-1);
 						
 						// mise a jour des variables
@@ -164,7 +167,6 @@ public class GraphManager {
 				}
 			}
 		}
-
 		return hasSubCycle;
 	}
 	

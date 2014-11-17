@@ -109,22 +109,6 @@ public class GraphManager {
 		}
 	}
 	
-	public static int nextNode(boolean[] nodeVisite, int nbNode){
-		for(int i=0; i<nbNode; i++){
-			if(nodeVisite[i] == false){
-				return i;
-			}
-		}
-		return -1;	// tous les noeuds ont été visité
-	}
-	
-	public static void affiche(int i, double[][]tabResult, int nbNode){
-		for(int j=0; j<nbNode; j++){
-			System.out.println(tabResult[i][j]);
-		}
-	}
-	
-	
 	// renvoie vrai si il existe des sous tours, faux sinon
 	public static boolean addNewSubCycleConstraint(int nbNode,IloCplex cplex,IloNumVar[][] x, double[][] tabResult){
 		int cpt = 0;	// le nb de noeud dans la recherche d'un sous tours
@@ -137,13 +121,13 @@ public class GraphManager {
 		// de type <i, j> pour avoir une liste [(i1, j1), (i2, j2), ...]
 		HashMap<Integer, Integer> listVariables = new HashMap<Integer, Integer>();
 		
-		boolean[] noeudVisite = new boolean[nbNode];
+		boolean[] nodeVisited = new boolean[nbNode];
 		for(int k=0; k<nbNode; k++){
-			noeudVisite[k] = false;
+			nodeVisited[k] = false;
 		}
 		
 		while(cpt<nbNode && /*i_saved<nbNode &&*/ i_saved != -1){
-			noeudVisite[i] = true;
+			nodeVisited[i] = true;
 			j = searchIndiceJ(tabResult, i, nbNode);
 			
 			// si j = -1, ca veut dire que tous les noeuds xij pour j=0,...,n-1 sont = à 0
@@ -155,7 +139,7 @@ public class GraphManager {
 				cpt=0;
 				*/
 				System.out.println("Pb pour i="+i);
-				affiche(i, tabResult, nbNode);
+				//affiche(i, tabResult, nbNode);
 				return true;
 			}
 			else{
@@ -179,7 +163,7 @@ public class GraphManager {
 						
 						// mise a jour des variables
 						cpt=0;
-						i_saved = nextNode(noeudVisite, nbNode);
+						i_saved = nextNode(nodeVisited, nbNode);
 						i = i_saved;
 						listVariables.clear();
 						hasSubCycle = true;
@@ -200,6 +184,9 @@ public class GraphManager {
 	// On connait l'indice i, on cherche l'indice j tel que resultat[i][j] = 1
 	public static int searchIndiceJ(double[][] tabResult, int indiceI, int nbNode){
 		for(int j=0; j<nbNode; j++){
+			/**
+			 *  SI on ne regle pas le pb des 0.999999 et 0.00000001, il faut trancher a 0.5
+			 */
 			if(tabResult[indiceI][j] != 0){
 				return j;
 			}
@@ -207,6 +194,23 @@ public class GraphManager {
 		return -1;	// error
 	}
 
+	public static int nextNode(boolean[] nodeVisite, int nbNode){
+		for(int i=0; i<nbNode; i++){
+			if(nodeVisite[i] == false){
+				return i;
+			}
+		}
+		return -1;	// tous les noeuds ont été visité
+	}
+	
+	/*
+	public static void affiche(int i, double[][]tabResult, int nbNode){
+		for(int j=0; j<nbNode; j++){
+			System.out.println(tabResult[i][j]);
+		}
+	}
+	*/
+	
 	private static void initVarNameTab(int nbNode, String[][] varName) {
 		for(int i=0;i<nbNode;i++){
 			for(int j=0;j<nbNode;j++){

@@ -55,6 +55,7 @@ public class GraphManager {
 				int cpt=0;
 				while(addNewSubCycleConstraint(i_graph.getNbNode(), cplex, x, tabResult)){
 					cpt++;
+					//System.out.println(cpt);
 					/* désactive l'affichage de cplex (ralentit les traitements)*/
 					cplex.setOut(null);
 					cplex.solve();
@@ -108,6 +109,20 @@ public class GraphManager {
 		}
 	}
 	
+	public static int nextNode(boolean[] nodeVisite, int nbNode){
+		for(int i=0; i<nbNode; i++){
+			if(nodeVisite[i] == false){
+				return i;
+			}
+		}
+		return -1;	// tous les noeuds ont été visité
+	}
+	
+	public static void affiche(int i, double[][]tabResult, int nbNode){
+		for(int j=0; j<nbNode; j++){
+			System.out.println(tabResult[i][j]);
+		}
+	}
 	
 	
 	// renvoie vrai si il existe des sous tours, faux sinon
@@ -122,14 +137,26 @@ public class GraphManager {
 		// de type <i, j> pour avoir une liste [(i1, j1), (i2, j2), ...]
 		HashMap<Integer, Integer> listVariables = new HashMap<Integer, Integer>();
 		
-		while(cpt<nbNode && i_saved<nbNode){
+		boolean[] noeudVisite = new boolean[nbNode];
+		for(int k=0; k<nbNode; k++){
+			noeudVisite[k] = false;
+		}
+		
+		while(cpt<nbNode && /*i_saved<nbNode &&*/ i_saved != -1){
+			noeudVisite[i] = true;
 			j = searchIndiceJ(tabResult, i, nbNode);
 			
 			// si j = -1, ca veut dire que tous les noeuds xij pour j=0,...,n-1 sont = à 0
 			if(j == -1){
+				/** NORMALEMENT NE DOIT JAMAIS ARRIVE -> GERER L'ERREUR **/
+				/*
 				i_saved++;
 				i = i_saved;
 				cpt=0;
+				*/
+				System.out.println("Pb pour i="+i);
+				affiche(i, tabResult, nbNode);
+				return true;
 			}
 			else{
 				cpt++;
@@ -144,15 +171,15 @@ public class GraphManager {
 							indice_j = listVariables.get(indice_i);
 							
 							expr.addTerm(1.0, x[indice_i][indice_j]);
-							// on ne regarde plus les variables comprises dans le sous-tour
-							tabResult[indice_i][indice_j] = 0;
+							// on ne veut plus regarder les variables xij comprises dans le sous-tour
+							//tabResult[indice_i][indice_j] = 0;
 						}
 						//System.out.println(expr + "<=" + (cpt-1));
 						cplex.addLe(expr, cpt-1);
 						
 						// mise a jour des variables
 						cpt=0;
-						i_saved++;
+						i_saved = nextNode(noeudVisite, nbNode);
 						i = i_saved;
 						listVariables.clear();
 						hasSubCycle = true;
@@ -173,7 +200,7 @@ public class GraphManager {
 	// On connait l'indice i, on cherche l'indice j tel que resultat[i][j] = 1
 	public static int searchIndiceJ(double[][] tabResult, int indiceI, int nbNode){
 		for(int j=0; j<nbNode; j++){
-			if(tabResult[indiceI][j] == 1){
+			if(tabResult[indiceI][j] != 0){
 				return j;
 			}
 		}

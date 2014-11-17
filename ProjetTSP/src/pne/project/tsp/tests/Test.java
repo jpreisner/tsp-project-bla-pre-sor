@@ -13,7 +13,7 @@ public class Test {
 	/* TSP main*/
 	public static void main(String[] args) {
 		Graph g1 = FileReader.
-				buildGraphFromXml("data/XML/gr48.xml");
+				buildGraphFromXml("data/XML/eil76.xml");
 		
 		GraphManager.writeLinearProgram(g1,"tests/lpex1.lp", "tests/results.txt");
 		GraphManager.writeLinearProgram(g1,"tests/lpex1.lp", "tests/results.txt");

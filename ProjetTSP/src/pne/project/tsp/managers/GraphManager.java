@@ -55,7 +55,7 @@ public class GraphManager {
 				int cpt=0;
 				while(addNewSubCycleConstraint(i_graph.getNbNode(), cplex, x, tabResult)){
 					cpt++;
-					//System.out.println(cpt);
+					System.out.println(cpt);
 					/* désactive l'affichage de cplex (ralentit les traitements)*/
 					cplex.setOut(null);
 					cplex.solve();

@@ -8,7 +8,6 @@ public class MainView {
 	private JFrame jf;
 	
 	// Ces 3 boutons --> MainCanvas	???
-	private JButton createTSP;
 	private JButton readTSP;
 	private JButton quit;
 	

@@ -4,6 +4,7 @@ import ilog.concert.IloException;
 import ilog.concert.IloLinearNumExpr;
 import ilog.concert.IloNumVar;
 import ilog.cplex.IloCplex;
+import ilog.cplex.IloCplex.DoubleParam;
 
 import java.util.HashMap;
 import java.util.Scanner;
@@ -37,6 +38,8 @@ public class GraphManager {
 				x[i] = cplex.boolVarArray(i_graph.getNbNode(),varName[i]);
 			}
 			
+			/* Permet de ne renvoyer que des 1 et 0*/
+			cplex.setParam(DoubleParam.EpInt, 0.0);
 			/**
 			 * QU'EST CE QUE FAIT : numVarArray?
 			 */

@@ -21,7 +21,6 @@ public class MatrixCellRenderer implements TableCellRenderer {
 			editor.setBackground(Color.GRAY);
 		}
 		return editor;
-
 	}
 
 }

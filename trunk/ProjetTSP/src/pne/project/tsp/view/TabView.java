@@ -9,7 +9,7 @@ public class TabView extends JTable {
 
 	public TabView(Graph g) {
 		super(new TabModel(g));
-		setAutoCreateColumnsFromModel(false);
+		setAutoCreateColumnsFromModel(true);
 		setAutoscrolls(false);
 
 		getColumnModel().getColumn(0).setCellRenderer(

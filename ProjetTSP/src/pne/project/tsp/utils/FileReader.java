@@ -40,17 +40,22 @@ public class FileReader {
 				m.find();
 				tabSize = Integer.parseInt(m.group());
 
-				tabPos = new double[tabSize][2];
-				int i = 0;
+				tabPos = new double[tabSize+1][2];
 
 				/* get first position */
-				if (line.split(" ")[0].equals("1")) {
+				if (line.split(" ")[0].equals("NODE_COORD_SECTION")) {
+					line = scanner.nextLine();
 					while (scanner.hasNextLine()) {
 						try {
 							/* traitement */
+							String[] tabPosition = line.split(" ");
+							
+							/* indice */
+							int indice = Integer.parseInt(tabPosition[0]);
+							
 							/* x */
-							double x = Double.parseDouble(line.split(" ")[1]);
-							tabPos[i][0] = x;
+							double x = Double.parseDouble(tabPosition[1]);
+							tabPos[indice][0] = x;
 							if (x > bg.getxMax()) {
 								bg.setxMax(x);
 							} else if (x < bg.getxMin()) {
@@ -58,16 +63,14 @@ public class FileReader {
 							}
 
 							/* y */
-							double y = Double.parseDouble(line.split(" ")[2]);
-							tabPos[i][1] = y;
+							double y = Double.parseDouble(tabPosition[2]);
+							tabPos[indice][1] = y;
 							if (y > bg.getyMax()) {
 								bg.setyMax(y);
 							} else if (y < bg.getyMin()) {
 								bg.setyMin(y);
 							}
-
-							i++;
-							 System.out.println(line);
+//							 System.out.println(line);
 
 							line = scanner.nextLine();
 						} catch (NumberFormatException e) {

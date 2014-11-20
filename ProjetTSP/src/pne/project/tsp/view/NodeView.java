@@ -12,13 +12,13 @@ public class NodeView extends Component{
 	private Color colorDraw;	// couleur contour
 	private Color colorText;
 	
-	public NodeView(float x, float y, float d, int number, Color fill, Color draw, Color text){
+	public NodeView(double x, double y, float d, int number, Color fill, Color draw, Color text){
 		this.id = number;
 		colorFill = fill;
 		colorDraw = draw;
 		colorText = text;
 		
-		circle = new Ellipse2D.Float(x, y, d, d);	// a verifier?
+		circle = new Ellipse2D.Double(x, y, d, d);	// a verifier?
 	}
 
 	public Ellipse2D getCircle() {

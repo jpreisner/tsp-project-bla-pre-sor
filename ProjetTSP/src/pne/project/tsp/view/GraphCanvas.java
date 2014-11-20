@@ -8,6 +8,8 @@ import java.util.ArrayList;
 
 import javax.swing.JButton;
 
+import pne.project.tsp.utils.BoundsGraph;
+
 public class GraphCanvas extends Canvas{
 
 	private boolean isResolved;
@@ -16,7 +18,7 @@ public class GraphCanvas extends Canvas{
 	private JButton quit;
 	private ArrayList <NodeView> listNode;
 	
-	public GraphCanvas(boolean isResolved, ArrayList <NodeView> listNode) {
+	public GraphCanvas(boolean isResolved, ArrayList <NodeView> listNode, BoundsGraph bg) {
 		this.isResolved = isResolved;
 		this.listNode = listNode;
 		
@@ -30,8 +32,19 @@ public class GraphCanvas extends Canvas{
 		
 		// Dessiner tous les elements
 		
+		// Dessin des aretes
+		for(NodeView node : listNode){			
+			for(NodeView nodeJ : listNode){
+				g.setColor(Color.GRAY);	// couleur des aretes
+				if(!(node.equals(nodeJ))){
+					// pb : drawLine prend que des int, alors qu'on a des double
+					g.drawLine((int) node.getCircle().getCenterX(), (int) node.getCircle().getCenterY(), (int) nodeJ.getCircle().getCenterX(), (int) nodeJ.getCircle().getCenterY());
+				}
+			}
+		}
+		
 		// Dessin des noeuds present dans listNode
-		for(NodeView node : listNode){
+		for(NodeView node : listNode){			
 			// contour
 			g.setColor(node.getColorDraw());
 			g.draw(node.getCircle());
@@ -44,15 +57,6 @@ public class GraphCanvas extends Canvas{
 			g.setColor(node.getColorText());
 			// pb : drawString prend que des float, alors qu'on a des double
 			g.drawString(Integer.toString(node.getID()), (float) node.getCircle().getCenterX(), (float) node.getCircle().getCenterY());
-	
-			// Dessin des aretes
-			for(NodeView nodeJ : listNode){
-				g.setColor(Color.GRAY);	// couleur des aretes
-				if(!(node.equals(nodeJ))){
-					// pb : drawLine prend que des int, alors qu'on a des double
-					g.drawLine((int) node.getCircle().getCenterX(), (int) node.getCircle().getCenterY(), (int) nodeJ.getCircle().getCenterX(), (int) nodeJ.getCircle().getCenterY());
-				}
-			}
 		}
 	}
 

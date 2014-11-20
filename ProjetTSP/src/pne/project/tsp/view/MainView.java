@@ -1,26 +1,37 @@
 package pne.project.tsp.view;
 
-import javax.swing.JButton;
+import java.awt.Color;
+
 import javax.swing.JFrame;
 
-public class MainView {
-
-	private JFrame jf;
-	
-	// Ces 3 boutons --> MainCanvas	???
-	private JButton readTSP;
-	private JButton quit;
-	
-	//private MainCanvas mainCanvas;		???
+public class MainView extends JFrame{
+	private MainCanvas mc;
 	
 	public MainView(String titre, int width, int height){
-		jf = new JFrame(titre);
-		jf.setSize(width, height);
+		new JFrame(titre);
+		setSize(width, height);
+		setBackground(Color.WHITE);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setVisible(true);
 		
-		//mainCanvas = new MainCanvas();
-		//jf.add(mainCanvas); 
+		mc = new MainCanvas(800, 600);
+		menuPrincipal();
 		
-		//jf.setVisible(true);
+	}
+	
+	public void menuPrincipal(){
+		//removeAll();
+		add(mc);
+		setVisible(true);
+	}
+	
+	public MainCanvas getMainCanvas(){
+		return mc;
+	}
+	
+	
+	public static void main (String[] args){
+		MainView view = new MainView("View", 800, 600);
 	}
 	
 }

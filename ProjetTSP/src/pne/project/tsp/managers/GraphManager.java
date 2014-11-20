@@ -17,12 +17,14 @@ public class GraphManager {
 	 * Method called to write Linear program with graph in param and write it in file in param.
 	 * @param i_graph
 	 * @param o_pathFileToExport
+	 * @return 
 	 */
-	public static void writeLinearProgram(Graph i_graph,String o_pathModelToExport,String o_pathFileToExport) {
+	public static double[][] writeLinearProgram(Graph i_graph,String o_pathModelToExport,String o_pathFileToExport) {
 		System.out.println("1 - utiliser la méthode plans-coupants\n2 - utiliser l'autre méthode");
 		Scanner s = new Scanner(System.in);
 		int choix = s.nextInt();
-		
+		double[][] tabResult = new double[i_graph.getNbNode()][i_graph.getNbNode()];
+
 		
 		IloCplex cplex;
 		try {
@@ -51,7 +53,6 @@ public class GraphManager {
 			if(choix == 1){
 				cplex.setOut(null);
 				cplex.solve();			
-				double[][] tabResult = new double[i_graph.getNbNode()][i_graph.getNbNode()];
 				for(int i=0;i<i_graph.getNbNode();i++){
 					tabResult[i] = cplex.getValues(x[i]);
 				}			
@@ -89,7 +90,6 @@ public class GraphManager {
 				setConstraintSubCycle(i_graph, cplex, x, u);
 				cplex.solve();
 				// Enregistrement du résultat dans tabResult
-				double[][] tabResult = new double[i_graph.getNbNode()][i_graph.getNbNode()];
 				for(int i=0;i<i_graph.getNbNode();i++){
 					tabResult[i] = cplex.getValues(x[i]);
 				}
@@ -110,6 +110,7 @@ public class GraphManager {
 		} catch (IloException e) {
 			e.printStackTrace();
 		}
+		return tabResult;
 	}
 	
 	// renvoie vrai si il existe des sous tours, faux sinon

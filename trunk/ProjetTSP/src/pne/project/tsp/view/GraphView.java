@@ -32,7 +32,7 @@ public class GraphView {
 	// ce que je dois faire: passer en parametre le graphe pour dessiner le
 	// graphe
 	public GraphView(String titre, int width, int height,
-			double[][] nodePositions, BoundsGraph bg) {
+			double[][] nodePositions, BoundsGraph bg, boolean isResolved, double[][] tabResult) {
 		frame = new JFrame(titre);
 		frame.setSize(width, height);
 
@@ -57,7 +57,7 @@ public class GraphView {
 		// a mettre pour de vrai :
 		// listNode = displayGraph(graph);
 
-		canvas = new GraphCanvas(false, listNode);
+		canvas = new GraphCanvas(isResolved, listNode, tabResult);
 		canvas.setBackground(Color.WHITE);
 		frame.add(canvas);
 

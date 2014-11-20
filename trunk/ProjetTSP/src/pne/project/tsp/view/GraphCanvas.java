@@ -17,13 +17,14 @@ public class GraphCanvas extends Canvas{
 	private JButton startMenu;
 	private JButton quit;
 	private ArrayList <NodeView> listNode;
+	private double[][] tabResult;
 	
-	public GraphCanvas(boolean isResolved, ArrayList <NodeView> listNode) {
+	public GraphCanvas(boolean isResolved, ArrayList <NodeView> listNode, double[][] tabResult) {
 		this.isResolved = isResolved;
 		this.listNode = listNode;
+		this.tabResult = tabResult;
 		
-		// Créer les 3 boutons
-		
+		// Créer les 3 boutons		
 	}
 	
 	@Override
@@ -33,12 +34,28 @@ public class GraphCanvas extends Canvas{
 		// Dessiner tous les elements
 		
 		// Dessin des aretes
-		for(NodeView node : listNode){			
-			for(NodeView nodeJ : listNode){
-				g.setColor(Color.GRAY);	// couleur des aretes
-				if(!(node.equals(nodeJ))){
-					// pb : drawLine prend que des int, alors qu'on a des double
-					g.drawLine((int) node.getCircle().getCenterX(), (int) node.getCircle().getCenterY(), (int) nodeJ.getCircle().getCenterX(), (int) nodeJ.getCircle().getCenterY());
+		if(isResolved){
+			for(int i=0;i<listNode.size()-1;i++){
+				for(int j=0;j<listNode.size()-1;j++){
+					
+					g.setColor(Color.GRAY);	// couleur des aretes
+					if(!(listNode.get(i).equals(listNode.get(j))) &&  tabResult[i][j]==1){
+						// pb : drawLine prend que des int, alors qu'on a des double
+						g.drawLine((int) listNode.get(i).getCircle().getCenterX(), 
+								(int) listNode.get(i).getCircle().getCenterY(), 
+								(int) listNode.get(j).getCircle().getCenterX(), 
+								(int) listNode.get(j).getCircle().getCenterY());
+					}
+				}
+			}
+		}else{
+			for(NodeView node : listNode){			
+				for(NodeView nodeJ : listNode){
+					g.setColor(Color.GRAY);	// couleur des aretes
+					if(!(node.equals(nodeJ))){
+						// pb : drawLine prend que des int, alors qu'on a des double
+						g.drawLine((int) node.getCircle().getCenterX(), (int) node.getCircle().getCenterY(), (int) nodeJ.getCircle().getCenterX(), (int) nodeJ.getCircle().getCenterY());
+					}
 				}
 			}
 		}

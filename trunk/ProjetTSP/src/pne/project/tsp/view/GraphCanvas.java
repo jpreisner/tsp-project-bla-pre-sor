@@ -18,7 +18,7 @@ public class GraphCanvas extends Canvas{
 	private JButton quit;
 	private ArrayList <NodeView> listNode;
 	
-	public GraphCanvas(boolean isResolved, ArrayList <NodeView> listNode, BoundsGraph bg) {
+	public GraphCanvas(boolean isResolved, ArrayList <NodeView> listNode) {
 		this.isResolved = isResolved;
 		this.listNode = listNode;
 		

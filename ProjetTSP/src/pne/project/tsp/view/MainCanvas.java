@@ -3,6 +3,7 @@ package pne.project.tsp.view;
 import java.awt.BasicStroke;
 import java.awt.Canvas;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -11,7 +12,7 @@ import java.awt.Rectangle;
 
 import javax.swing.ImageIcon;
 
-public class MainCanvas extends Canvas{
+public class MainCanvas extends Component{
 	private Image fondEcran;
 	private Rectangle chargerPVC;
 	private Rectangle quitter;

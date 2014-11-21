@@ -1,30 +1,20 @@
 package pne.project.tsp.view;
 
-import java.awt.Canvas;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 
-import javax.swing.JButton;
-
-import pne.project.tsp.utils.BoundsGraph;
-
-public class GraphCanvas extends Canvas{
-
+public class GraphCanvas extends Component{
 	private boolean isResolved;
-	private JButton solve;
-	private JButton startMenu;
-	private JButton quit;
 	private ArrayList <NodeView> listNode;
 	private double[][] tabResult;
 	
 	public GraphCanvas(boolean isResolved, ArrayList <NodeView> listNode, double[][] tabResult) {
 		this.isResolved = isResolved;
 		this.listNode = listNode;
-		this.tabResult = tabResult;
-		
-		// Créer les 3 boutons		
+		this.tabResult = tabResult;	
 	}
 	
 	@Override
@@ -83,30 +73,6 @@ public class GraphCanvas extends Canvas{
 
 	public void setIsResolved(boolean isResolved) {
 		this.isResolved = isResolved;
-	}
-
-	public JButton getSolve() {
-		return solve;
-	}
-
-	public void setSolve(JButton solve) {
-		this.solve = solve;
-	}
-
-	public JButton getStartMenu() {
-		return startMenu;
-	}
-
-	public void setStartMenu(JButton startMenu) {
-		this.startMenu = startMenu;
-	}
-
-	public JButton getQuit() {
-		return quit;
-	}
-
-	public void setQuit(JButton quit) {
-		this.quit = quit;
 	}
 
 	public ArrayList<NodeView> getListNode() {

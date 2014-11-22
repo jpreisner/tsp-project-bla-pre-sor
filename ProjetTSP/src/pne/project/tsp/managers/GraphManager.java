@@ -44,9 +44,7 @@ public class GraphManager {
 			
 			/* Permet de ne renvoyer que des 1 et 0*/
 			cplex.setParam(DoubleParam.EpInt, 0.0);
-			/**
-			 * QU'EST CE QUE FAIT : numVarArray?
-			 */
+
 			IloNumVar[] u = cplex.numVarArray(i_graph.getNbNode(), 0, Double.MAX_VALUE);
 
 			setObjectiveFonction(i_graph, cplex, x);

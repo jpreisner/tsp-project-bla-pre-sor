@@ -53,7 +53,7 @@ public class Test {
 	/* display graph main */
 	public static void main(String[] args) {
 		
-		String filename = "gr48";
+		String filename = "att48";
 		Graph g1 = FileReader.buildGraphFromXml("data/XML/"+filename+".xml");
 		int[] tabResult = GraphManager.writeLinearProgram(g1, "tests/lpex1.lp", "tests/results.txt");
 		

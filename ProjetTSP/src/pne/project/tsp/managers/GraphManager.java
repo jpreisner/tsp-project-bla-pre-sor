@@ -9,6 +9,8 @@ import ilog.cplex.IloCplex.DoubleParam;
 import java.util.HashMap;
 import java.util.Scanner;
 
+import org.omg.CORBA.portable.IndirectionException;
+
 import pne.project.tsp.beans.Graph;
 
 public class GraphManager {
@@ -19,11 +21,11 @@ public class GraphManager {
 	 * @param o_pathFileToExport
 	 * @return 
 	 */
-	public static double[][] writeLinearProgram(Graph i_graph,String o_pathModelToExport,String o_pathFileToExport) {
+	public static int[] writeLinearProgram(Graph i_graph,String o_pathModelToExport,String o_pathFileToExport) {
 		System.out.println("1 - utiliser la méthode plans-coupants\n2 - utiliser l'autre méthode");
 		Scanner s = new Scanner(System.in);
 		int choix = s.nextInt();
-		double[][] tabResult = new double[i_graph.getNbNode()][i_graph.getNbNode()];
+		int[] tabResult = new int[i_graph.getNbNode()];
 
 		
 		IloCplex cplex;
@@ -52,33 +54,29 @@ public class GraphManager {
 			setConstraintInnerEdge(i_graph, cplex, x);
 			if(choix == 1){
 				cplex.setOut(null);
-				cplex.solve();			
-				for(int i=0;i<i_graph.getNbNode();i++){
-					tabResult[i] = cplex.getValues(x[i]);
-				}			
+				cplex.solve();		
+				
+				for(int i=0; i<i_graph.getNbNode(); i++){
+					tabResult[i] = searchIndiceJ(cplex.getValues(x[i]), i_graph.getNbNode());
+				}
 				int cpt=0;
 				while(addNewSubCycleConstraint(i_graph.getNbNode(), cplex, x, tabResult)){
 					cpt++;
-					//System.out.println(cpt);
-					/* désactive l'affichage de cplex (ralentit les traitements)*/
+					
+					// désactive l'affichage de cplex (ralentit les traitements)
 					cplex.setOut(null);
 					cplex.solve();
 
 					// Enregistrement du résultat dans tabResult
-					tabResult = new double[i_graph.getNbNode()][i_graph.getNbNode()];
-					for(int i=0;i<i_graph.getNbNode();i++){
-						tabResult[i] = cplex.getValues(x[i]);
+					tabResult = new int[i_graph.getNbNode()];	// pas besoin?
+					for(int i=0; i<i_graph.getNbNode(); i++){
+						tabResult[i] = searchIndiceJ(cplex.getValues(x[i]), i_graph.getNbNode());
 					}			
 				}
 				
 				System.out.println("Après la méthode des plans coupants : ");
-				for(int i=0;i<i_graph.getNbNode();i++){
-					for(int j=0;j<i_graph.getNbNode();j++){
-						
-						if(tabResult[i][j]==1){
-							System.out.println("arête "+x[i][j]);
-						}
-					}			
+				for(int i=0; i<i_graph.getNbNode(); i++){
+					System.out.println("x["+i+"]["+tabResult[i]+"]");
 				}
 				System.out.println("cpt=" + cpt);
 				System.out.println("valeur chemin optimal : "+cplex.getObjValue());
@@ -90,16 +88,13 @@ public class GraphManager {
 				setConstraintSubCycle(i_graph, cplex, x, u);
 				cplex.solve();
 				// Enregistrement du résultat dans tabResult
-				for(int i=0;i<i_graph.getNbNode();i++){
-					tabResult[i] = cplex.getValues(x[i]);
+				tabResult = new int[i_graph.getNbNode()];	// pas besoin?
+				for(int i=0; i<i_graph.getNbNode(); i++){
+					tabResult[i] = searchIndiceJ(cplex.getValues(x[i]), i_graph.getNbNode());
 				}
 				System.out.println("Après l'autre méthode : ");
-				for(int i=0;i<i_graph.getNbNode();i++){
-					for(int j=0;j<i_graph.getNbNode();j++){
-						if(tabResult[i][j]==1){
-							System.out.println("arête "+x[i][j]);
-						}
-					}			
+				for(int i=0; i<i_graph.getNbNode(); i++){
+					System.out.println("x["+i+"]["+tabResult[i]+"]");
 				}
 				
 				System.out.println("valeur chemin optimal : "+cplex.getObjValue());
@@ -114,7 +109,7 @@ public class GraphManager {
 	}
 	
 	// renvoie vrai si il existe des sous tours, faux sinon
-	public static boolean addNewSubCycleConstraint(int nbNode,IloCplex cplex,IloNumVar[][] x, double[][] tabResult){
+	public static boolean addNewSubCycleConstraint(int nbNode,IloCplex cplex,IloNumVar[][] x, int[] tabResult){
 		int cpt = 0;	// le nb de noeud dans la recherche d'un sous tours
 		int i_saved = 0;
 		int i = i_saved;
@@ -132,7 +127,7 @@ public class GraphManager {
 		
 		while(cpt<nbNode && /*i_saved<nbNode &&*/ i_saved != -1){
 			nodeVisited[i] = true;
-			j = searchIndiceJ(tabResult, i, nbNode);
+			j = tabResult[i];
 			
 			// si j = -1, ca veut dire que tous les noeuds xij pour j=0,...,n-1 sont = à 0
 			if(j == -1){
@@ -186,12 +181,9 @@ public class GraphManager {
 	}
 	
 	// On connait l'indice i, on cherche l'indice j tel que resultat[i][j] = 1
-	public static int searchIndiceJ(double[][] tabResult, int indiceI, int nbNode){
+	public static int searchIndiceJ(double[] tabResult, int nbNode){
 		for(int j=0; j<nbNode; j++){
-			/**
-			 *  SI on ne regle pas le pb des 0.999999 et 0.00000001, il faut trancher a 0.5
-			 */
-			if(tabResult[indiceI][j] != 0){
+			if(tabResult[j] != 0){
 				return j;
 			}
 		}

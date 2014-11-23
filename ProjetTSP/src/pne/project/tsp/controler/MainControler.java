@@ -28,33 +28,13 @@ public class MainControler {
 	public MouseListener menuPrincipal = new MouseListener() {
 		
 		@Override
-		public void mouseReleased(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-		}
-		
-		@Override
-		public void mousePressed(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-		}
-		
-		@Override
-		public void mouseExited(MouseEvent arg0) {
-			// TODO Auto-generated method stub		
-		}
-		
-		@Override
-		public void mouseEntered(MouseEvent arg0) {
-			// TODO Auto-generated method stub		
-		}
-		
-		@Override
 		public void mouseClicked(MouseEvent arg0) {
 			// TODO Auto-generated method stub
 			Point p = new Point(arg0.getX(), arg0.getY());
 			
 			if(mv.getMainCanvas().getChargerPVC().contains(p)){
 				// appeler methode chargerPVC
-				System.out.println("Gignac souhaite charger un PVC");
+//				System.out.println("Gignac souhaite charger un PVC");
 				//mv.dispose();
 				Choix_fichier jf = new Choix_fichier("data/XML");
 				File fileSelected = jf.selectFile();
@@ -105,6 +85,22 @@ public class MainControler {
 				mv.dispose();
 			}
 			
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent arg0) {
+		}
+
+		@Override
+		public void mouseExited(MouseEvent arg0) {
+		}
+
+		@Override
+		public void mousePressed(MouseEvent arg0) {
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent arg0) {
 		}
 	};
 

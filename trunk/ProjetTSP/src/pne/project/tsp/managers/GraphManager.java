@@ -73,11 +73,7 @@ public class GraphManager {
 						tabResult[i] = searchIndiceJ(cplex.getValues(x[i]), i_graph.getNbNode());
 					}			
 				}
-				
-				System.out.println("Après la méthode des plans coupants : ");
-				for(int i=0; i<i_graph.getNbNode(); i++){
-					System.out.println("x["+i+"]["+tabResult[i]+"]");
-				}
+
 				System.out.println("cpt=" + cpt);
 				System.out.println("valeur chemin optimal : "+cplex.getObjValue());
 				cplex.exportModel(o_pathModelToExport);
@@ -87,16 +83,6 @@ public class GraphManager {
 				cplex.setOut(null);
 				setConstraintSubCycle(i_graph, cplex, x, u);
 				cplex.solve();
-				// Enregistrement du résultat dans tabResult
-				tabResult = new int[i_graph.getNbNode()];	// pas besoin?
-				for(int i=0; i<i_graph.getNbNode(); i++){
-					tabResult[i] = searchIndiceJ(cplex.getValues(x[i]), i_graph.getNbNode());
-				}
-				System.out.println("Après l'autre méthode : ");
-				for(int i=0; i<i_graph.getNbNode(); i++){
-					System.out.println("x["+i+"]["+tabResult[i]+"]");
-				}
-				
 				System.out.println("valeur chemin optimal : "+cplex.getObjValue());
 				cplex.exportModel(o_pathModelToExport);
 				cplex.writeSolution(o_pathFileToExport);

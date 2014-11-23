@@ -53,9 +53,18 @@ public class Test {
 	/* display graph main */
 	public static void main(String[] args) {
 		
-		String filename = "att48";
+		String filename = "gr48";
 		Graph g1 = FileReader.buildGraphFromXml("data/XML/"+filename+".xml");
 		int[] tabResult = GraphManager.writeLinearProgram(g1, "tests/lpex1.lp", "tests/results.txt");
+		int cpt=0;
+		int n = tabResult.length;
+		int i = 0;
+		
+		while(cpt<n){
+			cpt++;
+			System.out.print("(" + i + ", " + tabResult[i] +") - ");
+			i = tabResult[i];
+		}
 		
 		//BoundsGraph bg = new BoundsGraph();
 		//double[][] tmp = FileReader.getPositionsFromTsp("data/TSP/"+filename+".tsp", bg);

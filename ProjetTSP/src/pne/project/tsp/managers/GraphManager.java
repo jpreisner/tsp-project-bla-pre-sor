@@ -52,6 +52,9 @@ public class GraphManager {
 			setObjectiveFonction(i_graph, cplex, x);
 			setConstraintOuterEdge(i_graph, cplex, x);
 			setConstraintInnerEdge(i_graph, cplex, x);
+			
+			long startTime = System.nanoTime();			
+			
 			if(choix == 1){
 				cplex.setOut(null);
 				cplex.solve();		
@@ -73,7 +76,9 @@ public class GraphManager {
 						tabResult[i] = searchIndiceJ(cplex.getValues(x[i]), i_graph.getNbNode());
 					}			
 				}
-
+				long stopTime = System.nanoTime();
+				System.out.println(((stopTime - startTime)/1000000000)+" seconds");
+				
 				System.out.println("cpt=" + cpt);
 				System.out.println("valeur chemin optimal : "+cplex.getObjValue());
 				cplex.exportModel(o_pathModelToExport);

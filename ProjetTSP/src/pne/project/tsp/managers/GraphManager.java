@@ -6,12 +6,14 @@ import ilog.concert.IloNumVar;
 import ilog.cplex.IloCplex;
 import ilog.cplex.IloCplex.DoubleParam;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
 import org.omg.CORBA.portable.IndirectionException;
 
 import pne.project.tsp.beans.Graph;
+import pne.project.tsp.beans.NodeCouple;
 
 public class GraphManager {
 	
@@ -106,7 +108,15 @@ public class GraphManager {
 		return tabResult;
 	}
 	
-	// renvoie vrai si il existe des sous tours, faux sinon
+
+	/** add subcycles (if they exists)
+	 * 
+	 * @param nbNode
+	 * @param cplex
+	 * @param x
+	 * @param tabResult
+	 * @return true if it exists subCycles
+	 */
 	public static boolean addNewSubCycleConstraint(int nbNode,IloCplex cplex,IloNumVar[][] x, int[] tabResult){
 		int cpt = 0;	// le nb de noeud dans la recherche d'un sous tours
 		int i_saved = 0;
@@ -116,46 +126,53 @@ public class GraphManager {
 		boolean hasSubCycle = false;
 		
 		// de type <i, j> pour avoir une liste [(i1, j1), (i2, j2), ...]
-		HashMap<Integer, Integer> listVariables = new HashMap<Integer, Integer>();
+		//HashMap<Integer, Integer> listVariables = new HashMap<Integer, Integer>();
+		ArrayList<NodeCouple> listVariables = new ArrayList<NodeCouple>();
 		
 		boolean[] nodeVisited = new boolean[nbNode];
+		boolean[] nodeVisitedInSubCycle = new boolean[nbNode];
 		for(int k=0; k<nbNode; k++){
 			nodeVisited[k] = false;
+			nodeVisitedInSubCycle[k] = false;
 		}
 		
 		while(cpt<nbNode && /*i_saved<nbNode &&*/ i_saved != -1){
 			nodeVisited[i] = true;
+			nodeVisitedInSubCycle[i] = true;
 			j = tabResult[i];
 			
 			// si j = -1, ca veut dire que tous les noeuds xij pour j=0,...,n-1 sont = à 0
 			if(j == -1){
 				/** NORMALEMENT NE DOIT JAMAIS ARRIVE -> GERER L'ERREUR **/
-				/*
-				i_saved++;
-				i = i_saved;
-				cpt=0;
-				*/
 				System.out.println("Pb pour i="+i);
-				//affiche(i, tabResult, nbNode);
 				return true;
 			}
 			else{
 				cpt++;
-				listVariables.put(i, j);
-				// dans le cas ou on rencontre un sous-tour
-				if(j == i_saved && cpt<nbNode){
+				//listVariables.put(i, j);
+				listVariables.add(new NodeCouple(i, j));
+				// dans le cas ou on rencontre un sous-tour (cas ou on revient sur le noeud i_saved)
+				if(/*j == i_saved*/ nodeVisitedInSubCycle[j] && cpt<nbNode){
+					
 					try {
-						
 						// ajout de la contrainte
 						IloLinearNumExpr expr = cplex.linearNumExpr();
-						for(Integer indice_i : listVariables.keySet()){
-							indice_j = listVariables.get(indice_i);
-							
-							expr.addTerm(1.0, x[indice_i][indice_j]);
-							// on ne veut plus regarder les variables xij comprises dans le sous-tour
-							//tabResult[indice_i][indice_j] = 0;
+						int pos = getNodeInList(listVariables, j);
+						if(pos==-1){
+							System.out.println("j="+j+", visite[j]="+nodeVisited[j]);
+							System.out.println("k=-1 pour j=" + j + ", listVariables="+listVariables);
 						}
-						//System.out.println(expr + "<=" + (cpt-1));
+						while(pos<cpt){
+							expr.addTerm(1.0, x[listVariables.get(pos).getN1()][listVariables.get(pos).getN2()]);
+							pos++;
+							
+						}
+						/*for(Integer indice_i : listVariables.keySet()){
+							indice_j = listVariables.get(indice_i);	
+							expr.addTerm(1.0, x[indice_i][indice_j]);
+					
+						}*/
+						
 						cplex.addLe(expr, cpt-1);
 						
 						// mise a jour des variables
@@ -164,21 +181,50 @@ public class GraphManager {
 						i = i_saved;
 						listVariables.clear();
 						hasSubCycle = true;
+						for(int l=0; l<nbNode; l++){
+							nodeVisitedInSubCycle[l] = false;
+						}
 						
 					} catch (IloException e) {
 						e.printStackTrace();
 					}
 				}
-				// dans le cas ou on ne rencontre pas de sous-tour : on continue notre recherche
+				
 				else{
-					i = j;
+					/*
+					// sous tour
+					if(nodeVisited[j]){
+						// j'ajoute a partir de la position ou j'ai rencontré le j
+						//listVariables.get(0);
+					}
+					// dans le cas ou on ne rencontre pas de sous-tour : on continue notre recherche
+					else{*/
+						i = j;
+					//}
 				}
 			}
 		}
 		return hasSubCycle;
 	}
 	
+	private static int getNodeInList(ArrayList<NodeCouple> listVariables, int j) {
+		int n = listVariables.size();
+		for(int i=0; i<n; i++){
+			if(listVariables.get(i).getN1() == j){
+				return i;
+			}
+		}
+		return -1;	// error
+	}
+
+
 	// On connait l'indice i, on cherche l'indice j tel que resultat[i][j] = 1
+	/**
+	 * 
+	 * @param tabResult
+	 * @param nbNode
+	 * @return
+	 */
 	public static int searchIndiceJ(double[] tabResult, int nbNode){
 		for(int j=0; j<nbNode; j++){
 			if(tabResult[j] != 0){
@@ -188,9 +234,15 @@ public class GraphManager {
 		return -1;	// error
 	}
 
+	/**
+	 * 
+	 * @param nodeVisite
+	 * @param nbNode
+	 * @return 
+	 */
 	public static int nextNode(boolean[] nodeVisite, int nbNode){
 		for(int i=0; i<nbNode; i++){
-			if(nodeVisite[i] == false){
+			if(!nodeVisite[i]){
 				return i;
 			}
 		}
@@ -205,6 +257,11 @@ public class GraphManager {
 	}
 	*/
 	
+	/**
+	 * 
+	 * @param nbNode
+	 * @param varName
+	 */
 	private static void initVarNameTab(int nbNode, String[][] varName) {
 		for(int i=0;i<nbNode;i++){
 			for(int j=0;j<nbNode;j++){
@@ -283,11 +340,6 @@ public class GraphManager {
 		}	
 	}
 	
-	
-	
-	
-	// A REGARDER !
-
 	/**
 	 * Write the third constraint : the path chozen does'nt contains sub-cycle in it.
 	 * @param graph
@@ -313,155 +365,4 @@ public class GraphManager {
 			e.printStackTrace();
 		}	
 	}
-	
-	
-	
-	
-	
-	/**
-	 * Return true if "i" is the indice i of a variable in tabConst
-	 * 
-	 * @param tabConst
-	 * @param i
-	 * @return
-	 */
-//	private static boolean contains_i(ArrayList<IloNumVar> tabConst, int i){
-//		for(IloNumVar x : tabConst){
-//			if(Integer.parseInt(x.getName().substring(1).split(";")[0]) == i){
-//				return true;
-//			}
-//		}
-//		return false;
-//	}
-	
-	
-	/** Contrainte n°3 (sous-tours) : on va regarder pour chaque xij tous les sous-tours possibles 
-	 * 								  en partant de cette variable
-	 * 		
-	 * 
-	 * @param graph
-	 * @param cplex
-	 * @param x
-	 * 
-	 * */
-	 
-//	private static void setConstraintSubCycle(Graph graph, IloCplex cplex, IloNumVar[][] x) {
-//		int i,j;
-//		ArrayList<IloNumVar> tabConst = new ArrayList<IloNumVar>();
-//		for(i=0;i<graph.getNbNode()-1;i++){
-//			for(j=i+1;j<graph.getNbNode();j++){
-//				tabConst.clear();	// on efface la liste des variables car on passe a un indice qui n'a rien a voir avec les indices precedents
-//				setConstraintSubCycleRecursif(graph,cplex,tabConst,x,i,j,i);
-//				
-//			}
-//		}
-//		
-//	}
-
-	// init_I permet de connaitre quel est le dernier indice i
-//	private static void setConstraintSubCycleRecursif(Graph graph, IloCplex cplex, 
-//			ArrayList<IloNumVar> tabConst, IloNumVar[][] x, int i, int j, int init_I) {
-//				
-//		//System.out.println("On regarde (i=" + i + ", j=" + j + ")");
-//		try{
-//			if(graph.getTabAdja()[i][j]!=0 && graph.getTabAdja()[j][init_I]!=0 && (tabConst.size()+2)<graph.getNbNode()){
-//				IloLinearNumExpr expr = cplex.linearNumExpr();
-//				for(IloNumVar strExpr : tabConst){
-//					expr.addTerm(1.0, strExpr);	
-//				}
-//				expr.addTerm(1.0, x[i][j]);
-//				expr.addTerm(1.0, x[j][init_I]);
-//				
-//				System.out.println("l'expression de la contrainte : " + expr + "<=" + (tabConst.size()+1));
-//				cplex.addLe(expr, (tabConst.size()+1));
-//				
-//				tabConst.add(x[i][j]);
-////				System.out.println("tabConst="+tabConst);
-//				i=j;
-//				for(j=init_I+1;j<graph.getNbNode();j++){
-//					
-//					if((tabConst.size()+2)>=graph.getNbNode()){
-////						System.out.println("On est ds le break pour (i=" + i + ", j=" + j +") et taille tabConst=" + (tabConst.size()) + " et tabConst = " + tabConst);
-//						break;
-//					}
-//					
-//					if(contains_i(tabConst, j) == false && j!=i){
-//						setConstraintSubCycleRecursif(graph,cplex,tabConst,x,i,j,init_I);
-//						//System.out.println("avant remove1 pour (i=" + i + ", j=" + j + ": " + tabConst);
-//						//tabConst.remove((tabConst.size()-1));
-//						//System.out.println("apres remove1 pour (i=" + i + ", j=" + j + ") : " + tabConst);
-//					}
-//					
-//				}
-////				System.out.println("avant remove2: " + tabConst);
-//				tabConst.remove((tabConst.size()-1));
-////				System.out.println("apres remove2 pour (i=" + i + ", j=" + j + ") : " + tabConst);
-//
-//			}
-//		}catch(IloException e){
-//			
-//		}
-//	}
-	
-	
-	/*
-	 Ancienne version de l'algo contrainte 3
-	 
-	private static void setConstraintSubCycle(Graph graph, IloCplex cplex, IloNumVar[][] x) {
-		int i,j;
-		ArrayList<IloNumVar> tabConst = new ArrayList<IloNumVar>();
-		for(i=1;i<=graph.getNbNode();i++){
-			for(j=i+1;i<graph.getNbNode();j++){
-				
-				tabConst.clear();
-				setConstraintSubCycleRecursif(graph,cplex,tabConst,x,i,j,i,2);
-				
-			}
-		}
-		
-	}
-	
-	private static void setConstraintSubCycleRecursif(Graph graph, IloCplex cplex, 
-			ArrayList<IloNumVar> tabConst, IloNumVar[][] x, int i, int j, int init_I, int nbNodeST) {
-		try{
-			if(graph.getTabAdja()[i][j]!=0 && graph.getTabAdja()[j][init_I]!=0 && nbNodeST<graph.getNbNode()){
-				IloLinearNumExpr expr = cplex.linearNumExpr();
-				for(IloNumVar strExpr : tabConst){
-					expr.addTerm(1.0, strExpr);	
-				}
-				expr.addTerm(1.0, x[i][j]);
-				expr.addTerm(1.0, x[j][init_I]);
-				
-				System.out.println(expr + "<=" + (nbNodeST-1));
-				cplex.addLe(expr, nbNodeST-1);
-				
-				tabConst.add(x[i][j]);
-				nbNodeST++;
-				i=j;
-				for(j=1;j<=graph.getNbNode();j++){
-					
-					if(nbNodeST>=graph.getNbNode()){
-
-						break;
-					}
-					
-					if(j!=i && j > init_I){
-						setConstraintSubCycleRecursif(graph,cplex,tabConst,x,i,j,init_I,nbNodeST);
-						System.out.println(tabConst);
-
-						tabConst.remove(tabConst.size()-1);
-					}
-					
-				}
-				System.out.println(tabConst);
-				tabConst.remove(tabConst.size()-1);
-
-			}
-		}catch(IloException e){
-			
-		}
-	}
-	*/
-
-
 }

@@ -19,11 +19,17 @@ import pne.project.tsp.view.NodeView;
 public class MainControler {
 
 	private MainView mv;
+	private boolean solved;
+	private Graph g;
 
 	public MainControler(MainView mv) {
 		this.mv = mv;
+		solved = false;
+		g = null;
 		mv.getMainCanvas().addMouseListener(menuPrincipal);
 	}
+	
+	
 	
 	public MouseListener menuPrincipal = new MouseListener() {
 		
@@ -33,56 +39,33 @@ public class MainControler {
 			Point p = new Point(arg0.getX(), arg0.getY());
 			
 			if(mv.getMainCanvas().getChargerPVC().contains(p)){
-				Choix_fichier jf = new Choix_fichier("data/XML");
-				File fileSelected = jf.selectFile();
-				System.out.println("Le fichier selected est = " + fileSelected.getName());
-				
-				
-				Graph g1 = FileReader.buildGraphFromXml("data/XML/"+fileSelected.getName());
-				//double[][] tabResult = GraphManager.writeLinearProgram(g1, "tests/lpex1.lp", "tests/results.txt");
-				
-				String filename = fileSelected.getName().substring(0, (int) (fileSelected.getName().length()-4));
-				System.out.println(filename);
-				int w = mv.getWidth();
-				int h = mv.getHeight();
-				
-				BoundsGraph bg = new BoundsGraph();
-				ArrayList<NodeView> listNode = new ArrayList<NodeView>();
-				int i;
-				int d = 18;
-				Color fill = Color.RED;
-				Color draw = Color.RED;
-				Color text = Color.BLACK;
-				
-//				double ratioX = (bg.getxMax()-bg.getxMin())/(double)w;
-//				double ratioY = (bg.getyMax()-bg.getyMin())/(double)h;
-				
-				double[][] nodePositions = FileReader.getPositionsFromTsp("data/TSP/"+filename+".tsp", bg);
-								
-				for (i = 0; i < nodePositions.length; i++) {
-//					listNode.add(new NodeView((nodePositions[i][0]-bg.getxMin()) / (ratioX*1.1), 
-//							(nodePositions[i][1]-bg.getyMin())/(ratioY*1.1),
-//							d, i, fill, draw, text));
-					listNode.add(new NodeView((nodePositions[i][0]), 
-							(nodePositions[i][1]),
-							d, i, fill, draw, text));
-				}
-				double[][] tabResult = null;
-				mv.graphView(w, h, g1, false, listNode, tabResult);
-				
-				/*BoundsGraph bg = new BoundsGraph();
-				double[][] nodePositions = FileReader.getPositionsFromTsp("data/TSP/"+filename+".tsp", bg);
-				//GraphView view = new GraphView("Affichage Graph", 800, 600, tmp, bg,true, tabResult);
-				
-				
-				
-				// A enlever : c'est juste pour tester
-				
-				*/
-				
+				/* recupération du xml*/
+				String filename = getXML();
+				affichageGraphe(filename);
+				Graph g1 = FileReader.buildGraphFromXml("data/XML/"+filename + ".xml");
+				/* construction de la vue initiale*/
+				mv.graphView(mv.getWidth(), mv.getHeight(), g1, solved, mv.getGraphCanvas().getListNode(), null);
 			}
-			else if(mv.getMainCanvas().getQuitter().contains(p)){
+			else if(mv.getMainCanvas().getQuitter().contains(p) || mv.getButtonCanvas().getQuit().contains(p)){
 				mv.dispose();
+			} else if(mv.getButtonCanvas().getSolve_or_startMenu().contains(p)){
+				mv.getContentPane().removeAll();
+				// cas ou le graphe n'est pas resolu
+				if(!solved){
+					// lancer la résolution
+					int[] tabResult = GraphManager.writeLinearProgram(g, "tests/lpex1.lp", "tests/results.txt");
+					// passer le resultat dans la fonction d'affichage
+					mv.graphView(mv.getWidth(), mv.getHeight(), g, solved, mv.getGraphCanvas().getListNode(), tabResult);
+					
+					solved = true;
+				}
+				// cas ou le graphe a ete resolu
+				else{
+					mv.getContentPane().removeAll();
+					mv.menuPrincipal(mv.getWidth(), mv.getHeight());
+					solved = false;
+				}
+				
 			}
 			
 		}
@@ -104,6 +87,48 @@ public class MainControler {
 		}
 	};
 
+	
+	private String getXML() {
+		Choix_fichier jf = new Choix_fichier("data/XML");
+		File fileSelected = jf.selectFile();
+		System.out.println("Le fichier selected est = " + fileSelected.getName());				
+						
+		return fileSelected.getName().substring(0, (int) (fileSelected.getName().length()-4));
+	}
+	
+	private void affichageGraphe(String filename) {
+		
+		
+		// TODO Auto-generated method stub
+		/* Affichage du graphe*/
+		int w = mv.getWidth();
+		int h = mv.getHeight();
+						
+		BoundsGraph bg = new BoundsGraph();
+		ArrayList<NodeView> listNode = new ArrayList<NodeView>();
+		int i;
+		int d = 18;
+		Color fill = Color.RED;
+		Color draw = Color.RED;
+		Color text = Color.BLACK;
+						
+		/* initialisation des bornes du graphe*/
+		double[][] nodePositions = FileReader.getPositionsFromTsp("data/TSP/"+filename+".tsp", bg);
+						
+		double ratioX = (bg.getxMax()-bg.getxMin())/(double)(w/2);
+		double ratioY = (bg.getyMax()-bg.getyMin())/(double)(h/2);
+		
+		/* affectation des positions aux noeuds*/
+		for (i = 0; i < nodePositions.length; i++) {
+			listNode.add(new NodeView((nodePositions[i][0]-bg.getxMin()) / (ratioX*1.2), 
+					(nodePositions[i][1]-bg.getyMin())/(ratioY*1.2),
+					d, i, fill, draw, text));
+
+		}
+		
+	}
+	
+	
 	public MainView getMv() {
 		return mv;
 	}

@@ -57,7 +57,7 @@ public class GraphView {
 		// a mettre pour de vrai :
 		// listNode = displayGraph(graph);
 
-		canvas = new GraphCanvas(isResolved, listNode, tabResult);
+//		canvas = new GraphCanvas(isResolved, listNode, tabResult);
 		canvas.setBackground(Color.WHITE);
 		frame.add(canvas);
 

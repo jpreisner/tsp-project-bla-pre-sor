@@ -43,14 +43,12 @@ public class MainControler {
 				String filename = getXML();
 				ArrayList<NodeView> listNode = affichageGraphe(filename);
 				Graph g1 = FileReader.buildGraphFromXml("data/XML/"+filename + ".xml");
+
 				/* construction de la vue initiale*/
-//				System.out.println(mv.getWidth()+", "+ mv.getHeight());
-//				System.out.println(g1);				
-//				System.out.println(solved);				
-//				System.out.println(mv.getGraphCanvas().getListNode());				
 				mv.graphView(mv.getWidth(), mv.getHeight(), g1, solved, listNode, null);
 			}
 			else if(mv.getMainCanvas().getQuitter().contains(p) || mv.getButtonCanvas().getQuit().contains(p)){
+				/* quitter*/
 				mv.dispose();
 			} else if(mv.getButtonCanvas().getSolve_or_startMenu().contains(p)){
 				mv.getContentPane().removeAll();

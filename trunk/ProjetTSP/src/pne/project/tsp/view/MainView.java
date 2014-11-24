@@ -26,6 +26,8 @@ public class MainView extends JFrame {
 		setBackground(Color.WHITE);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
+		setResizable(false);
+		setLocationRelativeTo(null);
 
 		menuPrincipal(width, height);
 
@@ -41,7 +43,7 @@ public class MainView extends JFrame {
 	}
 
 	public void graphView(int width, int height, Graph g, boolean isResolved,
-			ArrayList<NodeView> listNode, double[][] tabResult) {
+			ArrayList<NodeView> listNode, int[] tabResult) {
 		getContentPane().removeAll();
 
 		JPanel mainPanel = new JPanel();

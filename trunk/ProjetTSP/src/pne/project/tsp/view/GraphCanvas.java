@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
 import java.util.ArrayList;
 
 public class GraphCanvas extends Component {
@@ -12,8 +11,7 @@ public class GraphCanvas extends Component {
 	private ArrayList<NodeView> listNode;
 	private int[] tabResult;
 
-	public GraphCanvas(boolean isResolved, ArrayList<NodeView> listNode,
-			int[] tabResult) {
+	public GraphCanvas(boolean isResolved, ArrayList<NodeView> listNode, int[] tabResult) {
 		this.isResolved = isResolved;
 		this.listNode = listNode;
 		this.tabResult = tabResult;
@@ -21,7 +19,7 @@ public class GraphCanvas extends Component {
 
 	@Override
 	public void paint(Graphics graphics) {
-		
+
 		Graphics2D g = (Graphics2D) graphics;
 
 		// Dessiner tous les elements
@@ -40,11 +38,9 @@ public class GraphCanvas extends Component {
 				g.setColor(Color.GRAY); // couleur des aretes
 
 				// pb : drawLine prend que des int, alors qu'on a des double
-				g.drawLine((int) listNode.get(i).getCircle().getCenterX(),
-						(int) listNode.get(i).getCircle().getCenterY(),
-						(int) listNode.get(tabResult[i]).getCircle()
-								.getCenterX(), (int) listNode.get(tabResult[i])
-								.getCircle().getCenterY());
+				g.drawLine((int) listNode.get(i).getCircle().getCenterX(), (int) listNode.get(i).getCircle()
+						.getCenterY(), (int) listNode.get(tabResult[i]).getCircle().getCenterX(),
+						(int) listNode.get(tabResult[i]).getCircle().getCenterY());
 
 			}
 		} else {
@@ -54,10 +50,8 @@ public class GraphCanvas extends Component {
 					if (!(node.equals(nodeJ))) {
 						// pb : drawLine prend que des int, alors qu'on a des
 						// double
-						g.drawLine((int) node.getCircle().getCenterX(),
-								(int) node.getCircle().getCenterY(),
-								(int) nodeJ.getCircle().getCenterX(),
-								(int) nodeJ.getCircle().getCenterY());
+						g.drawLine((int) node.getCircle().getCenterX(), (int) node.getCircle().getCenterY(),
+								(int) nodeJ.getCircle().getCenterX(), (int) nodeJ.getCircle().getCenterY());
 					}
 				}
 			}
@@ -76,9 +70,8 @@ public class GraphCanvas extends Component {
 			// numéro du noeud
 			g.setColor(node.getColorText());
 			// pb : drawString prend que des float, alors qu'on a des double
-			g.drawString(Integer.toString(node.getID()), (float) node
-					.getCircle().getCenterX(), (float) node.getCircle()
-					.getCenterY());
+			g.drawString(Integer.toString(node.getID()), (float) node.getCircle().getCenterX(), (float) node
+					.getCircle().getCenterY());
 		}
 	}
 

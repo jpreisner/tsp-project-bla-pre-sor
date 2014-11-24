@@ -2,7 +2,6 @@ package pne.project.tsp.utils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -10,17 +9,19 @@ import java.util.regex.Pattern;
 
 import org.jdom2.Attribute;
 import org.jdom2.Content;
+import org.jdom2.Content.CType;
 import org.jdom2.DataConversionException;
 import org.jdom2.Document;
 import org.jdom2.Element;
-import org.jdom2.Content.CType;
 import org.jdom2.input.SAXBuilder;
 
 import pne.project.tsp.beans.Graph;
 
 public class FileReader {
 
-	/** read a tsp file and gives nodes positions
+	/**
+	 * read a tsp file and gives nodes positions
+	 * 
 	 * @param filePath
 	 * @return int[][] corresponding to node positions
 	 */
@@ -40,7 +41,7 @@ public class FileReader {
 				m.find();
 				tabSize = Integer.parseInt(m.group());
 
-				tabPos = new double[tabSize+1][2];
+				tabPos = new double[tabSize + 1][2];
 
 				/* get first position */
 				if (line.split(" ")[0].equals("NODE_COORD_SECTION")) {
@@ -49,10 +50,10 @@ public class FileReader {
 						try {
 							/* traitement */
 							String[] tabPosition = line.split(" ");
-							
+
 							/* indice */
 							int indice = Integer.parseInt(tabPosition[0]);
-							
+
 							/* x */
 							double x = Double.parseDouble(tabPosition[1]);
 							tabPos[indice][0] = x;
@@ -70,7 +71,7 @@ public class FileReader {
 							} else if (y < bg.getyMin()) {
 								bg.setyMin(y);
 							}
-//							 System.out.println(line);
+							// System.out.println(line);
 
 							line = scanner.nextLine();
 						} catch (NumberFormatException e) {
@@ -95,7 +96,9 @@ public class FileReader {
 
 	}
 
-	/** read a xml file and build the graph
+	/**
+	 * read a xml file and build the graph
+	 * 
 	 * @param filePath
 	 * @return Graph obtains from xml file in param.
 	 */
@@ -131,8 +134,7 @@ public class FileReader {
 	 * @param iGraphSize
 	 * @return Graph with tableAdja
 	 */
-	private static Graph fillGraphWithParam(List<Element> i_graphElement,
-			double[][] io_tabInt, int iGraphSize) {
+	private static Graph fillGraphWithParam(List<Element> i_graphElement, double[][] io_tabInt, int iGraphSize) {
 		int i = 0;
 		/* Vertex */
 		for (Element elemGraph : i_graphElement) {
@@ -167,5 +169,5 @@ public class FileReader {
 		Graph result = new Graph(io_tabInt, iGraphSize);
 		return result;
 	}
-	
+
 }

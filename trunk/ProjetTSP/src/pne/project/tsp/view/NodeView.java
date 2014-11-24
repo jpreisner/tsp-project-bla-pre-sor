@@ -4,21 +4,21 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.geom.Ellipse2D;
 
-public class NodeView extends Component{
-	
+public class NodeView extends Component {
+
 	private Ellipse2D circle;
 	private int id;
-	private Color colorFill;	// couleur interieur
-	private Color colorDraw;	// couleur contour
+	private Color colorFill; // couleur interieur
+	private Color colorDraw; // couleur contour
 	private Color colorText;
-	
-	public NodeView(double x, double y, float d, int number, Color fill, Color draw, Color text){
+
+	public NodeView(double x, double y, float d, int number, Color fill, Color draw, Color text) {
 		this.id = number;
 		colorFill = fill;
 		colorDraw = draw;
 		colorText = text;
-		
-		circle = new Ellipse2D.Double(x, y, d, d);	// a verifier?
+
+		circle = new Ellipse2D.Double(x, y, d, d); // a verifier?
 	}
 
 	public Ellipse2D getCircle() {
@@ -63,7 +63,7 @@ public class NodeView extends Component{
 
 	@Override
 	public String toString() {
-		return "("+circle.getX()+", "+circle.getY()+"), id="+id;
+		return "(" + circle.getX() + ", " + circle.getY() + "), id=" + id;
 
 	}
 }

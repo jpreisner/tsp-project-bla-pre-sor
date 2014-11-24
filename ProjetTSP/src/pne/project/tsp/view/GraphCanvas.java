@@ -34,6 +34,7 @@ public class GraphCanvas extends Component {
 
 		// Dessin des aretes
 		if (isResolved) {
+			System.out.println("Dans GraphCanvas-paint(), on rentre dans isResolved");
 			for (int i = 0; i < listNode.size() - 1; i++) {
 
 				g.setColor(Color.GRAY); // couleur des aretes

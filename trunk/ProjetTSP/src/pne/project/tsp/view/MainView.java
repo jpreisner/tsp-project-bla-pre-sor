@@ -50,6 +50,7 @@ public class MainView extends JFrame {
 	 JPanel bottomPanel = new JPanel();
 	 JPanel panelTab = new JPanel();
 	 JPanel panelGraph = new JPanel();
+	 JPanel panelRight = new JPanel();
 		
 		mainPanel.setBackground(Color.pink);
 		topPanel.setBackground(Color.yellow);
@@ -59,7 +60,7 @@ public class MainView extends JFrame {
 		
 		topPanel.setPreferredSize(new Dimension(width, height-150));
 		panelGraph.setPreferredSize(new Dimension(490, 450));
-		panelTab.setPreferredSize(new Dimension(490, 450));
+		panelRight.setPreferredSize(new Dimension(490, 450));
 		bottomPanel.setPreferredSize(new Dimension(width, 150));
 
 		// topPanel
@@ -87,10 +88,13 @@ public class MainView extends JFrame {
 		panelTab.add(adjaMatrix.getTableHeader(), BorderLayout.WEST);
 		panelTab.add(adjaMatrix, BorderLayout.LINE_END);
 
-		JScrollPane sc = new JScrollPane(panelTab,
+		JScrollPane sc = new JScrollPane(panelTab,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		panelRight.add(sc);
+		//topPanel.add(panelRight);
+		JScrollPane sc1 = new JScrollPane(panelRight,
 				JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 				JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-		topPanel.add(sc);
+		topPanel.add(sc1);
 
 		// bottomPanel
 		bottomPanel.setLayout(new BoxLayout(bottomPanel, BoxLayout.X_AXIS));

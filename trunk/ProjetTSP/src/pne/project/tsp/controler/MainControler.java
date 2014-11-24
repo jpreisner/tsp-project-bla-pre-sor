@@ -53,6 +53,7 @@ public class MainControler {
 				mv.getContentPane().removeAll();
 				// cas ou le graphe n'est pas resolu
 				if(!solved){
+					solved = true;
 					System.out.println("on lance la résolution");
 					//mv.getGraphCanvas().removeNotify();
 					// lancer la résolution
@@ -61,9 +62,10 @@ public class MainControler {
 					mv.getGraphCanvas().setTabResult(tabResult);
 					mv.getGraphCanvas().setIsResolved(true);
 					mv.getGraphCanvas().repaint();
-					//mv.graphView(mv.getWidth(), mv.getHeight(), g, solved, mv.getGraphCanvas().getListNode(), tabResult);
+					mv.getButtonCanvas().setIsResolved(true);
+					mv.graphView(mv.getWidth(), mv.getHeight(), g, solved, mv.getGraphCanvas().getListNode(), tabResult);
 					System.out.println("terminé");
-					solved = true;
+					
 				}
 				// cas ou le graphe a ete resolu
 				else{

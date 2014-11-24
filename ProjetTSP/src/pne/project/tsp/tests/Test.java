@@ -17,13 +17,13 @@ import pne.project.tsp.view.TabView;
 public class Test {
 
 	/* TSP main */
-//	 public static void main(String[] args) {
-//	 Graph g1 = FileReader.
-//	 buildGraphFromXml("data/XML/gr17.xml");
-//	
-//	 GraphManager.writeLinearProgram(g1,"tests/lpex1.lp",
-//	 "tests/results.txt");
-//	 }
+	// public static void main(String[] args) {
+	// Graph g1 = FileReader.
+	// buildGraphFromXml("data/XML/gr17.xml");
+	//
+	// GraphManager.writeLinearProgram(g1,"tests/lpex1.lp",
+	// "tests/results.txt");
+	// }
 
 	/* JTable main */
 	// public static void main(String[] args) {
@@ -51,23 +51,27 @@ public class Test {
 	// }
 
 	/* display graph main */
-	public static void main(String[] args) {
-		
-		String filename = "gr48";
-		Graph g1 = FileReader.buildGraphFromXml("data/XML/"+filename+".xml");
-		int[] tabResult = GraphManager.writeLinearProgram(g1, "tests/lpex1.lp", "tests/results.txt");
-		int cpt=0;
-		int n = tabResult.length;
-		int i = 0;
-		
-		while(cpt<n){
-			cpt++;
-			System.out.print("(" + i + ", " + tabResult[i] +") - ");
-			i = tabResult[i];
-		}
-		
-		//BoundsGraph bg = new BoundsGraph();
-		//double[][] tmp = FileReader.getPositionsFromTsp("data/TSP/"+filename+".tsp", bg);
-		//GraphView view = new GraphView("Affichage Graph", 800, 600, tmp, bg,true, tabResult);
-	}
+//	public static void main(String[] args) {
+//
+//		String filename = "kroB100";
+//		Graph g1 = FileReader
+//				.buildGraphFromXml("data/XML/" + filename + ".xml");
+//		int[] tabResult = GraphManager.writeLinearProgram(g1, "tests/lpex1.lp",
+//				"tests/results.txt");
+//		int cpt = 0;
+//		int n = tabResult.length;
+//		int i = 0;
+//
+//		while (cpt < n) {
+//			cpt++;
+//			System.out.print("(" + i + ", " + tabResult[i] + ") - ");
+//			i = tabResult[i];
+//		}
+
+		// BoundsGraph bg = new BoundsGraph();
+		// double[][] tmp =
+		// FileReader.getPositionsFromTsp("data/TSP/"+filename+".tsp", bg);
+		// GraphView view = new GraphView("Affichage Graph", 800, 600, tmp,
+		// bg,true, tabResult);
+//	}
 }

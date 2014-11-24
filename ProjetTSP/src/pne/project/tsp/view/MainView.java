@@ -45,14 +45,33 @@ public class MainView extends JFrame {
 		getContentPane().removeAll();
 
 		JPanel mainPanel = new JPanel();
-		JPanel topPanel = new JPanel();
+		JPanel topPanel = new JPanel();	// graphcanvas
 		JPanel bottomPanel = new JPanel();
+		JPanel panelTab = new JPanel();
+		JPanel panelGraph = new JPanel();
+		
+		mainPanel.setBackground(Color.pink);
+		topPanel.setBackground(Color.yellow);
+		panelGraph.setBackground(Color.ORANGE);
+		bottomPanel.setBackground(Color.green);
+		panelTab.setBackground(Color.GRAY);
+		
+		topPanel.setPreferredSize(new Dimension(width, height-150));
+		panelGraph.setPreferredSize(new Dimension(490, 450));
+		panelTab.setPreferredSize(new Dimension(490, 450));
+		bottomPanel.setPreferredSize(new Dimension(width, 150));
 
 		// topPanel
 		topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.X_AXIS));
 
 		gc = new GraphCanvas(isResolved, listNode, tabResult);
-		topPanel.add(gc);
+		System.out.println("listNode: " + listNode);
+//		panelGraph.add(gc);
+		
+		panelGraph.setLayout(new BorderLayout());
+		panelGraph.add(gc, BorderLayout.CENTER);
+		//panelGraph.setBounds(0, 0, 400, 400);
+		topPanel.add(panelGraph);
 
 		topPanel.add(Box.createRigidArea(new Dimension(30, 0)));
 		JSeparator separator = new JSeparator(JSeparator.VERTICAL);
@@ -60,7 +79,6 @@ public class MainView extends JFrame {
 		topPanel.add(Box.createRigidArea(new Dimension(30, 0)));
 
 		/* display Right Matrix*/
-		JPanel panelTab = new JPanel();
 		panelTab.setLayout(new BoxLayout(panelTab, BoxLayout.Y_AXIS));
 		adjaMatrix = new TabView(g);
 
@@ -74,9 +92,13 @@ public class MainView extends JFrame {
 
 		// bottomPanel
 		bottomPanel.setLayout(new BoxLayout(bottomPanel, BoxLayout.X_AXIS));
+		System.out.println("w=" + width + ", h=" + height);
 		bc = new ButtonsCanvas(width, height);
-		bottomPanel.add(bc);
-
+		//bottomPanel.add(bc);
+		bottomPanel.setLayout(new BorderLayout());
+		bottomPanel.add(bc, BorderLayout.CENTER);
+		
+		
 		// mainPanel
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 		mainPanel.add(topPanel);
@@ -101,9 +123,13 @@ public class MainView extends JFrame {
 	public ButtonsCanvas getButtonCanvas() {
 		return bc;
 	}
+	
+	/*
 
 	public static void main(String[] args) {
 		MainView view = new MainView("View", 800, 600);
 	}
+	
+	*/
 
 }

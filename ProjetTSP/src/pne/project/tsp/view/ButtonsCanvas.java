@@ -29,6 +29,7 @@ public class ButtonsCanvas extends Component {
 	
 	public void paint(Graphics graphics){
 		Graphics2D g = (Graphics2D) graphics;
+		g.setBackground(Color.BLUE);
 		
 		g.setColor(Color.BLACK);
 		g.draw(solve_or_startMenu);

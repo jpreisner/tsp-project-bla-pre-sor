@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 
 public class GraphCanvas extends Component{
@@ -22,6 +23,12 @@ public class GraphCanvas extends Component{
 		Graphics2D g = (Graphics2D)graphics ;
 		
 		// Dessiner tous les elements
+		
+		NodeView a = new NodeView(10, 10, 50, 10, Color.blue, Color.blue, Color.blue);
+		g.setColor(Color.BLACK);
+		g.draw(a .getCircle());
+		g.draw(new Rectangle(0, 0, 490, 450));
+
 		
 		// Dessin des aretes
 		if(isResolved){
@@ -55,7 +62,7 @@ public class GraphCanvas extends Component{
 			// contour
 			g.setColor(node.getColorDraw());
 			g.draw(node.getCircle());
-			
+			System.out.println("dessin d'un noeud");
 			// remplissage
 			g.setColor(node.getColorFill());
 			g.fill(node.getCircle());

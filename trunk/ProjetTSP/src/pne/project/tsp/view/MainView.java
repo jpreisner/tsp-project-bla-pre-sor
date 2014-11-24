@@ -16,9 +16,17 @@ import pne.project.tsp.beans.Graph;
 
 public class MainView extends JFrame {
 	private MainCanvas mc = null;
+	
+	// a enlever?
 	private GraphCanvas gc = null;
 	private TabView adjaMatrix = null;
 	private ButtonsCanvas bc = null;
+	
+	public JPanel mainPanel = new JPanel();
+	public JPanel topPanel = new JPanel();	// graphcanvas
+	public JPanel bottomPanel = new JPanel();
+	public JPanel panelTab = new JPanel();
+	public JPanel panelGraph = new JPanel();
 
 	public MainView(String titre, int width, int height) {
 		new JFrame(titre);
@@ -46,11 +54,7 @@ public class MainView extends JFrame {
 			ArrayList<NodeView> listNode, int[] tabResult) {
 		getContentPane().removeAll();
 
-		JPanel mainPanel = new JPanel();
-		JPanel topPanel = new JPanel();	// graphcanvas
-		JPanel bottomPanel = new JPanel();
-		JPanel panelTab = new JPanel();
-		JPanel panelGraph = new JPanel();
+
 		
 		mainPanel.setBackground(Color.pink);
 		topPanel.setBackground(Color.yellow);
@@ -67,7 +71,7 @@ public class MainView extends JFrame {
 		topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.X_AXIS));
 
 		gc = new GraphCanvas(isResolved, listNode, tabResult);
-		System.out.println("listNode: " + listNode);
+		//System.out.println("listNode: " + listNode);
 //		panelGraph.add(gc);
 		
 		panelGraph.setLayout(new BorderLayout());

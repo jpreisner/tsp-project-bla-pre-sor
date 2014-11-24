@@ -68,6 +68,7 @@ public class MainView extends JFrame {
 		// topPanel
 		topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.X_AXIS));
 
+		System.out.println("dans graphView -> isResolved="+isResolved);
 		gc = new GraphCanvas(isResolved, listNode, tabResult);
 		//System.out.println("listNode: " + listNode);
 //		panelGraph.add(gc);
@@ -96,8 +97,8 @@ public class MainView extends JFrame {
 
 		// bottomPanel
 		bottomPanel.setLayout(new BoxLayout(bottomPanel, BoxLayout.X_AXIS));
-		System.out.println("w=" + width + ", h=" + height);
-		bc = new ButtonsCanvas(width, height);
+		//System.out.println("w=" + width + ", h=" + height);
+		bc = new ButtonsCanvas(width, height, isResolved);
 		//bottomPanel.add(bc);
 		bottomPanel.setLayout(new BorderLayout());
 		bottomPanel.add(bc, BorderLayout.CENTER);

@@ -97,4 +97,12 @@ public class GraphCanvas extends Component {
 		this.listNode = listNode;
 	}
 
+	public int[] getTabResult() {
+		return tabResult;
+	}
+
+	public void setTabResult(int[] tabResult) {
+		this.tabResult = tabResult;
+	}
+
 }

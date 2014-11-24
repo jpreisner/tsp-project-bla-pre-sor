@@ -65,6 +65,7 @@ public class MainControler {
 					mv.getButtonCanvas().setIsResolved(true);
 					mv.graphView(mv.getWidth(), mv.getHeight(), g, solved, mv.getGraphCanvas().getListNode(), tabResult);
 					System.out.println("terminé");
+					mv.getButtonCanvas().addMouseListener(graphButtons);
 					
 				}
 				// cas ou le graphe a ete resolu

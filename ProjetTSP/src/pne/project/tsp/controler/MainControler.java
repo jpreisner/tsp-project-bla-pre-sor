@@ -26,10 +26,13 @@ public class MainControler {
 
 	public MainControler(MainView mv) {
 		this.mv = mv;
+		init();
+	}
+	
+	public void init(){
+		mv.getMainCanvas().addMouseListener(menuPrincipal);
 		solved = false;
 		g = null;
-		mv.getMainCanvas().addMouseListener(menuPrincipal);
-		
 	}
 	
 	public void addListenerButtons(){
@@ -51,10 +54,14 @@ public class MainControler {
 				// cas ou le graphe n'est pas resolu
 				if(!solved){
 					System.out.println("on lance la résolution");
+					//mv.getGraphCanvas().removeNotify();
 					// lancer la résolution
 					int[] tabResult = GraphManager.writeLinearProgram(g, "tests/lpex1.lp", "tests/results.txt");
 					// passer le resultat dans la fonction d'affichage
-					mv.graphView(mv.getWidth(), mv.getHeight(), g, solved, mv.getGraphCanvas().getListNode(), tabResult);
+					mv.getGraphCanvas().setTabResult(tabResult);
+					mv.getGraphCanvas().setIsResolved(true);
+					mv.getGraphCanvas().repaint();
+					//mv.graphView(mv.getWidth(), mv.getHeight(), g, solved, mv.getGraphCanvas().getListNode(), tabResult);
 					System.out.println("terminé");
 					solved = true;
 				}
@@ -62,7 +69,7 @@ public class MainControler {
 				else{
 					mv.getContentPane().removeAll();
 					mv.menuPrincipal(mv.getWidth(), mv.getHeight());
-					solved = false;
+					init();
 				}
 				
 			}

@@ -58,23 +58,22 @@ public class ButtonsCanvas extends Component {
 		if (isResolved) {
 			// dessiner le bouton startMenu
 			msg = "Recommencer";
-			val=60;
+			val = 60;
 		} else {
 			// dessiner le bouton solve
 			msg = "Résoudre";
-			val=15;
+			val = 15;
 		}
-		
-		System.out.println("msg="+msg);
+
+		System.out.println("msg=" + msg);
 
 		g.setColor(Color.BLACK);
 		g.setFont(new Font("Dialog", Font.BOLD, 35));
-		g.drawString(msg, solve_or_startMenu.x + solve_or_startMenu.width / 3
-				- val, solve_or_startMenu.y + solve_or_startMenu.height / 2 + 10);
+		g.drawString(msg, solve_or_startMenu.x + solve_or_startMenu.width / 3 - val, solve_or_startMenu.y
+				+ solve_or_startMenu.height / 2 + 10);
 
 		// dessiner le bouton quit
-		g.drawString("Quitter", quit.x + quit.width / 3 + 10, quit.y
-				+ quit.height / 2 + 10);
+		g.drawString("Quitter", quit.x + quit.width / 3 + 10, quit.y + quit.height / 2 + 10);
 	}
 
 }

@@ -1,7 +1,10 @@
 package pne.project.tsp.cplex;
 
-import ilog.concert.*;
-import ilog.cplex.*;
+import ilog.concert.IloException;
+import ilog.concert.IloMPModeler;
+import ilog.concert.IloNumVar;
+import ilog.concert.IloRange;
+import ilog.cplex.IloCplex;
 
 public class TPex1 {
 
@@ -19,10 +22,8 @@ public class TPex1 {
 			// solve the model and display the solution if one was found
 			if (cplex.solve()) {
 				double[] x = cplex.getValues(var[0]);
-				cplex.output()
-						.println("Solution status = " + cplex.getStatus());
-				cplex.output().println(
-						"Solution value  = " + cplex.getObjValue());
+				cplex.output().println("Solution status = " + cplex.getStatus());
+				cplex.output().println("Solution value  = " + cplex.getObjValue());
 				cplex.output().println(x[0]);
 				cplex.output().println(x[1]);
 				cplex.output().println(x[2]);
@@ -48,8 +49,7 @@ public class TPex1 {
 	//
 	// using the IloMPModeler API
 
-	static void populateByRow(IloMPModeler model, IloNumVar[][] var,
-			IloRange[][] rng) throws IloException {
+	static void populateByRow(IloMPModeler model, IloNumVar[][] var, IloRange[][] rng) throws IloException {
 		double[] lb = { 0.0, 0.0, 0.0 };
 		double[] ub = { 40.0, Double.MAX_VALUE, Double.MAX_VALUE };
 		String[] varname = { "x1", "x2", "x3" };
@@ -60,12 +60,10 @@ public class TPex1 {
 		model.addMaximize(model.scalProd(x, objvals));
 
 		rng[0] = new IloRange[2];
-		rng[0][0] = model.addLe(
-				model.sum(model.prod(-1.0, x[0]), model.prod(1.0, x[1]),
-						model.prod(1.0, x[2])), 20.0, "c1");
-		rng[0][1] = model.addGe(
-				model.sum(model.prod(1.0, x[0]), model.prod(-3.0, x[1]),
-						model.prod(1.0, x[2])), 30.0, "c2");
+		rng[0][0] = model.addLe(model.sum(model.prod(-1.0, x[0]), model.prod(1.0, x[1]), model.prod(1.0, x[2])), 20.0,
+				"c1");
+		rng[0][1] = model.addGe(model.sum(model.prod(1.0, x[0]), model.prod(-3.0, x[1]), model.prod(1.0, x[2])), 30.0,
+				"c2");
 	}
 
 }

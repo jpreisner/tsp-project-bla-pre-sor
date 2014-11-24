@@ -6,41 +6,48 @@ public class BoundsGraph {
 	private double xMax;
 	private double yMin;
 	private double yMax;
-	
+
 	public BoundsGraph() {
 		this.xMin = 0;
 		this.xMax = 0;
 		this.yMin = 0;
 		this.yMax = 0;
 	}
-	
+
 	public double getxMin() {
 		return xMin;
 	}
+
 	public void setxMin(double xMin) {
 		this.xMin = xMin;
 	}
+
 	public double getxMax() {
 		return xMax;
 	}
+
 	public void setxMax(double xMax) {
 		this.xMax = xMax;
 	}
+
 	public double getyMin() {
 		return yMin;
 	}
+
 	public void setyMin(double yMin) {
 		this.yMin = yMin;
 	}
+
 	public double getyMax() {
 		return yMax;
 	}
+
 	public void setyMax(double yMax) {
 		this.yMax = yMax;
 	}
-	
+
 	@Override
 	public String toString() {
-		return "xMax : "+xMax+", xMin : "+xMin+", yMax : "+yMax+", yMin : "+yMin;
+		return "xMax : " + xMax + ", xMin : " + xMin + ", yMax : " + yMax + ", yMin : " + yMin;
 	}
 }

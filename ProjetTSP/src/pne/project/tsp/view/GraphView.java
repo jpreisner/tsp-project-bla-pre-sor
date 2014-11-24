@@ -7,7 +7,6 @@ import javax.swing.JFrame;
 
 import pne.project.tsp.beans.Graph;
 import pne.project.tsp.utils.BoundsGraph;
-import pne.project.tsp.utils.FileReader;
 
 /**
  * 
@@ -26,13 +25,13 @@ public class GraphView {
 	 * @param titre
 	 * @param width
 	 * @param height
-	 * @param bg 
+	 * @param bg
 	 */
 
 	// ce que je dois faire: passer en parametre le graphe pour dessiner le
 	// graphe
-	public GraphView(String titre, int width, int height,
-			double[][] nodePositions, BoundsGraph bg, boolean isResolved, double[][] tabResult) {
+	public GraphView(String titre, int width, int height, double[][] nodePositions, BoundsGraph bg, boolean isResolved,
+			double[][] tabResult) {
 		frame = new JFrame(titre);
 		frame.setSize(width, height);
 
@@ -43,21 +42,20 @@ public class GraphView {
 		Color fill = Color.RED;
 		Color draw = Color.RED;
 		Color text = Color.BLACK;
-		
-		double ratioX = (bg.getxMax()-bg.getxMin())/width;
-		double ratioY = (bg.getyMax()-bg.getyMin())/height;
-		
+
+		double ratioX = (bg.getxMax() - bg.getxMin()) / width;
+		double ratioY = (bg.getyMax() - bg.getyMin()) / height;
+
 		for (i = 0; i < nodePositions.length; i++) {
-			listNode.add(new NodeView((nodePositions[i][0]-bg.getxMin()) / (ratioX*1.1), 
-					(nodePositions[i][1]-bg.getyMin())/(ratioY*1.1),
-					d, i, fill, draw, text));
+			listNode.add(new NodeView((nodePositions[i][0] - bg.getxMin()) / (ratioX * 1.1), (nodePositions[i][1] - bg
+					.getyMin()) / (ratioY * 1.1), d, i, fill, draw, text));
 		}
 		// fin de ce qu'il faut enlever
 
 		// a mettre pour de vrai :
 		// listNode = displayGraph(graph);
 
-//		canvas = new GraphCanvas(isResolved, listNode, tabResult);
+		// canvas = new GraphCanvas(isResolved, listNode, tabResult);
 		canvas.setBackground(Color.WHITE);
 		frame.add(canvas);
 

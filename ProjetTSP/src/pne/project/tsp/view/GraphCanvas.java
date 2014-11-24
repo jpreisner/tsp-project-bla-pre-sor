@@ -27,7 +27,7 @@ public class GraphCanvas extends Component{
 		NodeView a = new NodeView(10, 10, 50, 10, Color.blue, Color.blue, Color.blue);
 		g.setColor(Color.BLACK);
 		g.draw(a .getCircle());
-		g.draw(new Rectangle(0, 0, 490, 450));
+		//g.draw(new Rectangle(0, 0, 490, 450));
 
 		
 		// Dessin des aretes
@@ -62,7 +62,7 @@ public class GraphCanvas extends Component{
 			// contour
 			g.setColor(node.getColorDraw());
 			g.draw(node.getCircle());
-			System.out.println("dessin d'un noeud");
+
 			// remplissage
 			g.setColor(node.getColorFill());
 			g.fill(node.getCircle());

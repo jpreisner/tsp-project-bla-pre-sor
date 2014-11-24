@@ -41,10 +41,14 @@ public class MainControler {
 			if(mv.getMainCanvas().getChargerPVC().contains(p)){
 				/* recupération du xml*/
 				String filename = getXML();
-				affichageGraphe(filename);
+				ArrayList<NodeView> listNode = affichageGraphe(filename);
 				Graph g1 = FileReader.buildGraphFromXml("data/XML/"+filename + ".xml");
 				/* construction de la vue initiale*/
-				mv.graphView(mv.getWidth(), mv.getHeight(), g1, solved, mv.getGraphCanvas().getListNode(), null);
+//				System.out.println(mv.getWidth()+", "+ mv.getHeight());
+//				System.out.println(g1);				
+//				System.out.println(solved);				
+//				System.out.println(mv.getGraphCanvas().getListNode());				
+				mv.graphView(mv.getWidth(), mv.getHeight(), g1, solved, listNode, null);
 			}
 			else if(mv.getMainCanvas().getQuitter().contains(p) || mv.getButtonCanvas().getQuit().contains(p)){
 				mv.dispose();
@@ -96,7 +100,7 @@ public class MainControler {
 		return fileSelected.getName().substring(0, (int) (fileSelected.getName().length()-4));
 	}
 	
-	private void affichageGraphe(String filename) {
+	private ArrayList<NodeView> affichageGraphe(String filename) {
 		
 		
 		// TODO Auto-generated method stub
@@ -125,6 +129,7 @@ public class MainControler {
 					d, i, fill, draw, text));
 
 		}
+		return listNode;
 		
 	}
 	

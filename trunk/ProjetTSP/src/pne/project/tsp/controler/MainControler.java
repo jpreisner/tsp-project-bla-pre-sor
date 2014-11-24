@@ -33,9 +33,6 @@ public class MainControler {
 			Point p = new Point(arg0.getX(), arg0.getY());
 			
 			if(mv.getMainCanvas().getChargerPVC().contains(p)){
-				// appeler methode chargerPVC
-//				System.out.println("Gignac souhaite charger un PVC");
-				//mv.dispose();
 				Choix_fichier jf = new Choix_fichier("data/XML");
 				File fileSelected = jf.selectFile();
 				System.out.println("Le fichier selected est = " + fileSelected.getName());
@@ -57,14 +54,17 @@ public class MainControler {
 				Color draw = Color.RED;
 				Color text = Color.BLACK;
 				
-				double ratioX = (bg.getxMax()-bg.getxMin())/mv.getWidth();
-				double ratioY = (bg.getyMax()-bg.getyMin())/mv.getHeight();
+//				double ratioX = (bg.getxMax()-bg.getxMin())/(double)w;
+//				double ratioY = (bg.getyMax()-bg.getyMin())/(double)h;
 				
 				double[][] nodePositions = FileReader.getPositionsFromTsp("data/TSP/"+filename+".tsp", bg);
-				
+								
 				for (i = 0; i < nodePositions.length; i++) {
-					listNode.add(new NodeView((nodePositions[i][0]-bg.getxMin()) / (ratioX*1.1), 
-							(nodePositions[i][1]-bg.getyMin())/(ratioY*1.1),
+//					listNode.add(new NodeView((nodePositions[i][0]-bg.getxMin()) / (ratioX*1.1), 
+//							(nodePositions[i][1]-bg.getyMin())/(ratioY*1.1),
+//							d, i, fill, draw, text));
+					listNode.add(new NodeView((nodePositions[i][0]), 
+							(nodePositions[i][1]),
 							d, i, fill, draw, text));
 				}
 				double[][] tabResult = null;
@@ -113,7 +113,7 @@ public class MainControler {
 	}
 	
 	public static void main (String[] args){
-		MainControler c = new MainControler(new MainView("View", 800, 600));
+		MainControler c = new MainControler(new MainView("View", 1000, 600));
 		//c.getMv().setVisible(true);
 	}
 }

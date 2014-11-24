@@ -46,6 +46,7 @@ public class GraphManager {
 			
 			/* Permet de ne renvoyer que des 1 et 0*/
 			cplex.setParam(DoubleParam.EpInt, 0.0);
+			//cplex.setParam(IloCplex.IntParam.TimeLimit, 0.1);
 
 			IloNumVar[] u = cplex.numVarArray(i_graph.getNbNode(), 0, Double.MAX_VALUE);
 

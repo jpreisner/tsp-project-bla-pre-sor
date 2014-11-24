@@ -8,9 +8,9 @@ public class BoundsGraph {
 	private double yMax;
 	
 	public BoundsGraph() {
-		this.xMin = 1000;
+		this.xMin = 0;
 		this.xMax = 0;
-		this.yMin = 1000;
+		this.yMin = 0;
 		this.yMax = 0;
 	}
 	

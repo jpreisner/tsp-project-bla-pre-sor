@@ -60,4 +60,10 @@ public class NodeView extends Component{
 	public void setColorText(Color colorText) {
 		this.colorText = colorText;
 	}
+
+	@Override
+	public String toString() {
+		return "("+circle.getX()+", "+circle.getY()+"), id="+id;
+
+	}
 }

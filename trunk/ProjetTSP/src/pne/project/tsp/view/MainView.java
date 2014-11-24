@@ -53,8 +53,6 @@ public class MainView extends JFrame {
 	public void graphView(int width, int height, Graph g, boolean isResolved,
 			ArrayList<NodeView> listNode, int[] tabResult) {
 		getContentPane().removeAll();
-
-
 		
 		mainPanel.setBackground(Color.pink);
 		topPanel.setBackground(Color.yellow);

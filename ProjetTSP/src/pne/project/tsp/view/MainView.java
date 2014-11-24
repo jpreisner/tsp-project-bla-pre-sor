@@ -83,7 +83,7 @@ public class MainView extends JFrame {
 
 		/* display Right Matrix */
 		panelTab.setLayout(new BoxLayout(panelTab, BoxLayout.Y_AXIS));
-		adjaMatrix = new TabView(g);
+		adjaMatrix = new TabView(g,isResolved,tabResult);
 
 		panelTab.add(adjaMatrix.getTableHeader(), BorderLayout.WEST);
 		panelTab.add(adjaMatrix, BorderLayout.LINE_END);

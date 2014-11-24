@@ -1,7 +1,9 @@
 package pne.project.tsp.view;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -12,10 +14,14 @@ public class ButtonsCanvas extends Component {
 	private boolean isResolved;
 	
 	public ButtonsCanvas(int w, int h){
-		int var = 10;
+		int x = 45;
+		int y = 40;
+		int largeur = (w/2)-100;
+		int hauteur = (h/8)-5;
+		
 		// rect = (x, y, largeur, hauteur)
-		solve_or_startMenu = new Rectangle(var, var+h/6, (w/2)-var, (h/6)-var);
-		quit = new Rectangle(var+(w/2), var+h/6, (w/2)-var, (h/6)-var);
+		solve_or_startMenu = new Rectangle(x, y, largeur, hauteur);
+		quit = new Rectangle(w-x-largeur, y, largeur, hauteur);
 		isResolved = false;
 	}
 	
@@ -29,9 +35,13 @@ public class ButtonsCanvas extends Component {
 	
 	public void paint(Graphics graphics){
 		Graphics2D g = (Graphics2D) graphics;
-		g.setBackground(Color.BLUE);
+		
+		g.setColor(Color.WHITE);
+		g.fill(solve_or_startMenu);
+		g.fill(quit);
 		
 		g.setColor(Color.BLACK);
+		g.setStroke(new BasicStroke(4));
 		g.draw(solve_or_startMenu);
 		g.draw(quit);
 		
@@ -44,10 +54,13 @@ public class ButtonsCanvas extends Component {
 			// dessiner le bouton solve
 			msg = "Résoudre";
 		}
-		g.drawString(msg, solve_or_startMenu.x, solve_or_startMenu.y);
+		
+		g.setColor(Color.BLACK);
+		g.setFont(new Font("Dialog", Font.BOLD, 35));
+		g.drawString(msg, solve_or_startMenu.x+solve_or_startMenu.width/3-15, solve_or_startMenu.y+solve_or_startMenu.height/2+10);
 		
 		// dessiner le bouton quit
-		g.drawString("Quitter", quit.x, quit.y);
+		g.drawString("Quitter", quit.x+quit.width/3+10, quit.y+quit.height/2+10);
 	}
 	
 

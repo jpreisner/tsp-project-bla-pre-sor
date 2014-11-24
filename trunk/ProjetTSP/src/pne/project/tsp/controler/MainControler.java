@@ -2,6 +2,7 @@ package pne.project.tsp.controler;
 
 import java.awt.Color;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
@@ -21,14 +22,78 @@ public class MainControler {
 	private MainView mv;
 	private boolean solved;
 	private Graph g;
+	
 
 	public MainControler(MainView mv) {
 		this.mv = mv;
 		solved = false;
 		g = null;
 		mv.getMainCanvas().addMouseListener(menuPrincipal);
+		
 	}
 	
+	public void addListenerButtons(){
+		mv.getButtonCanvas().addMouseListener(graphButtons);
+	}
+	
+	public MouseListener graphButtons = new MouseListener(){
+
+		@Override
+		public void mouseClicked(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+			Point p = new Point(arg0.getX(), arg0.getY());
+			
+			if(mv.getButtonCanvas().getQuit().contains(p)){
+				mv.dispose();
+			} 
+			else if(mv.getButtonCanvas().getSolve_or_startMenu().contains(p)){
+				mv.getContentPane().removeAll();
+				// cas ou le graphe n'est pas resolu
+				if(!solved){
+					System.out.println("on lance la résolution");
+					// lancer la résolution
+					int[] tabResult = GraphManager.writeLinearProgram(g, "tests/lpex1.lp", "tests/results.txt");
+					// passer le resultat dans la fonction d'affichage
+					mv.graphView(mv.getWidth(), mv.getHeight(), g, solved, mv.getGraphCanvas().getListNode(), tabResult);
+					System.out.println("terminé");
+					solved = true;
+				}
+				// cas ou le graphe a ete resolu
+				else{
+					mv.getContentPane().removeAll();
+					mv.menuPrincipal(mv.getWidth(), mv.getHeight());
+					solved = false;
+				}
+				
+			}
+			
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseExited(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mousePressed(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+	};
 	
 	
 	public MouseListener menuPrincipal = new MouseListener() {
@@ -42,33 +107,20 @@ public class MainControler {
 				/* recupération du xml*/
 				String filename = getXML();
 				ArrayList<NodeView> listNode = affichageGraphe(filename);
-				Graph g1 = FileReader.buildGraphFromXml("data/XML/"+filename + ".xml");
-
+				g = FileReader.buildGraphFromXml("data/XML/"+filename + ".xml");
 				/* construction de la vue initiale*/
-				mv.graphView(mv.getWidth(), mv.getHeight(), g1, solved, listNode, null);
+//				System.out.println(mv.getWidth()+", "+ mv.getHeight());
+//				System.out.println(g1);				
+//				System.out.println(solved);				
+//				System.out.println(mv.getGraphCanvas().getListNode());				
+				mv.graphView(mv.getWidth(), mv.getHeight(), g, solved, listNode, null);
+				mv.getButtonCanvas().addMouseListener(graphButtons);
 			}
-			else if(mv.getMainCanvas().getQuitter().contains(p) || mv.getButtonCanvas().getQuit().contains(p)){
-				/* quitter*/
+			
+			else if(mv.getMainCanvas().getQuitter().contains(p)){
 				mv.dispose();
-			} else if(mv.getButtonCanvas().getSolve_or_startMenu().contains(p)){
-				mv.getContentPane().removeAll();
-				// cas ou le graphe n'est pas resolu
-				if(!solved){
-					// lancer la résolution
-					int[] tabResult = GraphManager.writeLinearProgram(g, "tests/lpex1.lp", "tests/results.txt");
-					// passer le resultat dans la fonction d'affichage
-					mv.graphView(mv.getWidth(), mv.getHeight(), g, solved, mv.getGraphCanvas().getListNode(), tabResult);
-					
-					solved = true;
-				}
-				// cas ou le graphe a ete resolu
-				else{
-					mv.getContentPane().removeAll();
-					mv.menuPrincipal(mv.getWidth(), mv.getHeight());
-					solved = false;
-				}
-				
-			}
+			} 
+		
 			
 		}
 

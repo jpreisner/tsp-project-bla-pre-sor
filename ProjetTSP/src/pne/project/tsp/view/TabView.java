@@ -15,13 +15,17 @@ public class TabView extends JTable {
 
 		getColumnModel().getColumn(0).setCellRenderer(
 				getTableHeader().getDefaultRenderer());
-		getColumnModel().getColumn(0).setPreferredWidth(50);
+		//getColumnModel().getColumn(0).setPreferredWidth(150);
 //		getColumnModel().getColumn(1).setPreferredWidth(150);
 		setPreferredScrollableViewportSize(getPreferredSize());
 		
-		for (int j=0; j < getColumnCount(); j+=1) {  
-			getColumnModel().getColumn(j).setPreferredWidth(150);  
-			}
+		/*setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		
+		for (int j=1; j < getColumnCount(); j+=1) {  
+			getColumnModel().getColumn(j).setPreferredWidth(500);  
+		}
+		*/
+		
 		
 		setDefaultRenderer(Object.class, new MatrixCellRenderer());
 

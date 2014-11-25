@@ -90,7 +90,11 @@ public class MainView extends JFrame {
 
 		JScrollPane sc = new JScrollPane(panelTab, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 				JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+
+		//sc.setWheelScrollingEnabled(true);
+
 		topPanel.add(sc);
+		
 
 		// bottomPanel
 		bottomPanel.setLayout(new BoxLayout(bottomPanel, BoxLayout.X_AXIS));

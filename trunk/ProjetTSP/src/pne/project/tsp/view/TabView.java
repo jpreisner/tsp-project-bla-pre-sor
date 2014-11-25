@@ -41,7 +41,7 @@ public class TabView extends JTable {
 					if (row + 1 == col) {
 						editor.setBackground(Color.GRAY);
 					}
-					if (tabResult[row]==col) {
+					if (tabResult[row]==col-1) {
 						editor.setBackground(Color.RED);
 					}
 					return editor;

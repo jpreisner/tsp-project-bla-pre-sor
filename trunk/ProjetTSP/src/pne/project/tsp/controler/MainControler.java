@@ -170,7 +170,7 @@ public class MainControler {
 		double[][] nodePositions = FileReader.getPositionsFromTsp("data/TSP/" + filename + ".tsp", bg);
 
 		double ratioX = (bg.getxMax() - bg.getxMin()) / (double) (w / 2);
-		double ratioY = (bg.getyMax() - bg.getyMin()) / (double) (h / 2);
+		double ratioY = (bg.getyMax() - bg.getyMin()) / (double) (h / 1.5);
 
 		/* affectation des positions aux noeuds */
 		for (i = 0; i < nodePositions.length; i++) {

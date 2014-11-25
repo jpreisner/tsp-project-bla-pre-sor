@@ -53,12 +53,11 @@ public class MainView extends JFrame {
 		JPanel panelGraph = new JPanel();
 		JPanel panelRight = new JPanel();
 		int widthPanelTab = 60*g.getNbNode();
-
-		//panelGraph.setBackground(Color.WHITE);
-		//panelTab.setBackground(Color.WHITE);
+		int heightPanelTab = 16 * g.getNbNode() + 20;
+		bottomPanel.setBackground(new Color(0, 255, 255));
 		
 		topPanel.setPreferredSize(new Dimension(width, height - 150));
-		panelGraph.setPreferredSize(new Dimension(widthPanelTab, 450));
+		panelGraph.setPreferredSize(new Dimension(widthPanelTab, heightPanelTab));
 		bottomPanel.setPreferredSize(new Dimension(width, 150));
 
 		// topPanel
@@ -80,7 +79,7 @@ public class MainView extends JFrame {
 
 		panelTab.add(adjaMatrix.getTableHeader(), BorderLayout.WEST);
 		panelTab.add(adjaMatrix, BorderLayout.LINE_END);
-		panelTab.setPreferredSize(new Dimension(widthPanelTab, 450));
+		panelTab.setPreferredSize(new Dimension(widthPanelTab, heightPanelTab));
 
 		JScrollPane sc = new JScrollPane(panelTab, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		sc.setWheelScrollingEnabled(true);

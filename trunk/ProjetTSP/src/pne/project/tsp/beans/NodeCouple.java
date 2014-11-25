@@ -1,9 +1,21 @@
 package pne.project.tsp.beans;
 
+/**
+ * 
+ * Cette classe permet de représenter un couple de noeud (i, j)
+ *  Utile lors de la sauvegarde des résultats renvoyés par CPLEX
+ *
+ */
+
 public class NodeCouple {
 	private int n1;
 	private int n2;
 
+	/** Constructor
+	 * 
+	 * @param n1
+	 * @param n2
+	 */
 	public NodeCouple(int n1, int n2) {
 		this.n1 = n1;
 		this.n2 = n2;

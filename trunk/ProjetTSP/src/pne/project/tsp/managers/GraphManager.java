@@ -16,7 +16,6 @@ public class GraphManager {
 	private int resolutionDuration;
 
 	public GraphManager() {
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -51,9 +50,7 @@ public class GraphManager {
 //				cplex.setParam(IloCplex.IntParam.TimeLimit, 0.4);
 //				cplex.setParam(IloCplex.DoubleParam.TreLim, 0.4);
 				cplex.setParam(IloCplex.IntParam.IntSolLim, 2);
-				cplex.setParam(IloCplex.IntParam.Threads, 1);
 			}
-			/** METTRE LES PARAMETRES **/
 
 			setObjectiveFonction(i_graph, cplex, x);
 			setConstraintOuterEdge(i_graph, cplex, x);
@@ -78,9 +75,9 @@ public class GraphManager {
 				}
 			}
 			long stopTime = System.nanoTime();
-			System.out.println(((stopTime - startTime) / 1000000000)+ " seconds");
+			//System.out.println(((stopTime - startTime) / 1000000000)+ " seconds");
 			this.resolutionDuration = (int) ((stopTime - startTime) / 1000000000);
-			System.out.println("valeur chemin optimal : " + cplex.getObjValue());
+			//System.out.println("valeur chemin optimal : " + cplex.getObjValue());
 			solutionValue = cplex.getObjValue();
 			cplex.exportModel(o_pathModelToExport);
 			cplex.writeSolution(o_pathFileToExport);
@@ -213,8 +210,6 @@ public class GraphManager {
 			// si j = -1, ca veut dire que tous les noeuds xij pour j=0,...,n-1
 			// sont = à 0
 			if (j == -1) {
-				/** NORMALEMENT NE DOIT JAMAIS ARRIVE -> GERER L'ERREUR **/
-				System.out.println("Pb pour i=" + i);
 				return true;
 			} else {
 				cpt++;
@@ -226,10 +221,6 @@ public class GraphManager {
 						// ajout de la contrainte
 						IloLinearNumExpr expr = cplex.linearNumExpr();
 						int pos = getNodeInList(listVariables, j);
-						if (pos == -1) {
-							System.out.println("j=" + j + ", visite[j]="+ nodeVisited[j]);
-							System.out.println("k=-1 pour j=" + j+ ", listVariables=" + listVariables);
-						}
 						while (pos < cpt) {
 							expr.addTerm(1.0, x[listVariables.get(pos).getN1()][listVariables.get(pos).getN2()]);
 							pos++;
@@ -270,9 +261,8 @@ public class GraphManager {
 		return -1; // error
 	}
 
-	// On connait l'indice i, on cherche l'indice j tel que resultat[i][j] = 1
 	/**
-	 * 
+	 * On connait l'indice i, on cherche l'indice j tel que resultat[i][j] = 1
 	 * @param tabResult
 	 * @param nbNode
 	 * @return

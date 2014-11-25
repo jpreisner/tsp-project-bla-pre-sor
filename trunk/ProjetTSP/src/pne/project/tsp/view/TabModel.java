@@ -1,5 +1,7 @@
 package pne.project.tsp.view;
 
+import java.text.DecimalFormat;
+
 import javax.swing.table.AbstractTableModel;
 
 import pne.project.tsp.beans.Graph;
@@ -37,7 +39,7 @@ public class TabModel extends AbstractTableModel {
 			/* Row Names */
 			return i;
 		} else {
-			return g.getTabAdja()[i][j - 1];
+			return (double) ((int) (g.getTabAdja()[i][j - 1]*100))/100;
 		}
 	}
 

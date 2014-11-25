@@ -71,8 +71,6 @@ public class FileReader {
 							} else if (y < bg.getyMin()) {
 								bg.setyMin(y);
 							}
-							// System.out.println(line);
-
 							line = scanner.nextLine();
 						} catch (NumberFormatException e) {
 							scanner.close();
@@ -87,13 +85,6 @@ public class FileReader {
 			e.printStackTrace();
 		}
 		return tabPos;
-
-		// for(int j=0;j<tabSize;j++){
-		// for(int k=0;k<2;k++){
-		// System.out.println("tabpos i "+j+", j "+k+" = "+tabPos[j][k]);
-		// }
-		// }
-
 	}
 
 	/**
@@ -159,7 +150,6 @@ public class FileReader {
 							}
 							int node = Integer.parseInt(Edge.getValue());
 							io_tabInt[i][node] = costToLink;
-							// System.out.println("Cout du noeud "+(i)+" au noeud : "+node+",  "+costToLink+".");
 						}
 					}
 					i++;

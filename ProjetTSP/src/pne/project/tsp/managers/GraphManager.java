@@ -47,9 +47,11 @@ public class GraphManager {
 
 			/* Permet de ne renvoyer que des 1 et 0 */
 			cplex.setParam(DoubleParam.EpInt, 0.0);
-//			 cplex.setParam(IloCplex.IntParam.TimeLimit, 0.4);
-			 cplex.setParam(IloCplex.DoubleParam.TreLim, 0.4);
-			 
+			if(i_graph.getNbNode()>=70){
+//				cplex.setParam(IloCplex.IntParam.TimeLimit, 0.4);
+//				cplex.setParam(IloCplex.DoubleParam.TreLim, 0.4);
+				cplex.setParam(IloCplex.IntParam.IntSolLim, 1);
+			}
 			/** METTRE LES PARAMETRES **/
 
 			setObjectiveFonction(i_graph, cplex, x);
@@ -67,7 +69,6 @@ public class GraphManager {
 			while (addNewSubCycleConstraint(i_graph.getNbNode(), cplex, x, tabResult)) {
 				cplex.setOut(null);
 				cplex.solve();
-
 				// Enregistrement du résultat dans tabResult
 				tabResult = new int[i_graph.getNbNode()]; // pas besoin?
 				for (int i = 0; i < i_graph.getNbNode(); i++) {

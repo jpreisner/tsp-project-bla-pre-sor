@@ -49,7 +49,9 @@ public class GraphManager {
 			if(i_graph.getNbNode()>=100){
 //				cplex.setParam(IloCplex.IntParam.TimeLimit, 0.4);
 //				cplex.setParam(IloCplex.DoubleParam.TreLim, 0.4);
+//				cplex.setParam(IloCplex.DoubleParam.TreLim, 0.4);
 				cplex.setParam(IloCplex.IntParam.IntSolLim, 2);
+				cplex.setParam(IloCplex.IntParam.Threads, 1);
 			}
 
 			setObjectiveFonction(i_graph, cplex, x);

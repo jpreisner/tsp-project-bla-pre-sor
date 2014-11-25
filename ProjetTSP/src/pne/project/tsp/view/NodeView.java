@@ -17,8 +17,7 @@ public class NodeView extends Component {
 		colorFill = fill;
 		colorDraw = draw;
 		colorText = text;
-
-		circle = new Ellipse2D.Double(x, y, d, d); // a verifier?
+		circle = new Ellipse2D.Double(x, y, d, d); 
 	}
 
 	public Ellipse2D getCircle() {

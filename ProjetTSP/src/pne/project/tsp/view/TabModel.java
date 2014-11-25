@@ -1,7 +1,5 @@
 package pne.project.tsp.view;
 
-import java.text.DecimalFormat;
-
 import javax.swing.table.AbstractTableModel;
 
 import pne.project.tsp.beans.Graph;

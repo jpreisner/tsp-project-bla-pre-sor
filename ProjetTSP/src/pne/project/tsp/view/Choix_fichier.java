@@ -5,7 +5,7 @@ import java.io.File;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 
-public class Choix_fichier extends JDialog {
+public class Choix_fichier {
 	JFileChooser dialogue;
 
 	public Choix_fichier(String path) {
@@ -17,12 +17,7 @@ public class Choix_fichier extends JDialog {
 
 		File fileSelected = dialogue.getSelectedFile();
 		if (fileSelected != null) {
-			// System.out.println("Le fichier choisi est : " +
-			// fileSelected.getName());
-
 			if (!isXml(fileSelected.getName())) {
-				// GERER L'ERREUR DANS LE CAS OU LE FILE SELECTED N'EST PAS UN
-				// XML
 				return null;
 			}
 		}
@@ -33,10 +28,4 @@ public class Choix_fichier extends JDialog {
 		int t = f.length();
 		return f.substring(t - 3, t).toLowerCase().equals("xml");
 	}
-
-	/*
-	 * static public void main(String args[]) { Choix_fichier fs = new
-	 * Choix_fichier(); }
-	 */
-
 }

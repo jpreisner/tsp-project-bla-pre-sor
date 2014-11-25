@@ -20,37 +20,21 @@ public class GraphCanvas extends Component {
 
 	@Override
 	public void paint(Graphics graphics) {
-
 		Graphics2D g = (Graphics2D) graphics;
-
-		// Dessiner tous les elements
-
-		// NodeView a = new NodeView(10, 10, 50, 10, Color.blue, Color.blue,
-		// Color.blue);
-		// g.setColor(Color.BLACK);
-		// g.draw(a .getCircle());
-		// g.draw(new Rectangle(0, 0, 490, 450));
 
 		// Dessin des aretes
 		if (isResolved) {
-			System.out.println("Dans GraphCanvas-paint(), on rentre dans isResolved");
 			for (int i = 0; i < listNode.size() - 1; i++) {
-
 				g.setColor(Color.GRAY); // couleur des aretes
-
-				// pb : drawLine prend que des int, alors qu'on a des double
 				g.drawLine((int) listNode.get(i).getCircle().getCenterX(), (int) listNode.get(i).getCircle()
 						.getCenterY(), (int) listNode.get(tabResult[i]).getCircle().getCenterX(),
 						(int) listNode.get(tabResult[i]).getCircle().getCenterY());
-
 			}
 		} else {
 			for (NodeView node : listNode) {
 				for (NodeView nodeJ : listNode) {
 					g.setColor(Color.GRAY); // couleur des aretes
 					if (!(node.equals(nodeJ))) {
-						// pb : drawLine prend que des int, alors qu'on a des
-						// double
 						g.drawLine((int) node.getCircle().getCenterX(), (int) node.getCircle().getCenterY(),
 								(int) nodeJ.getCircle().getCenterX(), (int) nodeJ.getCircle().getCenterY());
 					}

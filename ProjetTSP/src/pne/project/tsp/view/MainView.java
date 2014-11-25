@@ -130,11 +130,4 @@ public class MainView extends JFrame {
 	public ButtonsCanvas getButtonCanvas() {
 		return bc;
 	}
-
-	/*
-	 * 
-	 * public static void main(String[] args) { MainView view = new
-	 * MainView("View", 800, 600); }
-	 */
-
 }

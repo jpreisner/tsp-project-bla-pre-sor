@@ -11,7 +11,7 @@ import pne.project.tsp.beans.Graph;
 
 public class TabView extends JTable {
 
-	public TabView(Graph g, boolean isResolved, int[] tabResult) {
+	public TabView(Graph g, boolean isResolved, final int[] tabResult) {
 		super(new TabModel(g));
 		setAutoCreateColumnsFromModel(true);
 		setAutoscrolls(false);

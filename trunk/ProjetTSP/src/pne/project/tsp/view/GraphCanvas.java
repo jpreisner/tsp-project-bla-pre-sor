@@ -1,5 +1,6 @@
 package pne.project.tsp.view;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
@@ -69,9 +70,23 @@ public class GraphCanvas extends Component {
 
 			// numéro du noeud
 			g.setColor(node.getColorText());
-			// pb : drawString prend que des float, alors qu'on a des double
-			g.drawString(Integer.toString(node.getID()), (float) node.getCircle().getCenterX(), (float) node
-					.getCircle().getCenterY());
+			g.setStroke(new BasicStroke(1));
+
+			int dec;
+			if(node.getID()<10){
+				dec = 2;
+			}
+			else if(node.getID()<100){
+				dec = 5;
+			}
+			else if(node.getID()<1000){
+				dec = 3;
+			}
+			else{
+				dec = 4;
+			}
+			g.drawString(Integer.toString(node.getID()), (float) node.getCircle().getCenterX()- dec, (float) node
+					.getCircle().getCenterY() + 3);
 		}
 	}
 

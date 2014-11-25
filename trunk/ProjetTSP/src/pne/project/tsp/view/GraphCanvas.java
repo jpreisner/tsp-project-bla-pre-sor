@@ -77,13 +77,13 @@ public class GraphCanvas extends Component {
 				dec = 2;
 			}
 			else if(node.getID()<100){
-				dec = 5;
+				dec = 6;
 			}
 			else if(node.getID()<1000){
-				dec = 3;
+				dec = (int) (node.getCircle().getWidth()-8);
 			}
 			else{
-				dec = 4;
+				dec = (int) (node.getCircle().getWidth()-4);
 			}
 			g.drawString(Integer.toString(node.getID()), (float) node.getCircle().getCenterX()- dec, (float) node
 					.getCircle().getCenterY() + 3);

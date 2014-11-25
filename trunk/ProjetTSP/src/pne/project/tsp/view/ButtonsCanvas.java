@@ -6,14 +6,20 @@ import java.awt.Component;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Rectangle;
+
+import javax.swing.ImageIcon;
 
 public class ButtonsCanvas extends Component {
 	private Rectangle solve_or_startMenu;
 	private Rectangle quit;
 	private boolean isResolved;
+	private Image fondEcran;
 
 	public ButtonsCanvas(int w, int h, boolean isResolved) {
+		ImageIcon image = new ImageIcon("Images/Main.jpg");
+		fondEcran = image.getImage();
 		int x = 45;
 		int y = 40;
 		int largeur = (w / 2) - 100;
@@ -44,7 +50,9 @@ public class ButtonsCanvas extends Component {
 	public void paint(Graphics graphics) {
 		Graphics2D g = (Graphics2D) graphics;
 
-		g.setColor(Color.WHITE);
+		g.drawImage(fondEcran, 0, 0, getWidth(), getHeight(), this);
+		
+		g.setColor(new Color (220, 220, 220));
 		g.fill(solve_or_startMenu);
 		g.fill(quit);
 
@@ -64,8 +72,6 @@ public class ButtonsCanvas extends Component {
 			msg = "Résoudre";
 			val = 15;
 		}
-
-		System.out.println("msg=" + msg);
 
 		g.setColor(Color.BLACK);
 		g.setFont(new Font("Dialog", Font.BOLD, 35));

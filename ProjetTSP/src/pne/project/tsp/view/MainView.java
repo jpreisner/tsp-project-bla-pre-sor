@@ -47,35 +47,28 @@ public class MainView extends JFrame {
 			int[] tabResult, double objectiveValue, int resolutionDuration) {
 		getContentPane().removeAll();
 		JPanel mainPanel = new JPanel();
-		JPanel topPanel = new JPanel(); // graphcanvas
+		JPanel topPanel = new JPanel(); 
 		JPanel bottomPanel = new JPanel();
 		JPanel panelTab = new JPanel();
 		JPanel panelGraph = new JPanel();
+		JPanel panelRight = new JPanel();
+		int widthPanelTab = 60*g.getNbNode();
 
-		mainPanel.setBackground(Color.pink);
-		topPanel.setBackground(Color.yellow);
-		panelGraph.setBackground(Color.ORANGE);
-		bottomPanel.setBackground(Color.green);
-		panelTab.setBackground(Color.GRAY);
-
+		//panelGraph.setBackground(Color.WHITE);
+		//panelTab.setBackground(Color.WHITE);
+		
 		topPanel.setPreferredSize(new Dimension(width, height - 150));
-		panelGraph.setPreferredSize(new Dimension(490, 450));
-		panelTab.setPreferredSize(new Dimension(490, 450));
+		panelGraph.setPreferredSize(new Dimension(widthPanelTab, 450));
 		bottomPanel.setPreferredSize(new Dimension(width, 150));
 
 		// topPanel
 		topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.X_AXIS));
 
-		System.out.println("dans graphView -> isResolved=" + isResolved);
 		gc = new GraphCanvas(isResolved, listNode, tabResult);
-		// System.out.println("listNode: " + listNode);
-		// panelGraph.add(gc);
-
 		panelGraph.setLayout(new BorderLayout());
 		panelGraph.add(gc, BorderLayout.CENTER);
-		// panelGraph.setBounds(0, 0, 400, 400);
-		topPanel.add(panelGraph);
 
+		topPanel.add(panelGraph);
 		topPanel.add(Box.createRigidArea(new Dimension(30, 0)));
 		JSeparator separator = new JSeparator(JSeparator.VERTICAL);
 		topPanel.add(separator);
@@ -87,20 +80,16 @@ public class MainView extends JFrame {
 
 		panelTab.add(adjaMatrix.getTableHeader(), BorderLayout.WEST);
 		panelTab.add(adjaMatrix, BorderLayout.LINE_END);
+		panelTab.setPreferredSize(new Dimension(widthPanelTab, 450));
 
-		JScrollPane sc = new JScrollPane(panelTab, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-				JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		JScrollPane sc = new JScrollPane(panelTab, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		sc.setWheelScrollingEnabled(true);
 
-		//sc.setWheelScrollingEnabled(true);
-
-		topPanel.add(sc);
-		
+		topPanel.add(sc);		
 
 		// bottomPanel
 		bottomPanel.setLayout(new BoxLayout(bottomPanel, BoxLayout.X_AXIS));
-		// System.out.println("w=" + width + ", h=" + height);
 		bc = new ButtonsCanvas(width, height, isResolved);
-		// bottomPanel.add(bc);
 		bottomPanel.setLayout(new BorderLayout());
 		bottomPanel.add(bc, BorderLayout.CENTER);
 

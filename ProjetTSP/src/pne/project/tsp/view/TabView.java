@@ -2,6 +2,7 @@ package pne.project.tsp.view;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -15,9 +16,10 @@ public class TabView extends JTable {
 		super(new TabModel(g));
 		setAutoCreateColumnsFromModel(true);
 		setAutoscrolls(false);
-
+		//setPreferredScrollableViewportSize(new Dimension(3000, 450));
+		//setPreferredSize(new Dimension(490, 450));
 		getColumnModel().getColumn(0).setCellRenderer(getTableHeader().getDefaultRenderer());
-		setPreferredScrollableViewportSize(getPreferredSize());
+		//setPreferredScrollableViewportSize(getPreferredSize());
 
 		/*
 		 * setAutoResizeMode(JTable.AUTO_RESIZE_OFF);

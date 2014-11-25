@@ -16,6 +16,8 @@ public class ButtonsCanvas extends Component {
 	private Rectangle quit;
 	private boolean isResolved;
 	private Image fondEcran;
+	private Color colorSolve_startMenu;
+	private Color colorQuit;
 
 	public ButtonsCanvas(int w, int h, boolean isResolved) {
 		ImageIcon image = new ImageIcon("Images/Main.jpg");
@@ -29,6 +31,9 @@ public class ButtonsCanvas extends Component {
 		solve_or_startMenu = new Rectangle(x, y, largeur, hauteur);
 		quit = new Rectangle(w - x - largeur, y, largeur, hauteur);
 		this.isResolved = isResolved;
+		
+		colorSolve_startMenu = new Color(220, 220, 220);
+		colorQuit = new Color(220, 220, 220);
 	}
 
 	public Rectangle getSolve_or_startMenu() {
@@ -52,8 +57,10 @@ public class ButtonsCanvas extends Component {
 
 		g.drawImage(fondEcran, 0, 0, getWidth(), getHeight(), this);
 		
-		g.setColor(new Color (220, 220, 220));
+		g.setColor(colorSolve_startMenu);
 		g.fill(solve_or_startMenu);
+		
+		g.setColor(colorQuit);
 		g.fill(quit);
 
 		g.setColor(Color.BLACK);
@@ -80,6 +87,30 @@ public class ButtonsCanvas extends Component {
 
 		// dessiner le bouton quit
 		g.drawString("Quitter", quit.x + quit.width / 3 + 10, quit.y + quit.height / 2 + 10);
+	}
+
+	public void setSolve_or_startMenu(Rectangle solve_or_startMenu) {
+		this.solve_or_startMenu = solve_or_startMenu;
+	}
+
+	public void setQuit(Rectangle quit) {
+		this.quit = quit;
+	}
+
+	public Color getColorQuit() {
+		return colorQuit;
+	}
+
+	public void setColorQuit(Color colorQuit) {
+		this.colorQuit = colorQuit;
+	}
+
+	public Color getColorSolve_startMenu() {
+		return colorSolve_startMenu;
+	}
+
+	public void setColorSolve_startMenu(Color colorSolve_startMenu) {
+		this.colorSolve_startMenu = colorSolve_startMenu;
 	}
 
 }

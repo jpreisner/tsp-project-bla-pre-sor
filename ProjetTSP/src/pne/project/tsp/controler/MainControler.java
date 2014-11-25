@@ -192,7 +192,7 @@ public class MainControler {
 	}
 
 	public static void main(String[] args) {
-		MainControler c = new MainControler(new MainView("View", 1000, 600));
+		MainControler c = new MainControler(new MainView("Problème du voyageur de commerce", 1000, 600));
 		// c.getMv().setVisible(true);
 	}
 }

@@ -35,11 +35,8 @@ public class MainView extends JFrame {
 	}
 
 	public void menuPrincipal(int width, int height) {
-		// getContentPane().removeAll();
 		mc = new MainCanvas(width, height);
 		getContentPane().add(mc);
-		// getContentPane().repaint();
-		// add(mc);
 		setVisible(true);
 	}
 

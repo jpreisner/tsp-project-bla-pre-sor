@@ -15,11 +15,8 @@ public class TabView extends JTable {
 		super(new TabModel(g));
 		setAutoCreateColumnsFromModel(true);
 		setAutoscrolls(false);
-		//setPreferredScrollableViewportSize(new Dimension(3000, 450));
-		//setPreferredSize(new Dimension(490, 450));
 		getColumnModel().getColumn(0).setCellRenderer(getTableHeader().getDefaultRenderer());
-		//setPreferredScrollableViewportSize(getPreferredSize());
-
+		
 		if(!isResolved){
 			setDefaultRenderer(Object.class, new MatrixCellRenderer());
 		}else{

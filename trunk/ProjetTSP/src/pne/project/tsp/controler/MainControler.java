@@ -113,11 +113,13 @@ public class MainControler {
 			if (mv.getMainCanvas().getChargerPVC().contains(p)) {
 				/* recupération du xml */
 				String filename = getXML();
-				ArrayList<NodeView> listNode = affichageGraphe(filename);
-				g = FileReader.buildGraphFromXml("data/XML/" + filename + ".xml");
-				/* construction de la vue initiale */
-				mv.graphView(mv.getWidth(), mv.getHeight(), g, solved, listNode, null, 0,0);
-				mv.getButtonCanvas().addMouseListener(graphButtons);
+				if(filename != null){
+					ArrayList<NodeView> listNode = affichageGraphe(filename);
+					g = FileReader.buildGraphFromXml("data/XML/" + filename + ".xml");
+					/* construction de la vue initiale */
+					mv.graphView(mv.getWidth(), mv.getHeight(), g, solved, listNode, null, 0,0);
+					mv.getButtonCanvas().addMouseListener(graphButtons);	
+				}
 			}
 
 			else if (mv.getMainCanvas().getQuitter().contains(p)) {
@@ -146,8 +148,7 @@ public class MainControler {
 	private String getXML() {
 		Choix_fichier jf = new Choix_fichier("data/XML");
 		File fileSelected = jf.selectFile();
-		System.out.println("Le fichier selected est = " + fileSelected.getName());
-
+		if(fileSelected == null)	return null;
 		return fileSelected.getName().substring(0, (int) (fileSelected.getName().length() - 4));
 	}
 

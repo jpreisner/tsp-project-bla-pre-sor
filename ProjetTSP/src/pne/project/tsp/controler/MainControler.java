@@ -44,14 +44,15 @@ public class MainControler {
 			Point p = new Point(arg0.getX(), arg0.getY());
 
 			if (mv.getButtonCanvas().getQuit().contains(p)) {
+				mv.getMainCanvas().setColorQuitter(new Color(200, 200, 200));
+				mv.repaint();
 				mv.dispose();
 			} else if (mv.getButtonCanvas().getSolve_or_startMenu().contains(p)) {
 				mv.getContentPane().removeAll();
+
 				// cas ou le graphe n'est pas resolu
 				if (!solved) {
 					solved = true;
-					System.out.println("on lance la résolution");
-					// mv.getGraphCanvas().removeNotify();
 					// lancer la résolution
 					GraphManager gm = new GraphManager();
 					int[] tabResult = gm.writeLinearProgram(g, "tests/lpex1.lp", "tests/results.txt");
@@ -92,12 +93,30 @@ public class MainControler {
 		@Override
 		public void mousePressed(MouseEvent arg0) {
 			// TODO Auto-generated method stub
+			Point p = new Point(arg0.getX(), arg0.getY());
+			if (mv.getButtonCanvas().getSolve_or_startMenu().contains(p)) {
+				mv.getButtonCanvas().setColorSolve_startMenu(new Color(200, 200, 200));
+				mv.repaint();
+			}
+			else if(mv.getButtonCanvas().getQuit().contains(p)) {
+				mv.getButtonCanvas().setColorQuit(new Color(200, 200, 200));
+				mv.repaint();
+			}
+			
 
 		}
 
 		@Override
 		public void mouseReleased(MouseEvent arg0) {
-			// TODO Auto-generated method stub
+			Point p = new Point(arg0.getX(), arg0.getY());
+			if (mv.getButtonCanvas().getSolve_or_startMenu().contains(p)) {
+				mv.getButtonCanvas().setColorSolve_startMenu(new Color(220, 220, 220));
+				mv.repaint();
+			}
+			else if(mv.getButtonCanvas().getQuit().contains(p)) {
+				mv.getButtonCanvas().setColorQuit(new Color(220, 220, 220));
+				mv.repaint();
+			}
 
 		}
 
@@ -109,14 +128,14 @@ public class MainControler {
 		public void mouseClicked(MouseEvent arg0) {
 			// TODO Auto-generated method stub
 			Point p = new Point(arg0.getX(), arg0.getY());
-
+			System.out.println("clicked");
 			if (mv.getMainCanvas().getChargerPVC().contains(p)) {
-				/* recupération du xml */
+				// recupération du xml
 				String filename = getXML();
 				if(filename != null){
 					ArrayList<NodeView> listNode = affichageGraphe(filename);
 					g = FileReader.buildGraphFromXml("data/XML/" + filename + ".xml");
-					/* construction de la vue initiale */
+					// construction de la vue initiale
 					mv.graphView(mv.getWidth(), mv.getHeight(), g, solved, listNode, null, 0,0);
 					mv.getButtonCanvas().addMouseListener(graphButtons);	
 				}
@@ -125,6 +144,9 @@ public class MainControler {
 			else if (mv.getMainCanvas().getQuitter().contains(p)) {
 				mv.dispose();
 			}
+			
+		
+			
 
 		}
 
@@ -138,10 +160,28 @@ public class MainControler {
 
 		@Override
 		public void mousePressed(MouseEvent arg0) {
+			Point p = new Point(arg0.getX(), arg0.getY());
+			if (mv.getMainCanvas().getChargerPVC().contains(p)) {
+				mv.getMainCanvas().setColorChargerPVC(new Color(200, 200, 200));
+				mv.repaint();
+			}
+			else if(mv.getMainCanvas().getQuitter().contains(p)) {
+				mv.getMainCanvas().setColorQuitter(new Color(200, 200, 200));
+				mv.repaint();
+			}
 		}
 
 		@Override
 		public void mouseReleased(MouseEvent arg0) {
+			Point p = new Point(arg0.getX(), arg0.getY());
+			if (mv.getMainCanvas().getChargerPVC().contains(p)) {
+				mv.getMainCanvas().setColorChargerPVC(new Color(220, 220, 220));
+				mv.repaint();
+			}
+			else if(mv.getMainCanvas().getQuitter().contains(p)) {
+				mv.getMainCanvas().setColorQuitter(new Color(220, 220, 220));
+				mv.repaint();
+			}
 		}
 	};
 

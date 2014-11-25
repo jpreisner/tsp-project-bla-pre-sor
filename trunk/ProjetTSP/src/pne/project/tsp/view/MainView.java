@@ -22,7 +22,7 @@ public class MainView extends JFrame {
 	private ButtonsCanvas bc = null;
 
 	public MainView(String titre, int width, int height) {
-		new JFrame(titre);
+		super(titre);
 		setSize(width, height);
 		setBackground(Color.WHITE);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

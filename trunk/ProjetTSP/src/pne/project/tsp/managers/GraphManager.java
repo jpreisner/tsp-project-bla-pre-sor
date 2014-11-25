@@ -47,7 +47,9 @@ public class GraphManager {
 
 			/* Permet de ne renvoyer que des 1 et 0 */
 			cplex.setParam(DoubleParam.EpInt, 0.0);
-			// cplex.setParam(IloCplex.IntParam.TimeLimit, 0.1);
+//			 cplex.setParam(IloCplex.IntParam.TimeLimit, 0.4);
+			 cplex.setParam(IloCplex.DoubleParam.TreLim, 0.4);
+			 
 			/** METTRE LES PARAMETRES **/
 
 			setObjectiveFonction(i_graph, cplex, x);

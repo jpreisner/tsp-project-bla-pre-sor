@@ -15,17 +15,36 @@ public class MainCanvas extends Component {
 	private Image fondEcran;
 	private Rectangle chargerPVC;
 	private Rectangle quitter;
+	
+	private Color colorChargerPVC;	
+	private Color colorQuitter;
 
 	public MainCanvas(int w, int h) {
 		ImageIcon image = new ImageIcon("Images/Main.jpg");
-		
-		fondEcran = image.getImage();
-	
-		
+		fondEcran = image.getImage();		
 		// rect = (x, y, largeur, hauteur)
 		chargerPVC = new Rectangle(w / 4, 150, w / 2, 100);
 		quitter = new Rectangle(w / 4, 350, w / 2, 100);
-		// System.out.println(getWidth() + " " + getHeight());
+		
+		colorChargerPVC = new Color(220, 220, 220);
+		colorQuitter = new Color(220, 220, 220);
+
+	}
+	
+	public Color getColorChargerPVC(){
+		return colorChargerPVC;
+	}
+	
+	public void setColorChargerPVC(Color c){
+		colorChargerPVC = c;
+	}
+	
+	public Color getColorQuitter(){
+		return colorQuitter;
+	}
+	
+	public void setColorQuitter(Color c){
+		colorQuitter = c;
 	}
 
 	public void paint(Graphics graphics) {
@@ -33,8 +52,9 @@ public class MainCanvas extends Component {
 		g.drawImage(fondEcran, 0, 0, getWidth(), getHeight(), this);
 
 		// remplissage des boutons
-		g.setColor(new Color(220, 220, 220));
+		g.setColor(colorChargerPVC);
 		g.fill(chargerPVC);
+		g.setColor(colorQuitter);
 		g.fill(quitter);
 
 		// contours des boutons

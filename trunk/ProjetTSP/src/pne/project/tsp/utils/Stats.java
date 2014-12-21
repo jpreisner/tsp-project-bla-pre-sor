@@ -4,6 +4,11 @@ import pne.project.tsp.beans.Graph;
 
 public class Stats {
 
+	/**
+	 * @param g
+	 * @param power
+	 * @return esperance of stochastic edges of the graph
+	 */
 	private double esperance(Graph g, int power) {
 		double result = 0;
 		int nbValuesStoch =0;
@@ -18,6 +23,10 @@ public class Stats {
 		return result/nbValuesStoch;
 	}
 	
+	/**
+	 * @param g
+	 * @return ecart type of stochastic edges of the graph
+	 */
 	public double ecartType(Graph g){
 		return Math.sqrt((esperance(g, 2)-Math.pow(esperance(g, 1),2)));
 	}

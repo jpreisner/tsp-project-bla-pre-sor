@@ -4,16 +4,28 @@ public class Graph {
 
 	private double[][] tabAdja;
 	private int nbNode;
+	private boolean[][] tabStoch;
 
 	/**
-	 * Initial Constructor
-	 * 
+	 * PNE Constructor
 	 * @param tabInt
 	 * @param nbNode
 	 */
 	public Graph(double[][] tabInt, int nbNode) {
 		this.tabAdja = tabInt;
 		this.nbNode = nbNode;
+	}
+
+	/**
+	 * PS Constructor
+	 * @param tabInt
+	 * @param nbNode
+	 * @param tabStoch
+	 */
+	public Graph(double[][] tabInt, int nbNode, boolean[][] tabStoch) {
+		this.tabAdja = tabInt;
+		this.nbNode = nbNode;
+		this.tabStoch = tabStoch;
 	}
 
 	public int getNbNode() {
@@ -25,5 +37,9 @@ public class Graph {
 	 */
 	public double[][] getTabAdja() {
 		return tabAdja;
+	}
+	
+	public boolean[][] getTabStoch() {
+		return tabStoch;
 	}
 }

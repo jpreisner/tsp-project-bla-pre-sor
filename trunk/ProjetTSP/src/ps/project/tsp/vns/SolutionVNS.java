@@ -10,6 +10,10 @@ public class SolutionVNS {
 	private ArrayList<Integer> pathChosen;
 	private double pathCost;
 
+	public double getPathCost() {
+		return pathCost;
+	}
+
 	public ArrayList<Edge> gloutonAlgorithm(Graph g) {
 		ArrayList<Edge> allEdge = new ArrayList<Edge>();
 		boolean[] tabInnerEdge = new boolean[g.getNbNode()];

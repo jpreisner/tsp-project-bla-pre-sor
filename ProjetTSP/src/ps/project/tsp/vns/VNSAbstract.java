@@ -6,7 +6,7 @@ public abstract class VNSAbstract {
 	private ArrayList<SolutionVNS> listSolutions;
 	private int Kmax;
 
-	public SolutionVNS vnsAlgorithm(double tmax, int kmax) {
+	public SolutionVNS vnsAlgorithm(double tmax) {
 		double t;
 		SolutionVNS x;
 		SolutionVNS y;
@@ -17,7 +17,7 @@ public abstract class VNSAbstract {
 				x = initialSolution(k);
 				y = findBetterSolution(x);
 				changeNeighbourhood(x, y, k);
-			} while (k == kmax);
+			} while (k == Kmax);
 
 			t = System.currentTimeMillis();
 		} while (t > tmax);

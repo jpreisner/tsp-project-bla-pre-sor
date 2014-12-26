@@ -99,7 +99,7 @@ public abstract class VNSAbstract {
 		}
 		
 		i=0;
-		j=k;
+		j=k-1;
 		int pos_val1, pos_val2;
 		int changement;	// permet de savoir s'il faut incrémenter ou décrémenter
 		while(i<k){
@@ -120,35 +120,6 @@ public abstract class VNSAbstract {
 				}
 				
 				// Ajout de Ai inclu jusqu'à Bk exclu
-				while(pos_val1!=pos_val2){
-					s.getPathChosen().add(x.getPathChosen().get(pos_val1));
-					pos_val1+=changement;
-				}
-			
-				// Ajout de Bk inclu jusqu'à la fin de la solution x qu'il reste
-				for(i=pos_val2; i<x.getPathChosen().size(); i++){
-					s.getPathChosen().add(x.getPathChosen().get(pos_val2));
-				}
-				break;
-			}
-			
-			// Dans le cas ou on arrive à la fin et que k est pair
-			if(i == k/2 && k%2 == 0){
-				// Enregistrement de Bi
-				pos_val1 = listEdge.get(i).getN2();
-				
-				// Enregistrement de Bk
-				pos_val2 = listEdge.get(k).getN2();
-
-				// Test pour savoir s'il faut incrémenter ou décrémenter pour faire Bi -> Bk
-				if(pos_val1>pos_val2){
-					changement = 1;
-				}
-				else{
-					changement = -1;
-				}
-				
-				// Ajout de Bi inclu jusqu'à Bk exclu
 				while(pos_val1!=pos_val2){
 					s.getPathChosen().add(x.getPathChosen().get(pos_val1));
 					pos_val1+=changement;
@@ -186,13 +157,52 @@ public abstract class VNSAbstract {
 			// ajout de Bj-1
 			s.getPathChosen().add(pos_val2);
 			
-			// ajout de Bi
-			s.getPathChosen().add(x.getPathChosen().get(listEdge.get(i).getN2()));
+			// Enregistrement de Bi
+			pos_val1 = listEdge.get(i).getN2();
+
+			// Dans le cas ou on arrive à la fin et que k est pair
+			if (i == (k / 2) - 1 && k % 2 == 0) {
+				// Enregistrement de Bk
+				pos_val2 = listEdge.get(k).getN2();
+
+				// Test pour savoir s'il faut incrémenter ou décrémenter pour
+				// faire Bi -> Bk
+				if (pos_val1 > pos_val2) {
+					changement = 1;
+				} else {
+					changement = -1;
+				}
+
+				// Ajout de Bi inclu jusqu'à Bk exclu
+				while (pos_val1 != pos_val2) {
+					s.getPathChosen().add(x.getPathChosen().get(pos_val1));
+					pos_val1 += changement;
+				}
+
+				// Ajout de Bk inclu jusqu'à la fin de la solution x qu'il reste
+				for (i = pos_val2; i < x.getPathChosen().size(); i++) {
+					s.getPathChosen().add(x.getPathChosen().get(pos_val2));
+				}
+				break;
+			}
 			
+			// Rajouter de Bi-> jusqu'à Ai+1 qui va être l'étape suivante
+
+			// Enregistrement de Ai+1
+			pos_val2 = listEdge.get(i+1).getN1();
+			
+			// Ajout de Bi inclu jusqu'à Ai+1 exclu
+			// Remarque : on sait que pos_val1 < pos_val2
+			while (pos_val1 != pos_val2) {
+				s.getPathChosen().add(x.getPathChosen().get(pos_val1));
+				pos_val1++;
+			}
+
 			// on passe à "l'étape suivante"
 			i++;
 			j--;
 		}
+		
 		/**
 		 * Calcul du cout total de la nouvelle solution
 		 */

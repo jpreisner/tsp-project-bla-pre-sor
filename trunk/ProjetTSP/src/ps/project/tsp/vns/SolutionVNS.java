@@ -7,8 +7,27 @@ import pne.project.tsp.beans.Edge;
 import pne.project.tsp.beans.Graph;
 
 public class SolutionVNS {
-	private ArrayList<Integer> pathChosen;
+	private Graph graph_scenario;
+	private ArrayList<Integer> pathChosen;	// pour un graphe à 4 noeuds : 1-2-3-4
 	private double pathCost;
+	
+	public SolutionVNS(Graph g, ArrayList<Integer> pathChosen, double pathCost){
+		graph_scenario = g;
+		this.pathChosen = pathChosen;
+		this.pathCost = pathCost;
+	}
+	
+	public SolutionVNS(Graph g, ArrayList<Integer> pathChosen){
+		graph_scenario = g;
+		this.pathChosen = pathChosen;
+		this.pathCost = calculPathCost();
+	}
+	
+	public SolutionVNS(Graph g){
+		graph_scenario = g;
+		pathChosen = new ArrayList<Integer>();
+		pathCost = 0.0;
+	}
 
 	public double getPathCost() {
 		return pathCost;
@@ -43,6 +62,16 @@ public class SolutionVNS {
 		
 		return result;
 	}
+	
+	public double calculPathCost(){
+		double cost = 0.0;
+		int n = pathChosen.size();
+		for(int i=0; i<n-1; i++){
+			cost+=graph_scenario.getTabAdja()[pathChosen.get(i)][pathChosen.get(i+1)];
+		}
+		cost+=graph_scenario.getTabAdja()[pathChosen.get(n)][pathChosen.get(0)];
+		return cost;
+	}
 
 	public Graph defineScenario(Graph g) {
 		return null;
@@ -50,5 +79,17 @@ public class SolutionVNS {
 
 	public void definePenalty(Graph g) {
 
+	}
+
+	public ArrayList<Integer> getPathChosen() {
+		return pathChosen;
+	}
+
+	public Graph getGraph_scenario() {
+		return graph_scenario;
+	}
+	
+	public void setPathCost(double cost){
+		pathCost = cost;
 	}
 }

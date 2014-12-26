@@ -13,5 +13,7 @@ public class VNSDeterminist extends VNSAbstract {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+
 
 }

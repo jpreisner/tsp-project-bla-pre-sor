@@ -7,7 +7,7 @@ package pne.project.tsp.beans;
  *
  */
 
-public class NodeCouple {
+public class NodeCouple implements Comparable<NodeCouple> {
 	private int n1;
 	private int n2;
 
@@ -65,6 +65,18 @@ public class NodeCouple {
 	@Override
 	public String toString() {
 		return "NodeCouple [" + n1 + ", " + n2 + "]";
+	}
+
+	@Override
+	public int compareTo(NodeCouple nc) {
+		// TODO Auto-generated method stub
+		if(n1<nc.getN1()){
+			return -1;
+		}
+		else if(n1==nc.getN1()){
+			return 0;
+		}
+		return 1;	
 	}
 
 }

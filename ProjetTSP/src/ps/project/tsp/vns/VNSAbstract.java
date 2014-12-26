@@ -20,7 +20,7 @@ public abstract class VNSAbstract {
 			k = 1;
 			do {
 				x = initialSolution(k);
-				y = findBetterSolution(x);
+				y = findBetterSolution(x, k);
 				changeNeighbourhood(x, y, k);
 			} while (k == Kmax);
 
@@ -31,7 +31,7 @@ public abstract class VNSAbstract {
 
 	protected abstract SolutionVNS initialSolution(int k);
 
-	protected abstract SolutionVNS findBetterSolution(SolutionVNS x);
+	protected abstract SolutionVNS findBetterSolution(SolutionVNS x, int k);
 
 	protected void changeNeighbourhood(SolutionVNS x, SolutionVNS y, int k) {
 		if (y.getPathCost() > x.getPathCost()) {

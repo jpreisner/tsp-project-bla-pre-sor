@@ -9,9 +9,8 @@ public class VNSStochastic extends VNSAbstract {
 	}
 
 	@Override
-	protected SolutionVNS findBetterSolution(SolutionVNS x) {
-		// TODO Auto-generated method stub
-		return null;
+	protected SolutionVNS findBetterSolution(SolutionVNS x, int k) {
+		return k_transformation(x, k);
 	}
 
 }

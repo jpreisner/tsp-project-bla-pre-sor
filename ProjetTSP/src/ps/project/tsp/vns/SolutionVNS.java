@@ -2,14 +2,32 @@ package ps.project.tsp.vns;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 
-import pne.project.tsp.beans.Edge;
 import pne.project.tsp.beans.Graph;
+import pne.project.tsp.beans.NodeCouple;
 
 public class SolutionVNS {
 	private Graph graph_scenario;
 	private ArrayList<Integer> pathChosen;	// pour un graphe à 4 noeuds : 1-2-3-4
 	private double pathCost;
+	
+	/**
+	 *  Comparator used in glouton algorithm
+	 */
+	private Comparator<NodeCouple> compareNodeCouple = new Comparator<NodeCouple>() {
+
+		@Override
+		public int compare(NodeCouple arg0, NodeCouple arg1) {
+			if (arg0.getCostEdge() < arg1.getCostEdge()) {
+				return -1;
+			} else if (arg0.getCostEdge() > arg1.getCostEdge()) {
+				return 1;
+			} else {
+				return 0;
+			}
+		}
+	};
 	
 	public SolutionVNS(Graph g, ArrayList<Integer> pathChosen, double pathCost){
 		graph_scenario = g;
@@ -33,29 +51,29 @@ public class SolutionVNS {
 		return pathCost;
 	}
 
-	public ArrayList<Edge> gloutonAlgorithm(Graph g) {
-		ArrayList<Edge> allEdge = new ArrayList<Edge>();
+	public ArrayList<NodeCouple> gloutonAlgorithm(Graph g) {
+		ArrayList<NodeCouple> alNodeCouple = new ArrayList<NodeCouple>();
 		boolean[] tabInnerEdge = new boolean[g.getNbNode()];
 		boolean[] tabOuterEdge = new boolean[g.getNbNode()];
-		ArrayList<Edge> result = new ArrayList<Edge>();
+		ArrayList<NodeCouple> result = new ArrayList<NodeCouple>();
 		/* recuperation de toutes les arêtes*/
 		for(int i=0;i<g.getNbNode();i++){
 			for(int j=0;j<g.getNbNode();j++){
 				if(i!=j){
-					allEdge.add(new Edge(i, j, g.getTabAdja()[i][j]));
+					alNodeCouple.add(new NodeCouple(i, j, g.getTabAdja()[i][j]));
 				}
 			}
 		}
 		
 		/* tri des arêtes */
-		Collections.sort(allEdge);
+		Collections.sort(alNodeCouple, compareNodeCouple );
 		
 		/* construction de la solution gloutonne*/
 		/* TODO verifier les sous tours*/
-		for(Edge e : allEdge){
-			if(!tabInnerEdge[e.getNode1()] && !tabOuterEdge[e.getNode2()]){
-				tabInnerEdge[e.getNode1()] = true;
-				tabOuterEdge[e.getNode2()] = true;
+		for(NodeCouple e : alNodeCouple){
+			if(!tabInnerEdge[e.getN1()] && !tabOuterEdge[e.getN2()]){
+				tabInnerEdge[e.getN1()] = true;
+				tabOuterEdge[e.getN2()] = true;
 				result.add(e);
 			}
 		}	

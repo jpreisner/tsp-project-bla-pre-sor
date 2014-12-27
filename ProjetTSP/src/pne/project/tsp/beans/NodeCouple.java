@@ -2,23 +2,36 @@ package pne.project.tsp.beans;
 
 /**
  * 
- * Cette classe permet de représenter un couple de noeud (i, j)
- *  Utile lors de la sauvegarde des résultats renvoyés par CPLEX
+ * Cette classe permet de représenter un couple de noeud (i, j) Utile lors de la
+ * sauvegarde des résultats renvoyés par CPLEX
  *
  */
 
 public class NodeCouple implements Comparable<NodeCouple> {
 	private int n1;
 	private int n2;
+	private double costEdge;
 
-	/** Constructor
-	 * 
+	/**
+	 * Constructor used in sub-tour method and VNS algorithm 
 	 * @param n1
 	 * @param n2
 	 */
 	public NodeCouple(int n1, int n2) {
 		this.n1 = n1;
 		this.n2 = n2;
+	}
+	
+	/**
+	 * Constructor used in glouton algorithm
+	 * @param node1
+	 * @param node2
+	 * @param costEdge
+	 */
+	public NodeCouple(int node1, int node2, double costEdge) {
+		this.n1 = node1;
+		this.n2 = node2;
+		this.costEdge = costEdge;
 	}
 
 	public int getN1() {
@@ -36,13 +49,17 @@ public class NodeCouple implements Comparable<NodeCouple> {
 	public void setN2(int n2) {
 		this.n2 = n2;
 	}
-
+	
+	public double getCostEdge() {
+		return costEdge;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + n1;
-		result = prime * result + n2;
+		result += prime * result + n1;
+		result += prime * result + n2;
 		return result;
 	}
 
@@ -70,13 +87,12 @@ public class NodeCouple implements Comparable<NodeCouple> {
 	@Override
 	public int compareTo(NodeCouple nc) {
 		// TODO Auto-generated method stub
-		if(n1<nc.getN1()){
+		if (n1 < nc.getN1()) {
 			return -1;
-		}
-		else if(n1==nc.getN1()){
+		} else if (n1 == nc.getN1()) {
 			return 0;
 		}
-		return 1;	
+		return 1;
 	}
 
 }

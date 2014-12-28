@@ -8,9 +8,4 @@ public class VNSStochastic extends VNSAbstract {
 		return null;
 	}
 
-	@Override
-	protected SolutionVNS findBetterSolution(SolutionVNS x, int k) {
-		return k_transformation(x, k);
-	}
-
 }

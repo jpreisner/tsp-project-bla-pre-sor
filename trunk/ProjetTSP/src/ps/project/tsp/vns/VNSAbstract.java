@@ -43,6 +43,9 @@ public abstract class VNSAbstract {
 		ArrayList<NodeCouple> listNodeCouple = new ArrayList<NodeCouple>();
 		
 		// Enregistrement de toutes les positions des arêtes possibles
+		/**
+		 * Pas sur qu'on en ait besoin
+		 */
 		for(i=0; i<n-1; i++){
 			listNodeCouple.add(new NodeCouple(i, i+1));
 		}
@@ -53,7 +56,7 @@ public abstract class VNSAbstract {
 		/**
 		 * Trouver un algo pour lister toutes les combinaisons possibles
 		 */
-		
+				
 		return k_transformation(x, k, listCombinaison);
 	}
 

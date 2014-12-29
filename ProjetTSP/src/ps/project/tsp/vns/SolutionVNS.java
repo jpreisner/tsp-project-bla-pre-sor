@@ -9,7 +9,7 @@ import pne.project.tsp.beans.NodeCouple;
 
 public class SolutionVNS {
 	private Graph graph_scenario;
-	private ArrayList<Integer> pathChosen;	// pour un graphe à 4 noeuds : 1-2-3-4
+	private ArrayList<Integer> pathChosen;	// ex pour un graphe à 4 noeuds : 1-2-3-4
 	private double pathCost;
 	
 	/**

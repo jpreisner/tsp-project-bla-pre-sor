@@ -49,7 +49,7 @@ public abstract class VNSAbstract {
 		for(i=0; i<n-1; i++){
 			listNodeCouple.add(new NodeCouple(i, i+1));
 		}
-		listNodeCouple.add(new NodeCouple(n, 0));
+		listNodeCouple.add(new NodeCouple(n-1, 0));
 		
 		// Initialisation de listCombinaison
 	
@@ -87,7 +87,7 @@ public abstract class VNSAbstract {
 		ArrayList<NodeCouple> listEdge = new ArrayList<NodeCouple>();
 
 		int n = x.getPathChosen().size();	// taille du graphe
-		int i, j;
+		int i, j, next_j;
 		NodeCouple nc;
 		boolean nodePositionPresent[] = new boolean[n];		// permet d'éviter d'avoir des arêtes déjà mises
 		
@@ -109,14 +109,21 @@ public abstract class VNSAbstract {
 			
 			do{
 				for(i=0;i<k;i++){
-					j = (int) (Math.random()*n);
-					nc = new NodeCouple(j, j+1);
-					while(nodePositionPresent[j-1] || nodePositionPresent[j] || nodePositionPresent[j+1]){
-						j = (int) (Math.random()*n);
-						nc = new NodeCouple(j, j+1);
-					}
+					do{
+						j = (int) (Math.random()*n);	// tirage aleatoire dans l'intervalle [0, n-1]
+						if(j == (n-1)){
+							next_j = 0;
+						}
+						else{
+							next_j = j+1;
+						}
+						nc = new NodeCouple(j, next_j);
+					} while(!nodePositionPresent[j]);
 					nodePositionPresent[j] = true;
-					nodePositionPresent[j+1] = true;
+					nodePositionPresent[next_j] = true;
+					if(j>0){
+						nodePositionPresent[j-1] = true;
+					}
 					listEdge.add(nc);
 				}
 				Collections.sort(listEdge);	// liste des arêtes interdites, trié selon leur position(!) 
@@ -148,7 +155,7 @@ public abstract class VNSAbstract {
 					pos_val1 = listEdge.get(i).getN1();
 					
 					// Enregistrement de la position Bk
-					pos_val2 = listEdge.get(k).getN2();
+					pos_val2 = listEdge.get(k-1).getN2();	// ou k?
 					
 					// Test pour savoir s'il faut incrémenter ou décrémenter pour faire Ai -> Bk
 					if(pos_val1>pos_val2){
@@ -202,7 +209,7 @@ public abstract class VNSAbstract {
 				// Dans le cas ou on arrive à la fin et que k est pair
 				if (i == (k / 2) - 1 && k % 2 == 0) {
 					// Enregistrement de Bk
-					pos_val2 = listEdge.get(k).getN2();
+					pos_val2 = listEdge.get(k-1).getN2();	// ou k?
 
 					// Test pour savoir s'il faut incrémenter ou décrémenter pour
 					// faire Bi -> Bk

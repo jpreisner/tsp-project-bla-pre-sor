@@ -79,7 +79,8 @@ public abstract class VNSAbstract {
 	 * @param k
 	 * @return
 	 */
-	protected SolutionVNS k_transformation(SolutionVNS x, int k, HashMap<ArrayList<NodeCouple>, Boolean> listCombinaison){
+	protected SolutionVNS k_transformation(SolutionVNS x, int k, 
+			HashMap<ArrayList<NodeCouple>, Boolean> listCombinaison){
 	
 		// liste des arêtes interdites (contient les positions des arêtes dans la solution x, et non les arêtes
 		// en elles-mêmes
@@ -254,6 +255,7 @@ public abstract class VNSAbstract {
 		 * Si aucune meilleure solution n'a été trouvé, on renvoie x
 		 */
 		return x;	// Je comprends pas pourquoi il met une erreur, ça doit être à cause du do while
+		/* Unreachable code : code inateignable, car le return Ligne 250 dit qu'on executera jamais ce qu'il y a après*/
 	}
 
 	public boolean isTested(ArrayList<NodeCouple> combinaison, HashMap<ArrayList<NodeCouple>, Boolean> listCombinaison){

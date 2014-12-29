@@ -247,21 +247,34 @@ public abstract class VNSAbstract {
 			 */
 			s.setPathCost(s.calculPathCost());
 			
-			return s;
+			/**
+			 * Si la solution s recherchée est meilleure que la solution initiale x, on renvoie s
+			 */
+			if(s.getPathCost()<x.getPathCost())	return s;
 			
 		} while(allTested(listCombinaison)); // la condition d'arret : qd allTested = true
 		
 		/**
 		 * Si aucune meilleure solution n'a été trouvé, on renvoie x
 		 */
-		return x;	// Je comprends pas pourquoi il met une erreur, ça doit être à cause du do while
-		/* Unreachable code : code inateignable, car le return Ligne 250 dit qu'on executera jamais ce qu'il y a après*/
+		return x;
 	}
 
+	/**
+	 * Permet de savoir si une combinaison (passée en paramètre) a été testée
+	 * @param combinaison
+	 * @param listCombinaison
+	 * @return true si la combinaison en question a déjà été testée
+	 */
 	public boolean isTested(ArrayList<NodeCouple> combinaison, HashMap<ArrayList<NodeCouple>, Boolean> listCombinaison){
 		return listCombinaison.get(combinaison);
 	}
 	
+	/**
+	 * Permet de savoir si toutes les combinaisons ont été testées
+	 * @param listCombinaison
+	 * @return true si toutes les combinaisons ont été testées
+	 */
 	public boolean allTested(HashMap<ArrayList<NodeCouple>, Boolean> listCombinaison){
 		for(ArrayList<NodeCouple> combinaison : listCombinaison.keySet()){
 			if(!listCombinaison.get(combinaison)) return false;

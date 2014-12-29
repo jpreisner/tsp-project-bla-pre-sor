@@ -56,7 +56,7 @@ public abstract class VNSAbstract {
 		/**
 		 * Trouver un algo pour lister toutes les combinaisons possibles
 		 */
-				
+		
 		return k_transformation(x, k, listCombinaison);
 	}
 

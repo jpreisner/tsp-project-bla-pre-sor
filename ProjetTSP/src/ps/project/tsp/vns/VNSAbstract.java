@@ -7,9 +7,13 @@ import java.util.HashMap;
 
 import pne.project.tsp.beans.NodeCouple;
 
-public abstract class VNSAbstract {
+public class VNSAbstract {
 	private ArrayList<SolutionVNS> listSolutions;		
 	private int Kmax;
+	
+	public VNSAbstract(){
+		
+	}
 
 	public SolutionVNS vnsAlgorithm(double tmax) {
 		double t;
@@ -29,35 +33,89 @@ public abstract class VNSAbstract {
 		return x;
 	}
 
-	protected abstract SolutionVNS initialSolution(int k);
+	//protected abstract SolutionVNS initialSolution(int k);
 
-	protected SolutionVNS findBetterSolution(SolutionVNS x, int k){
-		int i, j;
-		int n = x.getPathChosen().size();
+	/**
+	 * Teste toutes les combinaisons s'il le faut, mais s'arrete dès qu'une meilleure solution est trouvée
+	 * @param x
+	 * @param k
+	 * @return
+	 */
+	protected /*SolutionVNS*/ void findBetterSolution(SolutionVNS x, int k){
+		int i;
+		int n = x.getPathChosen().size()-1;	// n est la derniere position du noeud dans la solution
+		System.out.println("n=" + n);
 		/**
 		 * Remarque : ce sont des combinaisons des positions des arêtes (et non des arêtes réelles)
 		 */
 		
 		// initialiser un tableau ou tout sera a "false" pour la combinaison
 		HashMap<ArrayList<NodeCouple>, Boolean> listCombinaison = new HashMap<ArrayList<NodeCouple>, Boolean>();
-		ArrayList<NodeCouple> listNodeCouple = new ArrayList<NodeCouple>();
+		ArrayList<NodeCouple> combinaison;
+
+		// Initialisation de listCombinaison : liste toutes les k combinaisons possibles
 		
-		// Enregistrement de toutes les positions des arêtes possibles
-		/**
-		 * Pas sur qu'on en ait besoin
-		 */
 		for(i=0; i<n-1; i++){
-			listNodeCouple.add(new NodeCouple(i, i+1));
+			System.out.println("i=" + i);
+			combinaison = new ArrayList<NodeCouple>();
+			combinaison.add(new NodeCouple(i, i+1));
+			System.out.println("combinaison = " + combinaison);
+			searchCombinaisonRecursive(i, i+2, n, k-1, combinaison, listCombinaison);
 		}
-		listNodeCouple.add(new NodeCouple(n-1, 0));
 		
-		// Initialisation de listCombinaison
+		for(ArrayList<NodeCouple> listnc : listCombinaison.keySet()){
+			System.out.println("Listnc = [");
+			for(NodeCouple nc : listnc){
+				System.out.print(n + " -- ");
+			}
+			System.out.println("]");
+		}
+		
+		//return k_transformation(x, k, listCombinaison);
+	}
 	
-		/**
-		 * Trouver un algo pour lister toutes les combinaisons possibles
-		 */
+	/**
+	 * 
+	 * @param i : i du for dans la méthode précédente (il ne changera pas dans la récursivité
+	 * @param j	: indice qui nous permet de chercher toutes les combinaisons
+	 * @param n : nb de noeud dans la solution x
+	 * @param k	: k-opt. Au début il est égal à k, à la fin il sera à 0
+	 * @param combinaison	: combinaison qu'on regarde actuellement
+	 * @param listCombinaison	: on va ajouter combinaison à la liste à la fin
+	 */
+	protected void searchCombinaisonRecursive(int i, int j, int n, int k, ArrayList<NodeCouple> combinaison, HashMap<ArrayList<NodeCouple>, Boolean> listCombinaison){
+		int next_j;
+		NodeCouple nc;
 		
-		return k_transformation(x, k, listCombinaison);
+		System.out.println("au début de search : combinaison = " + combinaison);
+		
+		// Cas ou on peut mettre encore des combinaisons
+		if(k>0 && (j<n || (j==n && i!=0))){
+			while(k>0 && (j<n || (j==n && i!=0))){
+				if(j == n){
+					next_j = 0;
+				}
+				else{
+					next_j = j+1;
+				}
+				nc = new NodeCouple(j, next_j);
+				combinaison.add(nc);
+				searchCombinaisonRecursive(i, j+2, n, k-1, combinaison, listCombinaison);
+				combinaison.remove(nc);
+				j++;
+				
+			}
+		}
+		
+		// Cas ou on ne peut pas : on ajoute la combinaison qui est "terminée"
+		else{
+			if(k==0){
+				System.out.println("ajout de la combinaison : " + combinaison);
+				listCombinaison.put(combinaison, false);	
+			}
+			
+			
+		}
 	}
 
 	protected void changeNeighbourhood(SolutionVNS x, SolutionVNS y, int k) {
@@ -287,5 +345,19 @@ public abstract class VNSAbstract {
 			if(!listCombinaison.get(combinaison)) return false;
 		}
 		return true;
+	}
+
+	public ArrayList<SolutionVNS> getListSolutions() {
+		return listSolutions;
+	}
+	
+	public static void main(String[] args){
+		VNSAbstract vns = new VNSAbstract();
+		ArrayList<Integer> sol = new ArrayList<Integer>();
+		for(int i=0; i<=5; i++){
+			sol.add(i);
+		}
+		SolutionVNS s = new SolutionVNS(null, sol, 0.0);
+		vns.findBetterSolution(s, 3);
 	}
 }

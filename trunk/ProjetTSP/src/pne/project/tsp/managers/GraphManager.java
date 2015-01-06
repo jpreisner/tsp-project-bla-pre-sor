@@ -19,6 +19,29 @@ public class GraphManager {
 	}
 
 	/**
+	 * PS
+	 */
+	
+	// il faut résoudre le graphe chargé (appel de VNS deterministe)
+	
+	// si le X% = 0 ==> fin
+	
+	// sinon
+		// il faut tirer au sort les arêtes deterministes
+	
+		// génération des K scenarios
+	
+			// calcul ecart type et tirage au sort des valeurs
+	
+			// VNS stochastique + pénalité
+	
+	
+	
+	/**
+	 * PNE
+	 */
+	
+	/**
 	 * Method called to write Linear program with graph in param and write it in
 	 * file in param.
 	 * 

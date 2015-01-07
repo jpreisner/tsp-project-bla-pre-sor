@@ -41,10 +41,11 @@ public class VNSAbstract {
 	 * @param k
 	 * @return
 	 */
-	protected /*SolutionVNS*/ void findBetterSolution(SolutionVNS x, int k){
+	protected SolutionVNS findBetterSolution(SolutionVNS x, int k){
 		int i;
 		int n = x.getPathChosen().size()-1;	// n est la derniere position du noeud dans la solution
 		System.out.println("n=" + n);
+		
 		/**
 		 * Remarque : ce sont des combinaisons des positions des arêtes (et non des arêtes réelles)
 		 */
@@ -56,22 +57,20 @@ public class VNSAbstract {
 		// Initialisation de listCombinaison : liste toutes les k combinaisons possibles
 		
 		for(i=0; i<n-1; i++){
-			System.out.println("i=" + i);
 			combinaison = new ArrayList<NodeCouple>();
 			combinaison.add(new NodeCouple(i, i+1));
-			System.out.println("combinaison = " + combinaison);
 			searchCombinaisonRecursive(i, i+2, n, k-1, combinaison, listCombinaison);
 		}
 		
 		for(ArrayList<NodeCouple> listnc : listCombinaison.keySet()){
-			System.out.println("Listnc = [");
+			System.out.print("Listnc = [");
 			for(NodeCouple nc : listnc){
-				System.out.print(n + " -- ");
+				System.out.print(nc + " -- ");
 			}
 			System.out.println("]");
 		}
 		
-		//return k_transformation(x, k, listCombinaison);
+		return k_transformation(x, k, listCombinaison);
 	}
 	
 	/**
@@ -86,9 +85,7 @@ public class VNSAbstract {
 	protected void searchCombinaisonRecursive(int i, int j, int n, int k, ArrayList<NodeCouple> combinaison, HashMap<ArrayList<NodeCouple>, Boolean> listCombinaison){
 		int next_j;
 		NodeCouple nc;
-		
-		System.out.println("au début de search : combinaison = " + combinaison);
-		
+			
 		// Cas ou on peut mettre encore des combinaisons
 		if(k>0 && (j<n || (j==n && i!=0))){
 			while(k>0 && (j<n || (j==n && i!=0))){
@@ -109,12 +106,10 @@ public class VNSAbstract {
 		
 		// Cas ou on ne peut pas : on ajoute la combinaison qui est "terminée"
 		else{
+			// on ajoute que si on a respecter la condition k-opt (on a k permutation si k=0 ici)
 			if(k==0){
-				System.out.println("ajout de la combinaison : " + combinaison);
-				listCombinaison.put(combinaison, false);	
+				listCombinaison.put((ArrayList<NodeCouple>) combinaison.clone(), false);	
 			}
-			
-			
 		}
 	}
 
@@ -176,7 +171,7 @@ public class VNSAbstract {
 							next_j = j+1;
 						}
 						nc = new NodeCouple(j, next_j);
-					} while(!nodePositionPresent[j]);
+					} while(nodePositionPresent[j]);	// on veut trouver un nc qui n'est pas present
 					nodePositionPresent[j] = true;
 					nodePositionPresent[next_j] = true;
 					if(j>0){
@@ -186,6 +181,8 @@ public class VNSAbstract {
 				}
 				Collections.sort(listEdge);	// liste des arêtes interdites, trié selon leur position(!) 
 											// dans la solution x & correspond à 1 combinaison
+				
+				System.out.println("listEdge = " + listEdge);
 			} while(isTested(listEdge, listCombinaison));	// Condition d'arrêt : si isTested = false
 			
 			//int noeud_depart = x.getPathChosen().get(0);
@@ -206,21 +203,25 @@ public class VNSAbstract {
 			j=k-1;
 			int pos_val1, pos_val2;
 			int changement;	// permet de savoir s'il faut incrémenter ou décrémenter
-			while(i<k){
+			while(i<=(k/2)+1){
 				// Dans le cas où on arrive à la fin et que k est impair
 				if(i == j && k%2 != 0){
+					//s.getPathChosen().add(x.getPathChosen().get(listEdge.get(i).getN1()));
+					
 					// Enregistrement de la position Ai
 					pos_val1 = listEdge.get(i).getN1();
 					
 					// Enregistrement de la position Bk
 					pos_val2 = listEdge.get(k-1).getN2();	// ou k?
 					
+					System.out.println("On est dans cond arret avec pos_val1=" + pos_val1 + " et pos_val2=" + pos_val2);
+					
 					// Test pour savoir s'il faut incrémenter ou décrémenter pour faire Ai -> Bk
 					if(pos_val1>pos_val2){
-						changement = 1;
+						changement = -1;
 					}
 					else{
-						changement = -1;
+						changement = 1;
 					}
 					
 					// Ajout de Ai inclu jusqu'à Bk exclu
@@ -228,39 +229,45 @@ public class VNSAbstract {
 						s.getPathChosen().add(x.getPathChosen().get(pos_val1));
 						pos_val1+=changement;
 					}
+					System.out.println("s = " + s.getPathChosen());
 				
 					// Ajout de Bk inclu jusqu'à la fin de la solution x qu'il reste
 					for(i=pos_val2; i<x.getPathChosen().size(); i++){
 						s.getPathChosen().add(x.getPathChosen().get(pos_val2));
 					}
+					System.out.println("s = " + s.getPathChosen());					
 					break;
 				}
 				
 				// ajout de Ai
 				s.getPathChosen().add(x.getPathChosen().get(listEdge.get(i).getN1()));
+				System.out.println("s = " + s.getPathChosen());
 				
 				// Enregistrement des positions de Aj et Bj-1 car il faut enregistrer toutes les valeurs
 				// comprises dedans
 				pos_val1 = listEdge.get(j).getN1();
 				pos_val2 = listEdge.get(j-1).getN2();
+				System.out.println("post_val1 et 2 = " + pos_val1 + " et " + pos_val2);
 				
 				// test pour savoir s'il faut incrémenter ou décrémenter pour aller de Aj à Bj-1
 				if(pos_val1>pos_val2){
-					changement = 1;
-				}
-				else{
 					changement = -1;
 				}
+				else{
+					changement = 1;
+				}
+				
 				
 				// ajout de Aj inclu jusqu'à Bj-1 exclu
 				while(pos_val1!=pos_val2){
+					System.out.println("pos_val1 = " + pos_val1);
 					s.getPathChosen().add(x.getPathChosen().get(pos_val1));
 					pos_val1+=changement;
 				}
-				
+				System.out.println("s = " + s.getPathChosen());
 				// ajout de Bj-1
 				s.getPathChosen().add(pos_val2);
-				
+				System.out.println("s = " + s.getPathChosen());
 				// Enregistrement de Bi
 				pos_val1 = listEdge.get(i).getN2();
 
@@ -272,9 +279,9 @@ public class VNSAbstract {
 					// Test pour savoir s'il faut incrémenter ou décrémenter pour
 					// faire Bi -> Bk
 					if (pos_val1 > pos_val2) {
-						changement = 1;
-					} else {
 						changement = -1;
+					} else {
+						changement = 1;
 					}
 
 					// Ajout de Bi inclu jusqu'à Bk exclu
@@ -282,7 +289,7 @@ public class VNSAbstract {
 						s.getPathChosen().add(x.getPathChosen().get(pos_val1));
 						pos_val1 += changement;
 					}
-
+					System.out.println("s = " + s.getPathChosen());
 					// Ajout de Bk inclu jusqu'à la fin de la solution x qu'il reste
 					for (i = pos_val2; i < x.getPathChosen().size(); i++) {
 						s.getPathChosen().add(x.getPathChosen().get(pos_val2));
@@ -301,7 +308,7 @@ public class VNSAbstract {
 					s.getPathChosen().add(x.getPathChosen().get(pos_val1));
 					pos_val1++;
 				}
-
+				System.out.println("s = " + s.getPathChosen());
 				// on passe à "l'étape suivante"
 				i++;
 				j--;
@@ -317,7 +324,7 @@ public class VNSAbstract {
 			 */
 			if(s.getPathCost()<x.getPathCost())	return s;
 			
-		} while(allTested(listCombinaison)); // la condition d'arret : qd allTested = true
+		} while(!allTested(listCombinaison)); // la condition d'arret : qd allTested = true
 		
 		/**
 		 * Si aucune meilleure solution n'a été trouvé, on renvoie x
@@ -354,10 +361,31 @@ public class VNSAbstract {
 	public static void main(String[] args){
 		VNSAbstract vns = new VNSAbstract();
 		ArrayList<Integer> sol = new ArrayList<Integer>();
-		for(int i=0; i<=5; i++){
+		int n=7;
+		for(int i=0; i<=n; i++){
 			sol.add(i);
 		}
 		SolutionVNS s = new SolutionVNS(null, sol, 0.0);
-		vns.findBetterSolution(s, 3);
+		int kopt = 3;
+		SolutionVNS new_s = vns.findBetterSolution(s, kopt);
+		
+		
+//		int cpt = 0;
+//		System.out.println("while:");
+//		while(cpt<5){
+//			System.out.println("cpt="+cpt);
+//			cpt++;
+//		}
+//		
+//		cpt=0;
+//		System.out.println("do while:");
+//		do{
+//			System.out.println("cpt="+cpt);
+//			cpt++;
+//		}while(cpt<5);
+		
+		
+
+		
 	}
 }

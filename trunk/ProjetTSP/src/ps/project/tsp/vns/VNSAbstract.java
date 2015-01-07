@@ -206,7 +206,7 @@ public class VNSAbstract {
 			while(i<=(k/2)+1){
 				// Dans le cas où on arrive à la fin et que k est impair
 				if(i == j && k%2 != 0){
-					//s.getPathChosen().add(x.getPathChosen().get(listEdge.get(i).getN1()));
+					s.getPathChosen().add(x.getPathChosen().get(listEdge.get(i).getN1()));
 					
 					// Enregistrement de la position Ai
 					pos_val1 = listEdge.get(i).getN1();
@@ -215,7 +215,7 @@ public class VNSAbstract {
 					pos_val2 = listEdge.get(k-1).getN2();	// ou k?
 					
 					System.out.println("On est dans cond arret avec pos_val1=" + pos_val1 + " et pos_val2=" + pos_val2);
-					
+					/*
 					// Test pour savoir s'il faut incrémenter ou décrémenter pour faire Ai -> Bk
 					if(pos_val1>pos_val2){
 						changement = -1;
@@ -231,9 +231,14 @@ public class VNSAbstract {
 					}
 					System.out.println("s = " + s.getPathChosen());
 				
+				*/
+					
+					
 					// Ajout de Bk inclu jusqu'à la fin de la solution x qu'il reste
-					for(i=pos_val2; i<x.getPathChosen().size(); i++){
-						s.getPathChosen().add(x.getPathChosen().get(pos_val2));
+					if(pos_val2 != 0){
+						for(i=pos_val2; i<x.getPathChosen().size(); i++){
+							s.getPathChosen().add(x.getPathChosen().get(i));
+						}
 					}
 					System.out.println("s = " + s.getPathChosen());					
 					break;
@@ -273,6 +278,7 @@ public class VNSAbstract {
 
 				// Dans le cas ou on arrive à la fin et que k est pair
 				if (i == (k / 2) - 1 && k % 2 == 0) {
+					System.out.println("Condition d'arret avec pos_val1 = " + pos_val1 + " et pos_val2 = " + pos_val2);
 					// Enregistrement de Bk
 					pos_val2 = listEdge.get(k-1).getN2();	// ou k?
 
@@ -366,7 +372,10 @@ public class VNSAbstract {
 			sol.add(i);
 		}
 		SolutionVNS s = new SolutionVNS(null, sol, 0.0);
-		int kopt = 3;
+		int kopt = 2;
+		/**
+		 * REGARDER POUR K = PAIR AU NIVEAu DE LA COND D'ARRET
+		 */
 		SolutionVNS new_s = vns.findBetterSolution(s, kopt);
 		
 		

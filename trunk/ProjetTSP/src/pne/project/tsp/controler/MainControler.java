@@ -2,10 +2,15 @@ package pne.project.tsp.controler;
 
 import java.awt.Color;
 import java.awt.Point;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.util.ArrayList;
+
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import pne.project.tsp.beans.Graph;
 import pne.project.tsp.managers.GraphManager;
@@ -121,6 +126,7 @@ public class MainControler {
 							tabResult, gm.getSolutionValue(), gm.getResolutionDuration());
 					System.out.println("terminé");
 					mv.getButtonCanvas().addMouseListener(graphButtons);
+					
 
 				}
 				// cas ou le graphe a ete resolu
@@ -186,6 +192,8 @@ public class MainControler {
 	
 	public void init() {
 		mv.getMainCanvas().addMouseListener(menuPrincipal);
+		mv.getPourcentage().addKeyListener(change_text_pourcentage);
+		mv.getPou_aret_deter().addChangeListener(change_pourcentage);
 		solved = false;
 		g = null;
 	}
@@ -231,6 +239,38 @@ public class MainControler {
 		return listNode;
 
 	}
+	
+	public KeyListener change_text_pourcentage=new KeyListener() {
+		
+		@Override
+		public void keyTyped(KeyEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+		@Override
+		public void keyReleased(KeyEvent e) {
+			// TODO Auto-generated method stub
+			mv.getPou_aret_deter().setValue(Integer.parseInt(mv.getPourcentage().getText()));
+			
+		}
+		
+		@Override
+		public void keyPressed(KeyEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+	};
+	
+	public ChangeListener change_pourcentage=new ChangeListener() {
+		
+		@Override
+		public void stateChanged(ChangeEvent arg0) {
+			// TODO Auto-generated method stub
+			mv.getPourcentage().setText(String.valueOf(mv.getPou_aret_deter().getValue()));
+			
+		}
+	};
 
 	public MainView getMv() {
 		return mv;

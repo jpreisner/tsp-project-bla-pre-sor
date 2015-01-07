@@ -10,6 +10,7 @@ import java.awt.Image;
 import java.awt.Rectangle;
 
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 
 public class ButtonsCanvas extends Component {
 	private Rectangle solve_or_startMenu;
@@ -22,14 +23,14 @@ public class ButtonsCanvas extends Component {
 	public ButtonsCanvas(int w, int h, boolean isResolved) {
 		ImageIcon image = new ImageIcon("Images/Main.jpg");
 		fondEcran = image.getImage();
-		int x = 45;
+		int x = 50;
 		int y = 40;
-		int largeur = (w / 2) - 100;
-		int hauteur = (h / 8) - 5;
+		int largeur = (w / 2) - 230;
+		int hauteur = (h / 8) - 20;
 
 		// rect = (x, y, largeur, hauteur)
 		solve_or_startMenu = new Rectangle(x, y, largeur, hauteur);
-		quit = new Rectangle(w - x - largeur, y, largeur, hauteur);
+		quit = new Rectangle(x + largeur + 150, y, largeur, hauteur);
 		this.isResolved = isResolved;
 		
 		colorSolve_startMenu = new Color(220, 220, 220);
@@ -54,6 +55,7 @@ public class ButtonsCanvas extends Component {
 
 	public void paint(Graphics graphics) {
 		Graphics2D g = (Graphics2D) graphics;
+		//JButton button=new JButton("bien");
 
 		g.drawImage(fondEcran, 0, 0, getWidth(), getHeight(), this);
 		
@@ -70,6 +72,8 @@ public class ButtonsCanvas extends Component {
 
 		String msg;
 		int val;
+		
+		
 		if (isResolved) {
 			// dessiner le bouton startMenu
 			msg = "Recommencer";
@@ -78,10 +82,13 @@ public class ButtonsCanvas extends Component {
 			// dessiner le bouton solve
 			msg = "Résoudre";
 			val = 15;
+			
+			
 		}
 
 		g.setColor(Color.BLACK);
 		g.setFont(new Font("Dialog", Font.BOLD, 35));
+		
 		g.drawString(msg, solve_or_startMenu.x + solve_or_startMenu.width / 3 - val, solve_or_startMenu.y
 				+ solve_or_startMenu.height / 2 + 10);
 

@@ -150,6 +150,7 @@ public class VNSAbstract {
 		 */
 		
 		do{
+			System.out.println("1er do");
 			// Initialisation de nodePositionPresent
 			for(i=0; i<n; i++){
 				nodePositionPresent[i] = false;
@@ -161,8 +162,26 @@ public class VNSAbstract {
 			 */
 			
 			do{
+				System.out.println("2eme do");
+				int nbCombinaison = listCombinaison.size();
+				j = (int) (Math.random()*nbCombinaison);
+				int cpt=0;
+				for(ArrayList<NodeCouple> combinaison : listCombinaison.keySet()){
+					if(cpt == j){
+						listEdge = (ArrayList<NodeCouple>) combinaison.clone();
+						break;
+					}
+					cpt++;
+				}
+				
+				/**
+				 * Tirer au hasard une combinaison parmi toutes les combinaisons 
+				 */
+				
+				/*
 				for(i=0;i<k;i++){
 					do{
+						//System.out.println("3eme do");
 						j = (int) (Math.random()*n);	// tirage aleatoire dans l'intervalle [0, n-1]
 						if(j == (n-1)){
 							next_j = 0;
@@ -177,14 +196,26 @@ public class VNSAbstract {
 					if(j>0){
 						nodePositionPresent[j-1] = true;
 					}
-					listEdge.add(nc);
+					else{
+						//nodePositionPresent[n-1] = true;
+					}
+					if(nodeAllTested(nodePositionPresent)){
+						listEdge.clear();
+						i=0;
+					}
+					else{
+						listEdge.add(nc);
+					}
 				}
+			
 				Collections.sort(listEdge);	// liste des arêtes interdites, trié selon leur position(!) 
 											// dans la solution x & correspond à 1 combinaison
 				
 				System.out.println("listEdge = " + listEdge);
-			} while(isTested(listEdge, listCombinaison));	// Condition d'arrêt : si isTested = false
-			
+				System.out.println("avant");
+			} while(!listCombinaison.containsKey(listEdge) || isTested(listEdge, listCombinaison));	// Condition d'arrêt : si isTested = false
+			System.out.println("apres");
+			*/
 			//int noeud_depart = x.getPathChosen().get(0);
 			SolutionVNS s = new SolutionVNS(x.getGraph_scenario());
 			
@@ -278,10 +309,13 @@ public class VNSAbstract {
 
 				// Dans le cas ou on arrive à la fin et que k est pair
 				if (i == (k / 2) - 1 && k % 2 == 0) {
-					System.out.println("Condition d'arret avec pos_val1 = " + pos_val1 + " et pos_val2 = " + pos_val2);
 					// Enregistrement de Bk
 					pos_val2 = listEdge.get(k-1).getN2();	// ou k?
+					
+					System.out.println("Condition d'arret avec pos_val1 = " + pos_val1 + " et pos_val2 = " + pos_val2);
 
+
+					/*
 					// Test pour savoir s'il faut incrémenter ou décrémenter pour
 					// faire Bi -> Bk
 					if (pos_val1 > pos_val2) {
@@ -295,11 +329,17 @@ public class VNSAbstract {
 						s.getPathChosen().add(x.getPathChosen().get(pos_val1));
 						pos_val1 += changement;
 					}
+					*/
 					System.out.println("s = " + s.getPathChosen());
 					// Ajout de Bk inclu jusqu'à la fin de la solution x qu'il reste
-					for (i = pos_val2; i < x.getPathChosen().size(); i++) {
-						s.getPathChosen().add(x.getPathChosen().get(pos_val2));
+					if(pos_val2 != 0){
+						System.out.println("on rentre dans le if");
+						for (i = pos_val2; i < x.getPathChosen().size(); i++) {
+							System.out.println("i="+i);
+							s.getPathChosen().add(x.getPathChosen().get(i));
+						}
 					}
+					System.out.println("s = " + s.getPathChosen());
 					break;
 				}
 				
@@ -338,6 +378,16 @@ public class VNSAbstract {
 		return x;
 	}
 
+	private boolean nodeAllTested(boolean[] nodePositionPresent) {
+		System.out.println("eeeeeeeee");
+		for(int i=0; i<nodePositionPresent.length; i++){
+			if(!nodePositionPresent[i]){
+				return false;
+			}
+		}
+		return true;
+	}
+
 	/**
 	 * Permet de savoir si une combinaison (passée en paramètre) a été testée
 	 * @param combinaison
@@ -372,12 +422,13 @@ public class VNSAbstract {
 			sol.add(i);
 		}
 		SolutionVNS s = new SolutionVNS(null, sol, 0.0);
-		int kopt = 2;
+		
 		/**
 		 * REGARDER POUR K = PAIR AU NIVEAu DE LA COND D'ARRET
 		 */
-		SolutionVNS new_s = vns.findBetterSolution(s, kopt);
+		SolutionVNS new_s = vns.findBetterSolution(s, 4);
 		
+		System.out.println("listEdge");
 		
 //		int cpt = 0;
 //		System.out.println("while:");

@@ -111,7 +111,11 @@ public class MainControler {
 				mv.getMainCanvas().setColorQuitter(new Color(200, 200, 200));
 				mv.repaint();
 				mv.dispose();
-			} else if (mv.getButtonCanvas().getSolve_or_startMenu().contains(p) && mv.getBranch_and_band().isSelected()) {
+			} 
+			/**
+			 * PNE
+			 */
+			else if (mv.getButtonCanvas().getSolve_or_startMenu().contains(p) && mv.getBranch_and_band().isSelected()) {
 				mv.getContentPane().removeAll();
 
 				// cas ou le graphe n'est pas resolu
@@ -139,10 +143,18 @@ public class MainControler {
 					init();
 				}
 
-			}else if(mv.getButtonCanvas().getSolve_or_startMenu().contains(p) && mv.getVns().isSelected()){
+			}
+			/**
+			 * PS
+			 */
+			else if(mv.getButtonCanvas().getSolve_or_startMenu().contains(p) && mv.getVns().isSelected()){
 				// pour le moment j'ai mis le code branch and band en fermant la fenetre.c là que l on doit appele vns 
 				mv.dispose();
+				System.out.println("Pourcentage = " + mv.getPou_aret_deter().getValue());
 
+				/**
+				 * A REMPLACER PAR VNS
+				 */
 				// cas ou le graphe n'est pas resolu
 				if (!solved ) {
 					solved = true;

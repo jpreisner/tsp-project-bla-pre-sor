@@ -47,7 +47,7 @@ public class MainView extends JFrame {
 		setLocationRelativeTo(null);
 
 		menuPrincipal(width, height);
-
+		
 	}
 
 	public void menuPrincipal(int width, int height) {

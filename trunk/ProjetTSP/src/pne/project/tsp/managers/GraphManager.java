@@ -7,9 +7,13 @@ import ilog.cplex.IloCplex;
 import ilog.cplex.IloCplex.DoubleParam;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import pne.project.tsp.beans.Graph;
 import pne.project.tsp.beans.NodeCouple;
+import ps.project.tsp.vns.SolutionVNS;
+import ps.project.tsp.vns.VNSDeterminist;
 
 public class GraphManager {
 	private double solutionValue;
@@ -21,6 +25,47 @@ public class GraphManager {
 	/**
 	 * PS
 	 */
+	
+	/**
+	 * 
+	 * @param g
+	 * @param aleas : pourcentage d'aretes deterministes
+	 */
+	public void launchVNS(Graph g, int aleas){
+		double tmax = 100;		// ???
+		if(aleas < 0){
+			aleas = 0;
+		}
+		if(aleas > 100){
+			aleas = 100;
+		}
+		
+		// Initialisation de l'attribut qui va nous servir a enregistrer Glouton
+		SolutionVNS solutionInitiale = new SolutionVNS(g);
+		
+		// Enregistrement de Glouton
+		solutionInitiale.setPathChosen(solutionInitiale.gloutonAlgorithm(g));
+		
+		// Initialisation des arêtes déterministes
+		initAretesDeterministes(g, aleas);
+		
+		// Résolution avec la méthode VNS
+		VNSDeterminist vnsD = new VNSDeterminist();
+		vnsD.getListSolutions().add(solutionInitiale);
+		vnsD.vnsAlgorithm(solutionInitiale, tmax);
+	}
+	
+	/**
+	 * Détermine de façon aléatoire les arêtes déterministes du graphe
+	 * @param g
+	 * @param aleas : pourcentage des arêtes déterministes (compris entre 0 et 100
+	 */
+	private void initAretesDeterministes(Graph g, int aleas) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	
 	
 	// il faut résoudre le graphe chargé (appel de VNS deterministe)
 	

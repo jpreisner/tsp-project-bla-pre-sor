@@ -2,6 +2,8 @@ package pne.project.tsp.controler;
 
 import java.awt.Color;
 import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -9,6 +11,7 @@ import java.awt.event.MouseListener;
 import java.io.File;
 import java.util.ArrayList;
 
+import javax.swing.JRadioButton;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -108,11 +111,11 @@ public class MainControler {
 				mv.getMainCanvas().setColorQuitter(new Color(200, 200, 200));
 				mv.repaint();
 				mv.dispose();
-			} else if (mv.getButtonCanvas().getSolve_or_startMenu().contains(p)) {
+			} else if (mv.getButtonCanvas().getSolve_or_startMenu().contains(p) && mv.getBranch_and_band().isSelected()) {
 				mv.getContentPane().removeAll();
 
 				// cas ou le graphe n'est pas resolu
-				if (!solved) {
+				if (!solved ) {
 					solved = true;
 					// lancer la résolution
 					GraphManager gm = new GraphManager();
@@ -136,6 +139,35 @@ public class MainControler {
 					init();
 				}
 
+			}else if(mv.getButtonCanvas().getSolve_or_startMenu().contains(p) && mv.getVns().isSelected()){
+				// pour le moment j'ai mis le code branch and band en fermant la fenetre.c là que l on doit appele vns 
+				mv.dispose();
+
+				// cas ou le graphe n'est pas resolu
+				if (!solved ) {
+					solved = true;
+					// lancer la résolution
+					GraphManager gm = new GraphManager();
+					int[] tabResult = gm.writeLinearProgram(g, "tests/lpex1.lp", "tests/results.txt");
+					// passer le resultat dans la fonction d'affichage
+					mv.getGraphCanvas().setTabResult(tabResult);
+					mv.getGraphCanvas().setIsResolved(true);
+					mv.getGraphCanvas().repaint();
+					mv.getButtonCanvas().setIsResolved(true);
+					mv.graphView(mv.getWidth(), mv.getHeight(), g, solved, mv.getGraphCanvas().getListNode(),
+							tabResult, gm.getSolutionValue(), gm.getResolutionDuration());
+					System.out.println("terminé");
+					mv.getButtonCanvas().addMouseListener(graphButtons);
+					
+
+				}
+				// cas ou le graphe a ete resolu
+				else {
+					mv.getContentPane().removeAll();
+					mv.menuPrincipal(mv.getWidth(), mv.getHeight());
+					init();
+				}
+				
 			}
 
 		}
@@ -183,6 +215,8 @@ public class MainControler {
 		}
 
 	};
+	
+	
 
 	
 	
@@ -194,6 +228,7 @@ public class MainControler {
 		mv.getMainCanvas().addMouseListener(menuPrincipal);
 		mv.getPourcentage().addKeyListener(change_text_pourcentage);
 		mv.getPou_aret_deter().addChangeListener(change_pourcentage);
+		
 		solved = false;
 		g = null;
 	}
@@ -271,6 +306,8 @@ public class MainControler {
 			
 		}
 	};
+	
+	
 
 	public MainView getMv() {
 		return mv;

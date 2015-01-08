@@ -26,10 +26,10 @@ public class VNSAbstract {
 				//x = initialSolution(k);
 				y = findBetterSolution(x, k);	// on cherche des solutions differentes (et meilleure si possible) de x
 				k = changeNeighbourhood(x, y, k);	// si on a trouvé une meilleure solution on recommence, sinon k++
-			} while (k == Kmax);	// POURQUOI CETTE CONDITION ET PAS K<=KMAX????
+			} while (k <= Kmax);
 
 			t = System.currentTimeMillis();
-		} while (t > tmax);	// CONDITION BIZARRE? T? TMAX?
+		} while (t <= tmax);
 		return x;
 	}
 

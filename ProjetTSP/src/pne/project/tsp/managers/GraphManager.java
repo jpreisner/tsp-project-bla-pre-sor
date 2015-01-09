@@ -7,13 +7,12 @@ import ilog.cplex.IloCplex;
 import ilog.cplex.IloCplex.DoubleParam;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 
 import pne.project.tsp.beans.Graph;
 import pne.project.tsp.beans.NodeCouple;
+import pne.project.tsp.utils.Stats;
 import ps.project.tsp.vns.SolutionVNS;
-import ps.project.tsp.vns.VNSDeterminist;
+import ps.project.tsp.vns.VNSAbstract;
 
 public class GraphManager {
 	private double solutionValue;
@@ -31,7 +30,7 @@ public class GraphManager {
 	 * @param g
 	 * @param aleas : pourcentage d'aretes deterministes
 	 */
-	public void launchVNS(Graph g, int aleas){
+	public ArrayList<Integer> resolutionTSP_vns(Graph g, int aleas, int nbScenario){
 		double tmax = 100;		// ???
 		if(aleas < 0){
 			aleas = 0;
@@ -41,18 +40,64 @@ public class GraphManager {
 		}
 		
 		// Initialisation de l'attribut qui va nous servir a enregistrer Glouton
-		SolutionVNS solutionInitiale = new SolutionVNS(g);
+		SolutionVNS solutionInitiale = new SolutionVNS(g);	// on passe en parametre le graphe de base
 		
-		// Enregistrement de Glouton
-		solutionInitiale.setPathChosen(solutionInitiale.gloutonAlgorithm(g));
+		// Enregistrement de de la solution gloutonne
+		solutionInitiale.setPathChosen(solutionInitiale.gloutonAlgorithm());
 		
-		// Initialisation des arêtes déterministes
-		initAretesDeterministes(g, aleas);
+		// Déterministe
+		if(aleas == 100){
+			// Résolution avec la méthode VNS du problème deterministe
+			VNSAbstract vns = new VNSAbstract();
+			vns.getListSolutions().add(solutionInitiale);
+			vns.vnsAlgorithm(solutionInitiale, tmax);
+			
+		}
+		// Stochastique
+		else{
+			// Initialisation des arêtes déterministes
+			initAretesDeterministes(g, aleas);
+			
+			// Calcul de l'écart type des arêtes stochastiques
+			double ecartType = Stats.ecartType(g);
+			
+			
+			
+			/**
+			 * Remarque : à enlever? car cela correspond a la résolution du graphe deterministe
+			 */
+			// Résolution avec la méthode VNS
+			VNSAbstract vns = new VNSAbstract();
+			vns.getListSolutions().add(solutionInitiale);
+			vns.vnsAlgorithm(solutionInitiale, tmax);
+			
+			SolutionVNS sol;
+			Graph graph_scenario;
+			for(int i=0; i<nbScenario; i++){
+				
+				// génération d'un scénario
+				graph_scenario = genereScenario(g, ecartType);
+				
+				// initialisation d'un attribut solutionVNS qui contient le graphe du scenario i
+				sol = new SolutionVNS(graph_scenario);
+				
+				// initialisation de la solution a l'aide de glouton appliqué au graphe du scenario i
+				sol.setPathChosen(sol.gloutonAlgorithm());
+				
+				// ajout dans VNS du scenario i
+				vns.getListSolutions().add(sol);
+				
+				// résolution du scenario i
+				vns.vnsAlgorithm(sol, tmax);
 		
-		// Résolution avec la méthode VNS
-		VNSDeterminist vnsD = new VNSDeterminist();
-		vnsD.getListSolutions().add(solutionInitiale);
-		vnsD.vnsAlgorithm(solutionInitiale, tmax);
+			}
+		}
+		
+		return solutionInitiale.getPathChosen();	// a modifier
+	}
+	
+	public Graph genereScenario(Graph g, double ecartType){
+		return null;
 	}
 	
 	/**
@@ -61,8 +106,30 @@ public class GraphManager {
 	 * @param aleas : pourcentage des arêtes déterministes (compris entre 0 et 100
 	 */
 	private void initAretesDeterministes(Graph g, int aleas) {
-		// TODO Auto-generated method stub
+		int nbNodeDeterminist = g.getNbNode()*aleas/100;
+		int edgeRandom;
+		ArrayList<NodeCouple> listEdge = allEdge(g);
 		
+		// on met toutes les aretes en stochastique pour initialiser les aretes deterministes
+		g.initTabStoch(true);
+		
+		for(int i=0; i<nbNodeDeterminist; i++){
+			edgeRandom = (int) (Math.random()*listEdge.size());
+			g.getTabStoch()[listEdge.get(edgeRandom).getN1()][listEdge.get(edgeRandom).getN2()] = false;
+			listEdge.remove(edgeRandom);
+		}
+	}
+	
+	public ArrayList<NodeCouple> allEdge(Graph g){
+		ArrayList<NodeCouple> listEdge = new ArrayList<NodeCouple>();
+		for(int i=0; i<g.getNbNode(); i++){
+			for(int j=0; j<g.getNbNode(); j++){
+				if(i!=j && g.getTabAdja()[i][j] > 0){
+					listEdge.add(new NodeCouple(i, j));
+				}
+			}
+		}
+		return listEdge;
 	}
 
 	

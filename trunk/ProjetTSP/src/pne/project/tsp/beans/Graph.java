@@ -31,6 +31,15 @@ public class Graph {
 		this.percentageDeterministEdges = percentageDeterministEdges;
 	}
 
+	//  met toutes les val de tabStoch a bool
+	public void initTabStoch(boolean bool){
+		for(int i=0; i<nbNode; i++){
+			for(int j=0; j<nbNode; j++){
+				tabStoch[i][j] = bool;
+			}
+		}
+	}
+
 	public int getNbNode() {
 		return nbNode;
 	}

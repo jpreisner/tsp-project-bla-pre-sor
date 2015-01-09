@@ -49,19 +49,19 @@ public class SolutionVNS {
 	
 	/**Algorithme de Glouton lancé au tout début du programme
 	 * 
-	 * @param g
+	 * @param graph_scenario
 	 * @return
 	 */
-	public ArrayList<Integer> gloutonAlgorithm(Graph g) {
+	public ArrayList<Integer> gloutonAlgorithm() {
 		ArrayList<NodeCouple> alNodeCouple = new ArrayList<NodeCouple>();
-		boolean[] tabInnerEdge = new boolean[g.getNbNode()];
-		boolean[] tabOuterEdge = new boolean[g.getNbNode()];
+		boolean[] tabInnerEdge = new boolean[graph_scenario.getNbNode()];
+		boolean[] tabOuterEdge = new boolean[graph_scenario.getNbNode()];
 		ArrayList<NodeCouple> result = new ArrayList<NodeCouple>();
 		/* recuperation de toutes les arêtes*/
-		for(int i=0;i<g.getNbNode();i++){
-			for(int j=0;j<g.getNbNode();j++){
-				if(i!=j && g.getTabAdja()[i][j]>0){
-					alNodeCouple.add(new NodeCouple(i, j, g.getTabAdja()[i][j]));
+		for(int i=0;i<graph_scenario.getNbNode();i++){
+			for(int j=0;j<graph_scenario.getNbNode();j++){
+				if(i!=j && graph_scenario.getTabAdja()[i][j]>0){
+					alNodeCouple.add(new NodeCouple(i, j, graph_scenario.getTabAdja()[i][j]));
 				}
 			}
 		}
@@ -104,12 +104,17 @@ public class SolutionVNS {
 		cost+=graph_scenario.getTabAdja()[pathChosen.get(n)][pathChosen.get(0)];
 		return cost;
 	}
+	
+	/**
+	 * SUPPRIMER LES 2 METHODES?
+	 * 
+	 */
 
-	public Graph defineScenario(Graph g) {
+	public Graph defineScenario(double ecartType) {
 		return null;
 	}
 
-	public void definePenalty(Graph g) {
+	public void definePenalty() {
 
 	}
 
@@ -127,6 +132,7 @@ public class SolutionVNS {
 	
 	public void setPathChosen(ArrayList<Integer> pathChosen){
 		this.pathChosen = pathChosen;
+		this.pathCost = calculPathCost();
 	}
 	
 	public SolutionVNS clone(){

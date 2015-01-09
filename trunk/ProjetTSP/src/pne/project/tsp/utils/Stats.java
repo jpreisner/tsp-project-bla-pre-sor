@@ -9,7 +9,7 @@ public class Stats {
 	 * @param power
 	 * @return esperance of stochastic edges of the graph
 	 */
-	private double esperance(Graph g, int power) {
+	private static double esperance(Graph g, int power) {
 		double result = 0;
 		int nbValuesStoch = 0;
 		for (int i = 0; i < g.getNbNode(); i++) {
@@ -27,7 +27,7 @@ public class Stats {
 	 * @param g
 	 * @return ecart type of stochastic edges of the graph
 	 */
-	public double ecartType(Graph g) {
+	public static double ecartType(Graph g) {
 		return Math.sqrt((esperance(g, 2) - Math.pow(esperance(g, 1), 2)));
 	}
 
@@ -36,7 +36,7 @@ public class Stats {
 	 * @param max
 	 * @return a random value between min and max
 	 */
-	public double getRandValueBetween(double min, double max) {
+	public static double getRandValueBetween(double min, double max) {
 		if (min < 0) {
 			min = 0;
 		}

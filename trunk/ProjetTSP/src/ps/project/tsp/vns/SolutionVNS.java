@@ -30,6 +30,14 @@ public class SolutionVNS {
 		pathCost = 0.0;
 	}
 	
+	
+	/**
+	 * Faire les méthodes pour savoir si circuit hamiltonien
+	 * 		- sous méthode sur les aretes entrantes
+	 * 		- sous méthode sur les aretes sortantes
+	 * 		- sous méthode pour les sous tours
+	 */
+	
 	/**
 	 *  Comparator used in glouton algorithm
 	 */

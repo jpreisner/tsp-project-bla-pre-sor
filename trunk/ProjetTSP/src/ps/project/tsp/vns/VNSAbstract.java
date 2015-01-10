@@ -24,6 +24,12 @@ public class VNSAbstract {
 		do {
 			k = 2;
 			do {
+				System.out.println("-----------------------");
+				System.out.println("Pour k=" + k);
+				System.out.println("---> x = " + x.getPathChosen());
+				System.out.println("---> cout = " + x.getPathCost());
+				System.out.println("-----------------------");
+				
 				//x = initialSolution(k);
 				y = findBetterSolution(x, k);	// on cherche des solutions differentes (et meilleure si possible) de x
 				//k = changeNeighbourhood(x, y, k);

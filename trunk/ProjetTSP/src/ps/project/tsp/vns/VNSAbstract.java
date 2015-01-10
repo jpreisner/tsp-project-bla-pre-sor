@@ -1,7 +1,6 @@
 package ps.project.tsp.vns;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 
 
@@ -448,6 +447,18 @@ public class VNSAbstract {
 
 	public ArrayList<SolutionVNS> getListSolutions() {
 		return listSolutions;
+	}
+
+	public int getKmax() {
+		return Kmax;
+	}
+
+	public void setKmax(int kmax) {
+		Kmax = kmax;
+	}
+
+	public void setListSolutions(ArrayList<SolutionVNS> listSolutions) {
+		this.listSolutions = listSolutions;
 	}
 	
 //	public static void main(String[] args){

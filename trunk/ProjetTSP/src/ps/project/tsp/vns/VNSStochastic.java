@@ -4,7 +4,14 @@ public class VNSStochastic extends VNSAbstract {
 
 	public VNSStochastic(int Kmax) {
 		super(Kmax);
-		// TODO Auto-generated constructor stub
+	}
+	
+	public SolutionVNS getSolutionRef(){
+		return getListSolutions().get(0);
+	}
+	
+	public SolutionVNS getSolutionScenario(int k){
+		return getListSolutions().get(k);
 	}
 
 }

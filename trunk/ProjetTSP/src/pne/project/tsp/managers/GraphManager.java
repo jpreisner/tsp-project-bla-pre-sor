@@ -8,6 +8,8 @@ import ilog.cplex.IloCplex.DoubleParam;
 
 import java.util.ArrayList;
 
+import javax.swing.JWindow;
+
 import pne.project.tsp.beans.Graph;
 import pne.project.tsp.beans.NodeCouple;
 import pne.project.tsp.utils.Stats;
@@ -98,8 +100,26 @@ public class GraphManager {
 		return solutionInitiale.getPathChosen();	// a modifier
 	}
 	
+	/** Permet de générer un graphe correspondant a un scenario
+	 * 
+	 * @param g
+	 * @param ecartType
+	 * @return le graphe généré
+	 */
 	public Graph genereScenario(Graph g, double ecartType){
-		return null;
+		double cij;
+		Graph graph_scenario = (Graph) g.clone();
+		int nbNode = graph_scenario.getNbNode();
+		for(int i=0; i<nbNode; i++){
+			for(int j=0; j<nbNode; j++){
+				// Dans le cas ou (i,j) est stochastique = on lui attribut une valeur
+				if(i!=j && graph_scenario.isEdgeStochastic(i, j)){
+					cij = graph_scenario.getTabAdja()[i][j];
+					graph_scenario.getTabAdja()[i][j] = Stats.getRandValueBetween(cij-3*ecartType, cij+3*ecartType);
+				}
+			}
+		}
+		return graph_scenario;
 	}
 	
 	/**

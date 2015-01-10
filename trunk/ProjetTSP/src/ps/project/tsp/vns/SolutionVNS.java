@@ -13,6 +13,10 @@ public class SolutionVNS {
 	private ArrayList<Integer> pathChosen;	// ex pour un graphe à 4 noeuds : 1-2-3-4
 	private double pathCost;
 	
+	// penalite utile pour la partie stochastique
+	private double[][] penaliteLambda;
+	private double[][] penaliteRo;
+	
 	public SolutionVNS(Graph g, ArrayList<Integer> pathChosen, double pathCost){
 		graph_scenario = g;
 		this.pathChosen = pathChosen;
@@ -209,20 +213,76 @@ public class SolutionVNS {
 		cost+=graph_scenario.getTabAdja()[pathChosen.get(n-1)][pathChosen.get(0)];
 		return cost;
 	}
+
+	public void initPenalite(Graph graphInitial){
+		int n = graph_scenario.getNbNode();
+		penaliteLambda = new double[n][n];
+		penaliteRo = new double[n][n];
+		int i,j;
+		double coutMax = graph_scenario.getCoutMax();
+		
+		/**
+		 * !! Les penalites sappliquent a toutes les aretes deterministes
+		 * 		--> c peut etre que pour les aretes deterministes de la solution
+		 */
+		
+		// initialisation de lambda
+		for(i=0; i<n; i++){
+			for(j=0; j<n; j++){
+				// on veut (i,j) deterministe
+				if(i!=j && !graph_scenario.getTabStoch()[i][j]){
+					penaliteLambda[i][j] = 2*coutMax;
+				}
+				else{
+					penaliteLambda[i][j] = -1;	// par defaut
+				}
+			}
+		}
+		
+		// initialisation de ro
+		for(i=0; i<n; i++){
+			for(j=0; j<n; j++){
+				// on veut (i,j) deterministe
+				if(i!=j && !graph_scenario.getTabStoch()[i][j]){
+					penaliteRo[i][j] = graphInitial.getTabAdja()[i][j]/2;
+				}
+				else{
+					penaliteRo[i][j] = -1;	// par defaut
+				}
+			}
+		}
+	}
+
+	public void appliquePenalite(SolutionVNS solReference, int beta){
+		int i,j;
+		int n = graph_scenario.getNbNode();
+		
+		/**
+		 * !! Les penalites sappliquent a toutes les aretes deterministes
+		 * 		--> c peut etre que pour les aretes deterministes de la solution
+		 */
+		
+		// itération sur lambda
+		for(i=0; i<n; i++){
+			for(j=0; j<n; j++){
+				// on veut (i,j) deterministe
+				if(i!=j && !graph_scenario.getTabStoch()[i][j]){
+					penaliteLambda[i][j] = penaliteLambda[i][j] + penaliteRo[i][j]*(areteDansSolution(pathChosen, i, j) - areteDansSolution(solReference.getPathChosen(), i, j));
+				}
+			}
+		}
+		
+		// itération sur ro
+		for(i=0; i<n; i++){
+			for(j=0; j<n; j++){
+				// on veut (i,j) deterministe
+				if(i!=j && !graph_scenario.getTabStoch()[i][j]){
+					penaliteRo[i][j] *= beta;
+				}
+			}
+		}
+	}
 	
-	/**
-	 * SUPPRIMER LES 2 METHODES?
-	 * 
-	 */
-
-	public Graph defineScenario(double ecartType) {
-		return null;
-	}
-
-	public void definePenalty() {
-
-	}
-
 	public ArrayList<Integer> getPathChosen() {
 		return pathChosen;
 	}
@@ -242,6 +302,19 @@ public class SolutionVNS {
 	
 	public SolutionVNS clone(){
 		return new SolutionVNS(graph_scenario, pathChosen, pathCost);
+	}
+	
+	public int areteDansSolution(ArrayList<Integer> sol, int i, int j){
+		for(int a=0; a<sol.size()-1; a++){
+			if(sol.get(a) == i){
+				if(sol.get(a+1) == j)	return 1;
+				return 0;
+			}
+		}
+		if(sol.get(sol.size()-1) == i && sol.get(0) == j){
+			return 1;
+		}
+		return 0;
 	}
 	
 	public static void main(String[] args){

@@ -123,4 +123,18 @@ public class Graph {
 	public int getPercentageDeterminist(){
 		return percentageDeterministEdges;
 	}
+	
+	public double getCoutMax(){
+		double max = 0.0;
+		for(int i=0; i<nbNode; i++){
+			for(int j=0; j<nbNode; j++){
+				if(i!=j){
+					if(tabAdja[i][j]>max){
+						max = tabAdja[i][j];
+					}
+				}
+			}
+		}
+		return max;
+	}
 }

@@ -30,7 +30,7 @@ public class GraphManager {
 	 * @param g
 	 * @param aleas : pourcentage d'aretes deterministes
 	 */
-	public ArrayList<Integer> resolutionTSP_vns(Graph g, int aleas, int nbScenario){
+	public ArrayList<Integer> resolutionTSP_vns(Graph g, int aleas, int nbScenario, int Kmax){
 		double tmax = 100;		// ???
 		if(aleas < 0){
 			aleas = 0;
@@ -45,10 +45,12 @@ public class GraphManager {
 		// Enregistrement de de la solution gloutonne
 		solutionInitiale.setPathChosen(solutionInitiale.gloutonAlgorithm());
 		
+		System.out.println("GM --> solInit = " + solutionInitiale.getPathChosen());
+		
 		// Déterministe
 		if(aleas == 100){
 			// Résolution avec la méthode VNS du problème deterministe
-			VNSAbstract vns = new VNSAbstract();
+			VNSAbstract vns = new VNSAbstract(Kmax);
 			vns.getListSolutions().add(solutionInitiale);
 			vns.vnsAlgorithm(solutionInitiale, tmax);
 			
@@ -67,7 +69,7 @@ public class GraphManager {
 			 * Remarque : à enlever? car cela correspond a la résolution du graphe deterministe
 			 */
 			// Résolution avec la méthode VNS
-			VNSAbstract vns = new VNSAbstract();
+			VNSAbstract vns = new VNSAbstract(Kmax);
 			vns.getListSolutions().add(solutionInitiale);
 			vns.vnsAlgorithm(solutionInitiale, tmax);
 			

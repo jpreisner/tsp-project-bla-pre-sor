@@ -6,6 +6,7 @@ import java.util.Comparator;
 
 import pne.project.tsp.beans.Graph;
 import pne.project.tsp.beans.NodeCouple;
+import pne.project.tsp.utils.FileReader;
 
 public class SolutionVNS {
 	private Graph graph_scenario;
@@ -65,6 +66,7 @@ public class SolutionVNS {
 		boolean[] tabInnerEdge = new boolean[graph_scenario.getNbNode()];
 		boolean[] tabOuterEdge = new boolean[graph_scenario.getNbNode()];
 		ArrayList<NodeCouple> result = new ArrayList<NodeCouple>();
+		
 		/* recuperation de toutes les arêtes*/
 		for(int i=0;i<graph_scenario.getNbNode();i++){
 			for(int j=0;j<graph_scenario.getNbNode();j++){
@@ -75,17 +77,31 @@ public class SolutionVNS {
 		}
 		
 		/* tri des arêtes */
-		Collections.sort(alNodeCouple, compareNodeCouple );
+		Collections.sort(alNodeCouple, compareNodeCouple);
+		
+//		System.out.println("alNodeCouple = ");
+//		for(NodeCouple nc : alNodeCouple){
+//			System.out.println("nc = (" + nc.getN1() + ", " + nc.getN2() + ") - cout = " + nc.getCostEdge());
+//		}
 		
 		/* construction de la solution gloutonne*/
+		
 		/* TODO verifier les sous tours*/
 		for(NodeCouple e : alNodeCouple){
 			if(!tabInnerEdge[e.getN1()] && !tabOuterEdge[e.getN2()]){
-				tabInnerEdge[e.getN1()] = true;
-				tabOuterEdge[e.getN2()] = true;
 				result.add(e);
+//				if(containsSousTour(result, graph_scenario.getNbNode())){
+//					result.remove(e);
+//				}
+				//else{
+					tabInnerEdge[e.getN1()] = true;
+					tabOuterEdge[e.getN2()] = true;	
+				//}
 			}
-		}	
+		}
+		
+		System.out.println("result = " + result);
+		
 		
 		/**
 		 * Remarque : on souhaite que la solution soit de la forme 1-2-3-4 et non (1,2) (2,3) (3,4) (4,1)
@@ -94,12 +110,72 @@ public class SolutionVNS {
 		for(NodeCouple nc : result){
 			solution.add(nc.getN1());
 		}
+		
+		/**
+		 * A SUPPRIMER QUAND ON AURA TROUVER GLOUTON
+		 */
+		
+		solution.clear();
+		for(int i=0; i<graph_scenario.getNbNode(); i++){
+			solution.add(i);
+		}
+		
 		return solution;
 	}
 
 	public double getPathCost() {
 		return pathCost;
 	}
+	
+//	public boolean containsSousTour(ArrayList<NodeCouple> solution, int nbNoeud){
+//		System.out.println("*ContainsSousTour avec solution = " + solution);
+//		int i_sauvegarde = 0;
+//		int cpt=0;
+//		int position;
+//		ArrayList<Integer> listNoeud = new ArrayList<Integer>();
+//		NodeCouple nc;
+//		int i= 0;
+//		while(i<solution.size()){
+//			nc = solution.get(i);
+//			System.out.println("i="+i+" -> nc = " + nc);
+//			
+//			// on souhaite partir d'un noeud et dérouler la solution dans l'ordre pour voir si elle contient un sous tour
+//			if(!listNoeud.contains(nc.getN1())){
+//				position = NodeCouple.listContainsN1(solution, nc.getN2());
+//				System.out.println("-------position = " + position);
+//				// cas ou nc a une "suite" (exemple : (0,1) et (1,3)
+//				if(position!=-1){
+//					if(listNoeud.contains(solution.get(position).getN2())){
+//						// Cas ou nous avons une solution hamiltonienne
+//						if(nbNoeud == (cpt+1)){
+//							return false;
+//						}
+//						else{
+//							System.out.println("TTTTTTTTTTTT");
+//							return true;
+//						}
+//					}
+//					listNoeud.add(nc.getN1());
+//					i=position;
+//					cpt++;
+//				}
+//				// cas ou nc n'a pas de suite (exemple : (0,1) n'a pas de (1, qqch)
+//				else{
+//					//System.out.println("i=0");
+//					//i = 0;
+//					i++;
+//					cpt=0;
+//				}
+//				
+//			}
+//			else{
+//				i++;
+//				cpt=0;
+//			}
+//			
+//		}
+//		return false;
+//	}
 
 	
 	
@@ -109,7 +185,7 @@ public class SolutionVNS {
 		for(int i=0; i<n-1; i++){
 			cost+=graph_scenario.getTabAdja()[pathChosen.get(i)][pathChosen.get(i+1)];
 		}
-		cost+=graph_scenario.getTabAdja()[pathChosen.get(n)][pathChosen.get(0)];
+		cost+=graph_scenario.getTabAdja()[pathChosen.get(n-1)][pathChosen.get(0)];
 		return cost;
 	}
 	
@@ -145,5 +221,12 @@ public class SolutionVNS {
 	
 	public SolutionVNS clone(){
 		return new SolutionVNS(graph_scenario, pathChosen, pathCost);
+	}
+	
+	public static void main(String[] args){
+		Graph g = FileReader.buildGraphFromXml("Instances/gr17.xml");
+		SolutionVNS sol = new SolutionVNS(g);
+		sol.setPathChosen(sol.gloutonAlgorithm());
+		System.out.println(sol.getPathChosen() + "  cout = " + sol.getPathCost());
 	}
 }

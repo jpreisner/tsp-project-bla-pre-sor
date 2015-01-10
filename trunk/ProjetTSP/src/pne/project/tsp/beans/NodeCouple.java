@@ -1,5 +1,7 @@
 package pne.project.tsp.beans;
 
+import java.util.ArrayList;
+
 /**
  * 
  * Cette classe permet de représenter un couple de noeud (i, j) Utile lors de la
@@ -34,6 +36,42 @@ public class NodeCouple implements Comparable<NodeCouple> {
 		this.costEdge = costEdge;
 	}
 
+	/**
+	 * Permet de savoir si dans une liste de NodeCouple, celle ci contient un node couple dont elle a
+	 * le meme n1 passé en parametre
+	 * @param list
+	 * @param n1
+	 * @return la position du nodecouple dans la liste s'il contient n1, -1 si non
+	 */
+	public static int listContainsN1(ArrayList<NodeCouple> list, int n1){
+		int position = 0;
+		for(NodeCouple nc : list){
+			if(nc.getN1() == n1){
+				return position;
+			}
+			position++;
+		}
+		return -1;
+	}
+	
+	/**
+	 * Permet de savoir si dans une liste de NodeCouple, celle ci contient un node couple dont elle a
+	 * le meme n2 passé en parametre
+	 * @param list
+	 * @param n2
+	 * @return la position du nodecouple dans la liste s'il contient n2, -1 si non
+	 */
+	public static int listContainsN2(ArrayList<NodeCouple> list, int n2){
+		int position = 0;
+		for(NodeCouple nc : list){
+			if(nc.getN2() == n2){
+				return position;
+			}
+			position++;
+		}
+		return -1;
+	}
+	
 	public int getN1() {
 		return n1;
 	}

@@ -316,11 +316,10 @@ public class SolutionVNS {
 		}
 		return 0;
 	}
-	
-	public static void main(String[] args){
-		Graph g = FileReader.buildGraphFromXml("data/XML/gr17.xml");
-		SolutionVNS sol = new SolutionVNS(g);
-		sol.setPathChosen(sol.gloutonAlgorithm());
-		System.out.println(sol.getPathChosen() + "  cout = " + sol.getPathCost());
+
+	public void setSolution(SolutionVNS sol_scenario) {
+		pathChosen = sol_scenario.getPathChosen();
+		pathCost = sol_scenario.getPathCost();
+		
 	}
 }

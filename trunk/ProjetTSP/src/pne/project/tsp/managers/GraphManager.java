@@ -85,6 +85,7 @@ public class GraphManager {
 			// Initialisation des pénalités
 			initAllPenalites(vnsS);
 			
+			SolutionVNS sol_scenario;
 			int t=0;
 			// Recherche d'une solution
 			do{
@@ -95,7 +96,10 @@ public class GraphManager {
 					}
 					
 					// Appel de VNS
-					vnsS.vnsAlgorithm(vnsS.getSolutionScenario(i), tmax);
+					sol_scenario = vnsS.vnsAlgorithm(vnsS.getSolutionScenario(i), tmax);
+					
+					// le nouveau chemin et le nouveau cout sont sauvegardé
+					vnsS.setSolutionScenario(i, sol_scenario);
 					
 					// Calcul fonction obj (?!)
 				}

@@ -14,4 +14,10 @@ public class VNSStochastic extends VNSAbstract {
 		return getListSolutions().get(k);
 	}
 
+	public void setSolutionScenario(int i, SolutionVNS sol_scenario) {
+		// TODO Auto-generated method stub
+		getSolutionScenario(i).setSolution(sol_scenario);
+	}
+
+
 }

@@ -62,8 +62,25 @@ public class GraphManager {
 			// Initialisation des arêtes déterministes
 			initAretesDeterministes(g, aleas);
 			
+			System.out.println("Après initDeterminist :");
+			for(int a=0; a<g.getNbNode(); a++){
+				for(int b=0; b<g.getNbNode(); b++){
+					if(g.isEdgeStochastic(a, b)){
+						//System.out.println("(" + a + ", " + b + ") = S");
+					}
+					else{
+						System.out.println("(" + a + ", " + b + ") = D");
+					}
+				}
+			}
+			
 			// Calcul de l'écart type des arêtes stochastiques
 			double ecartType = Stats.ecartType(g);
+			
+			System.out.println("ecartType=" + ecartType);
+			
+		//	Graph g_s = genereScenario(g, ecartType);
+			
 			
 			
 			

@@ -61,6 +61,7 @@ public class GraphManager {
 		}
 		// Stochastique
 		else{
+			double proba_scenario = 1/nbScenario;
 			ArrayList<Integer> fusion = new ArrayList<Integer>();
 			
 			// Initialisation des arêtes déterministes
@@ -82,13 +83,18 @@ public class GraphManager {
 			generationAllScenarios(vnsS, g, nbScenario, ecartType);
 			
 			// Initialisation des pénalités
+			initAllPenalites(vnsS);
 			
+			int t=0;
 			// Recherche d'une solution
 			do{
 				for(int i=1; i<=nbScenario; i++){
 					// Application des pénalités
+					if(t!=0){
+						vnsS.getSolutionScenario(i).appliquePenalite(vnsS.getSolutionRef(), 2);
+					}
 					
-					// Appeler VNS
+					// Appel de VNS
 					vnsS.vnsAlgorithm(vnsS.getSolutionScenario(i), tmax);
 					
 					// Calcul fonction obj (?!)
@@ -99,6 +105,7 @@ public class GraphManager {
 				
 				// Mise a jour de la solution de reference (?!)
 				
+				t++;
 			}while(!aLesMemesAretesDeter(vnsS.getSolutionRef(), fusion));	// La condition d'arret : si la fusion possede les memes aretes deterministes que la sol de ref
 		}
 		
@@ -106,6 +113,12 @@ public class GraphManager {
 		return null;	// a modifier
 	}
 	
+	private void initAllPenalites(VNSStochastic vnsS) {
+		for(int i=1; i<vnsS.getListSolutions().size(); i++){
+			vnsS.getSolutionScenario(i).initPenalite(vnsS.getSolutionRef().getGraph_scenario());
+		}
+	}
+
 	private ArrayList<Integer> fusionSolutionsScenarios(VNSStochastic vnsS) {
 		// TODO Auto-generated method stub
 		return null;

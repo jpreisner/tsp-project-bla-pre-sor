@@ -10,7 +10,7 @@ import pne.project.tsp.view.MainView;
 public class Test {
 	public static void main(String[] args) {
 		System.out.println("TEST");
-		int aleas = 90;
+		int aleas = 100;
 		int nbScenario = 1;
 		int Kmax = 4;
 		Graph g = FileReader.buildGraphFromXml("data/XML/" + "gr17" + ".xml");

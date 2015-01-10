@@ -7,6 +7,7 @@ import ilog.cplex.IloCplex;
 import ilog.cplex.IloCplex.DoubleParam;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import javax.swing.JWindow;
 
@@ -15,6 +16,8 @@ import pne.project.tsp.beans.NodeCouple;
 import pne.project.tsp.utils.Stats;
 import ps.project.tsp.vns.SolutionVNS;
 import ps.project.tsp.vns.VNSAbstract;
+import ps.project.tsp.vns.VNSDeterminist;
+import ps.project.tsp.vns.VNSStochastic;
 
 public class GraphManager {
 	private double solutionValue;
@@ -41,93 +44,117 @@ public class GraphManager {
 			aleas = 100;
 		}
 		
-		// Initialisation de l'attribut qui va nous servir a enregistrer Glouton
-		SolutionVNS solutionInitiale = new SolutionVNS(g);	// on passe en parametre le graphe de base
-		
-		// Enregistrement de de la solution gloutonne
-		solutionInitiale.setPathChosen(solutionInitiale.gloutonAlgorithm());
-		
-		System.out.println("GM --> solInit = " + solutionInitiale.getPathChosen());
-		
 		// Déterministe
 		if(aleas == 100){
+			// Initialisation de l'attribut qui va nous servir a enregistrer Glouton
+			SolutionVNS solutionInitiale = new SolutionVNS(g);	// on passe en parametre le graphe de base
+			
+			// Enregistrement de de la solution gloutonne
+			solutionInitiale.setPathChosen(solutionInitiale.gloutonAlgorithm());
+			
+			System.out.println("GM --> solInit = " + solutionInitiale.getPathChosen());
 			// Résolution avec la méthode VNS du problème deterministe
-			VNSAbstract vns = new VNSAbstract(Kmax);
-			vns.getListSolutions().add(solutionInitiale);
-			vns.vnsAlgorithm(solutionInitiale, tmax);
+			VNSDeterminist vnsD = new VNSDeterminist(Kmax);
+			vnsD.getListSolutions().add(solutionInitiale);
+			vnsD.vnsAlgorithm(solutionInitiale, tmax);
 			
 		}
 		// Stochastique
 		else{
 			// Initialisation des arêtes déterministes
 			initAretesDeterministes(g, aleas);
-//			int a, b;
-//			System.out.println("Après initDeterminist :");
-//			for( a=0; a<g.getNbNode(); a++){
-//				for( b=0; b<g.getNbNode(); b++){
-//					if(g.isEdgeStochastic(a, b)){
-//						//System.out.println("(" + a + ", " + b + ") = S");
-//					}
-//					else{
-//						System.out.println("(" + a + ", " + b + ") = D");
-//					}
-//				}
-//			}
 			
 			// Calcul de l'écart type des arêtes stochastiques
 			double ecartType = Stats.ecartType(g);
 			
-		//	System.out.println("ecartType=" + ecartType);
-		
-			//Graph g_s = genereScenario(g, ecartType);
+			// Solution de reference (glouton)
+			SolutionVNS solutionRef = new SolutionVNS(g);	
+			solutionRef.setPathChosen(solutionRef.gloutonAlgorithm());
 			
-//			System.out.println("Après génération du scénario :");
-//			for( a=0; a<g.getNbNode(); a++){
-//				for( b=0; b<g.getNbNode(); b++){
-//					if(g.isEdgeStochastic(a, b)){
-//						System.out.println("(" + a + ", " + b + ") = S  |  g=" + g.getTabAdja()[a][b] + " - g_s=" + g_s.getTabAdja()[a][b]);
-//					}
-//					else{
-//						System.out.println("(" + a + ", " + b + ") = D  |  g=" + g.getTabAdja()[a][b] + " - g_s=" + g_s.getTabAdja()[a][b]);
-//					}
-//				}
-//			}
+			System.out.println("GM --> solInit = " + solutionRef.getPathChosen());
 			
+			VNSStochastic vnsS = new VNSStochastic(Kmax);
+			vnsS.getListSolutions().add(solutionRef);	
 			
+			// Génération de tous les scénarios + glouton sur chaque scénario
+			generationAllScenarios(vnsS, g, nbScenario, ecartType);
 			
-			/**
-			 * Remarque : à enlever? car cela correspond a la résolution du graphe deterministe
-			 */
-			// Résolution avec la méthode VNS
-			VNSAbstract vns = new VNSAbstract(Kmax);
-			vns.getListSolutions().add(solutionInitiale);
-			vns.vnsAlgorithm(solutionInitiale, tmax);
+			// Initialisation des pénalités
 			
-			SolutionVNS sol;
-			Graph graph_scenario;
-			for(int i=0; i<nbScenario; i++){
+			do{
+				for(int i=0; i<nbScenario; i++){
+					// Application des pénalités
+					
+					// Appeler VNS
+					
+					// Calcul fonction obj (?!)
+				}
 				
-				// génération d'un scénario
-				graph_scenario = genereScenario(g, ecartType);
+				// Fusionner toutes les solutions
 				
-				// initialisation d'un attribut solutionVNS qui contient le graphe du scenario i
-				sol = new SolutionVNS(graph_scenario);
+				// Mise a jour de la solution de reference (?!)
 				
-				// initialisation de la solution a l'aide de glouton appliqué au graphe du scenario i
-				sol.setPathChosen(sol.gloutonAlgorithm());
-				
-				// ajout dans VNS du scenario i
-				vns.getListSolutions().add(sol);
-				
-				// résolution du scenario i
-				vns.vnsAlgorithm(sol, tmax);
-		
-			}
+			}while(true);	// La condition d'arret : si la fusion possede les memes aretes deterministes que la sol de ref
 		}
 		
-		return solutionInitiale.getPathChosen();	// a modifier
+		return null;	// a modifier
 	}
 	
+	public boolean aLesMemesAretesDeter(ArrayList<Integer> solReference, ArrayList<Integer> solFusion, SolutionVNS graphInitial){
+		ArrayList<NodeCouple> listSolRef = listAretesDeter(solReference, graphInitial.getGraph_scenario());
+		ArrayList<NodeCouple> listSolFus = listAretesDeter(solFusion, graphInitial.getGraph_scenario());
+		
+		Collections.sort(listSolRef);
+		Collections.sort(listSolFus);
+		
+		return listSolRef.equals(listSolFus);
+	}
+	
+	public ArrayList<NodeCouple> listAretesDeter(ArrayList<Integer> solution, Graph g){
+		ArrayList<NodeCouple> list = new ArrayList<NodeCouple>();
+		int n1, n2;
+		for(int i=0; i<list.size()-1; i++){
+			n1 = solution.get(i);
+			n2 = solution.get(i+1);
+			if(!g.getTabStoch()[n1][n2]){
+				list.add(new NodeCouple(n1, n2));
+			}
+		}
+		n1 = solution.get(list.size()-1);
+		n2 = solution.get(0);
+		if(!g.getTabStoch()[n1][n2]){
+			list.add(new NodeCouple(n1, n2));
+		}
+		return list;
+	}
+	
+	/**
+	 * Génère tous les scenarios, et détermine une solution initiale de chaque scenario (par glouton)
+	 * @param vnsS
+	 * @param g
+	 * @param nbScenario
+	 * @param ecartType
+	 */
+	public void generationAllScenarios(VNSStochastic vnsS, Graph g,	int nbScenario, double ecartType) {
+		// Génération des K scénarios
+		SolutionVNS sol;
+		Graph graph_scenario;
+		for(int i=0; i<nbScenario; i++){
+			
+			// génération d'un scénario
+			graph_scenario = genereScenario(g, ecartType);
+			
+			// initialisation d'un attribut solutionVNS qui contient le graphe du scenario i
+			sol = new SolutionVNS(graph_scenario);
+			
+			// initialisation de la solution a l'aide de glouton appliqué au graphe du scenario i
+			sol.setPathChosen(sol.gloutonAlgorithm());
+			
+			// ajout dans VNS du scenario i
+			vnsS.getListSolutions().add(sol);
+		}
+	}
+
 	/** Permet de générer un graphe correspondant a un scenario
 	 * 
 	 * @param g

@@ -119,4 +119,8 @@ public class Graph {
 		int percentageDeterministEdges_copy = percentageDeterministEdges;
 		return new Graph(tab_copy, nbNode_copy, tabStoch_copy, percentageDeterministEdges_copy);
 	}
+	
+	public int getPercentageDeterminist(){
+		return percentageDeterministEdges;
+	}
 }

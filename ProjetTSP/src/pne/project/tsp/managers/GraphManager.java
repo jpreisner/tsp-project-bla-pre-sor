@@ -61,26 +61,37 @@ public class GraphManager {
 		else{
 			// Initialisation des arêtes déterministes
 			initAretesDeterministes(g, aleas);
-			
-			System.out.println("Après initDeterminist :");
-			for(int a=0; a<g.getNbNode(); a++){
-				for(int b=0; b<g.getNbNode(); b++){
-					if(g.isEdgeStochastic(a, b)){
-						//System.out.println("(" + a + ", " + b + ") = S");
-					}
-					else{
-						System.out.println("(" + a + ", " + b + ") = D");
-					}
-				}
-			}
+//			int a, b;
+//			System.out.println("Après initDeterminist :");
+//			for( a=0; a<g.getNbNode(); a++){
+//				for( b=0; b<g.getNbNode(); b++){
+//					if(g.isEdgeStochastic(a, b)){
+//						//System.out.println("(" + a + ", " + b + ") = S");
+//					}
+//					else{
+//						System.out.println("(" + a + ", " + b + ") = D");
+//					}
+//				}
+//			}
 			
 			// Calcul de l'écart type des arêtes stochastiques
 			double ecartType = Stats.ecartType(g);
 			
-			System.out.println("ecartType=" + ecartType);
+		//	System.out.println("ecartType=" + ecartType);
+		
+			//Graph g_s = genereScenario(g, ecartType);
 			
-		//	Graph g_s = genereScenario(g, ecartType);
-			
+//			System.out.println("Après génération du scénario :");
+//			for( a=0; a<g.getNbNode(); a++){
+//				for( b=0; b<g.getNbNode(); b++){
+//					if(g.isEdgeStochastic(a, b)){
+//						System.out.println("(" + a + ", " + b + ") = S  |  g=" + g.getTabAdja()[a][b] + " - g_s=" + g_s.getTabAdja()[a][b]);
+//					}
+//					else{
+//						System.out.println("(" + a + ", " + b + ") = D  |  g=" + g.getTabAdja()[a][b] + " - g_s=" + g_s.getTabAdja()[a][b]);
+//					}
+//				}
+//			}
 			
 			
 			
@@ -125,18 +136,23 @@ public class GraphManager {
 	 */
 	public Graph genereScenario(Graph g, double ecartType){
 		double cij;
-		Graph graph_scenario = (Graph) g.clone();
-		int nbNode = graph_scenario.getNbNode();
+		//Graph graph_scenario = (Graph) g.clone();
+		int nbNode = g.getNbNode();
+		double tabGraph[][] = new double[nbNode][nbNode];
+		
 		for(int i=0; i<nbNode; i++){
 			for(int j=0; j<nbNode; j++){
 				// Dans le cas ou (i,j) est stochastique = on lui attribut une valeur
-				if(i!=j && graph_scenario.isEdgeStochastic(i, j)){
-					cij = graph_scenario.getTabAdja()[i][j];
-					graph_scenario.getTabAdja()[i][j] = Stats.getRandValueBetween(cij-3*ecartType, cij+3*ecartType);
+				if(i!=j && g.isEdgeStochastic(i, j)){
+					cij = g.getTabAdja()[i][j];
+					tabGraph[i][j] = Stats.getRandValueBetween(cij-3*ecartType, cij+3*ecartType);
+				}
+				else{
+					tabGraph[i][j] = g.getTabAdja()[i][j];
 				}
 			}
 		}
-		return graph_scenario;
+		return new Graph(tabGraph, nbNode, g.getTabStoch().clone(), g.getPercentageDeterminist());
 	}
 	
 	/**

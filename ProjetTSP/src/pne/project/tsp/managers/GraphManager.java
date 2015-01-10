@@ -110,7 +110,14 @@ public class GraphManager {
 				// Mise a jour de la solution de reference (?!)
 				
 				t++;
-			}while(!aLesMemesAretesDeter(vnsS.getSolutionRef(), fusion));	// La condition d'arret : si la fusion possede les memes aretes deterministes que la sol de ref
+			}while(!allScenarioOntMemesAretesDeter(vnsS.getSolutionRef(), vnsS.getListSolutions()));
+			//}while(!aLesMemesAretesDeter(vnsS.getSolutionRef(), fusion));	// La condition d'arret : si la fusion possede les memes aretes deterministes que la sol de ref
+		/**
+		 * PB ici : je sais pas lequel des 2 while mettre
+		 * 	--> est ce que la condition d'arret c'est que la fusion ait les memes aretes det (2eme while)
+		 * --> ou est ce que la condition d'arret ce que tous les scenarios ait les memes aretes det (1er while)
+		 */
+		
 		}
 		
 		
@@ -128,6 +135,16 @@ public class GraphManager {
 		return null;
 	}
 
+	public boolean allScenarioOntMemesAretesDeter(SolutionVNS solReference, ArrayList<SolutionVNS> listSolScenario){
+		SolutionVNS scenario;
+		for(int i=1; i<listSolScenario.size(); i++){
+			scenario = listSolScenario.get(i);
+			if(!aLesMemesAretesDeter(solReference, scenario.getPathChosen())){
+				return false;
+			}
+		}
+		return true;
+	}
 	public boolean aLesMemesAretesDeter(SolutionVNS solReference, ArrayList<Integer> solFusion){
 		ArrayList<NodeCouple> listSolRef = listAretesDeter(solReference.getPathChosen(), solReference.getGraph_scenario());
 		ArrayList<NodeCouple> listSolFus = listAretesDeter(solFusion, solReference.getGraph_scenario());

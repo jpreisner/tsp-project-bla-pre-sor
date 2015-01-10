@@ -30,6 +30,13 @@ public class Graph {
 		this.nbNode = nbNode;
 		this.percentageDeterministEdges = percentageDeterministEdges;
 	}
+	
+	public Graph(double[][] tabInt, int nbNode, boolean tabStoch[][], int percentageDeterministEdges){
+		this.tabAdja = tabInt;
+		this.nbNode = nbNode;
+		this.tabStoch = tabStoch;
+		this.percentageDeterministEdges = percentageDeterministEdges;
+	}
 
 	//  met toutes les val de tabStoch a bool
 	public void initTabStoch(boolean bool){
@@ -102,5 +109,13 @@ public class Graph {
 				tabStoch[i][j] = true;
 			}
 		}
+	}
+	
+	public Graph clone(){
+		double[][] tab_copy = tabAdja.clone();
+		int nbNode_copy = nbNode;
+		boolean[][] tabStoch_copy = tabStoch.clone();
+		int percentageDeterministEdges_copy = percentageDeterministEdges;
+		return new Graph(tab_copy, nbNode_copy, tabStoch_copy, percentageDeterministEdges_copy);
 	}
 }

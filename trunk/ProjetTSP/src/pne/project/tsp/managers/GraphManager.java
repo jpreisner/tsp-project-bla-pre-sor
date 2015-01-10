@@ -9,13 +9,10 @@ import ilog.cplex.IloCplex.DoubleParam;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import javax.swing.JWindow;
-
 import pne.project.tsp.beans.Graph;
 import pne.project.tsp.beans.NodeCouple;
 import pne.project.tsp.utils.Stats;
 import ps.project.tsp.vns.SolutionVNS;
-import ps.project.tsp.vns.VNSAbstract;
 import ps.project.tsp.vns.VNSDeterminist;
 import ps.project.tsp.vns.VNSStochastic;
 
@@ -130,9 +127,48 @@ public class GraphManager {
 		}
 	}
 
+	/**
+	 * @param vnsS
+	 * @return
+	 */
 	private ArrayList<Integer> fusionSolutionsScenarios(VNSStochastic vnsS) {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<Integer> result = new ArrayList<Integer>();
+		for(int i=0;i<vnsS.getListSolutions().get(0).getGraph_scenario().getNbNode();i++){
+			/* on s'occupe de l'element i*/
+			ArrayList<Integer> tmp = new ArrayList<Integer>();
+			for (SolutionVNS solVns : vnsS.getListSolutions()) {
+				tmp.add(solVns.getPathChosen().get(i));
+			}
+			result.add(getMaxNode(tmp,result));
+		}
+		
+		return result;
+	}
+
+	private Integer getMaxNode(ArrayList<Integer> tmp, ArrayList<Integer> result) {
+		int[][] tabOccurence = new int[tmp.size()][2]; 		
+		int indiceMax;
+		int valueMax;
+		
+		/* on ecrit les frequences */
+		for (int i=0;i<tmp.size();i++) {
+			tabOccurence[i][0] = tmp.get(i);
+			tabOccurence[i][1] = Collections.frequency(tmp, tmp.get(i));
+		}
+		
+		/* on prends la meilleure valeur sauf si elle a déja été choisie */
+		indiceMax = 0;
+		valueMax = 0;
+		/* on lit la valeur max */
+		for(int j=0;j<tabOccurence.length;j++){
+			if(tabOccurence[j][1]>valueMax && !result.contains(tabOccurence[j][0])){
+				indiceMax = j;
+				valueMax = tabOccurence[j][1];				
+			}
+		}
+			
+		
+		return tabOccurence[indiceMax][1];
 	}
 
 	public boolean allScenarioOntMemesAretesDeter(SolutionVNS solReference, ArrayList<SolutionVNS> listSolScenario){

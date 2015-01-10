@@ -175,6 +175,11 @@ public class GraphManager {
 		}
 	}
 	
+	/** Méthode utile pour le tirage au sort des arêtes déterministes
+	 *
+	 * @param g
+	 * @return une liste de toutes les arêtes du graphe
+	 */
 	public ArrayList<NodeCouple> allEdge(Graph g){
 		ArrayList<NodeCouple> listEdge = new ArrayList<NodeCouple>();
 		for(int i=0; i<g.getNbNode(); i++){
@@ -201,6 +206,17 @@ public class GraphManager {
 			// calcul ecart type et tirage au sort des valeurs
 	
 			// VNS stochastique + pénalité
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	

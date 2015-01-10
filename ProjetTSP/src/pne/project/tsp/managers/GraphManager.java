@@ -61,6 +61,8 @@ public class GraphManager {
 		}
 		// Stochastique
 		else{
+			ArrayList<Integer> fusion = new ArrayList<Integer>();
+			
 			// Initialisation des arêtes déterministes
 			initAretesDeterministes(g, aleas);
 			
@@ -81,28 +83,37 @@ public class GraphManager {
 			
 			// Initialisation des pénalités
 			
+			// Recherche d'une solution
 			do{
-				for(int i=0; i<nbScenario; i++){
+				for(int i=1; i<=nbScenario; i++){
 					// Application des pénalités
 					
 					// Appeler VNS
+					vnsS.vnsAlgorithm(vnsS.getSolutionScenario(i), tmax);
 					
 					// Calcul fonction obj (?!)
 				}
 				
 				// Fusionner toutes les solutions
+				fusion = fusionSolutionsScenarios(vnsS);
 				
 				// Mise a jour de la solution de reference (?!)
 				
-			}while(true);	// La condition d'arret : si la fusion possede les memes aretes deterministes que la sol de ref
+			}while(!aLesMemesAretesDeter(vnsS.getSolutionRef(), fusion));	// La condition d'arret : si la fusion possede les memes aretes deterministes que la sol de ref
 		}
+		
 		
 		return null;	// a modifier
 	}
 	
-	public boolean aLesMemesAretesDeter(ArrayList<Integer> solReference, ArrayList<Integer> solFusion, SolutionVNS graphInitial){
-		ArrayList<NodeCouple> listSolRef = listAretesDeter(solReference, graphInitial.getGraph_scenario());
-		ArrayList<NodeCouple> listSolFus = listAretesDeter(solFusion, graphInitial.getGraph_scenario());
+	private ArrayList<Integer> fusionSolutionsScenarios(VNSStochastic vnsS) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public boolean aLesMemesAretesDeter(SolutionVNS solReference, ArrayList<Integer> solFusion){
+		ArrayList<NodeCouple> listSolRef = listAretesDeter(solReference.getPathChosen(), solReference.getGraph_scenario());
+		ArrayList<NodeCouple> listSolFus = listAretesDeter(solFusion, solReference.getGraph_scenario());
 		
 		Collections.sort(listSolRef);
 		Collections.sort(listSolFus);

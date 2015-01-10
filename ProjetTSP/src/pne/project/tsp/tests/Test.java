@@ -1,6 +1,10 @@
 package pne.project.tsp.tests;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 import pne.project.tsp.beans.Graph;
+import pne.project.tsp.beans.NodeCouple;
 import pne.project.tsp.controler.MainControler;
 import pne.project.tsp.managers.GraphManager;
 import pne.project.tsp.utils.FileReader;

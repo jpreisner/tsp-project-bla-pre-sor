@@ -85,26 +85,55 @@ public class SolutionVNS {
 //		}
 		
 		/* construction de la solution gloutonne*/
+		int accept = 0;
+		int refuse = 0;
 		
-		/* TODO verifier les sous tours*/
 		for(NodeCouple e : alNodeCouple){
 			if(!tabInnerEdge[e.getN1()] && !tabOuterEdge[e.getN2()]){
 				result.add(e);
-//				if(containsSousTour(result, graph_scenario.getNbNode())){
-//					result.remove(e);
-//				}
-				//else{
+				// pas de sous tour
+				if(verifSousTours(result, graph_scenario.getNbNode())){
 					tabInnerEdge[e.getN1()] = true;
 					tabOuterEdge[e.getN2()] = true;	
-				//}
+				}
+				// sous tour
+				else{
+					result.remove(e);
+				}
 			}
 		}
 		
+//		/* TODO verifier les sous tours*/
+//		for(NodeCouple e : alNodeCouple){
+//			if(!tabInnerEdge[e.getN1()] && !tabOuterEdge[e.getN2()] && !(tabInnerEdge[e.getN2()] && tabOuterEdge[e.getN1()] && (result.size()+1)<graph_scenario.getNbNode())){
+//				System.out.println("e.getN2 = " + e.getN2() + " et tabInner = " + tabInnerEdge[e.getN2()] + " et size=" + result.size());
+//				result.add(e);
+//				accept++;
+////				if(containsSousTour(result, graph_scenario.getNbNode())){
+////					result.remove(e);
+////				}
+//				//else{
+//					tabInnerEdge[e.getN1()] = true;
+//					tabOuterEdge[e.getN2()] = true;	
+//				//}
+//			}
+//			else{
+//				refuse++;
+//			}
+//		}
+//		
+		System.out.println("tResult = " + result.size());
 		System.out.println("result = " + result);
+		System.out.println("alNC = " + alNodeCouple);
+		System.out.println("accept="+ accept + " et refuse= " + refuse);
 		
 		
 		/**
 		 * Remarque : on souhaite que la solution soit de la forme 1-2-3-4 et non (1,2) (2,3) (3,4) (4,1)
+		 */
+		
+		/**
+		 * FAUX A MODIFIER
 		 */
 		ArrayList<Integer> solution = new ArrayList<Integer>();
 		for(NodeCouple nc : result){
@@ -113,14 +142,59 @@ public class SolutionVNS {
 		
 		/**
 		 * A SUPPRIMER QUAND ON AURA TROUVER GLOUTON
-		 */
+		
 		
 		solution.clear();
 		for(int i=0; i<graph_scenario.getNbNode(); i++){
 			solution.add(i);
 		}
+		 */
 		
 		return solution;
+	}
+	
+	/**
+	 * Renvoie Vrai si il n'y a pas de sous tour
+	 * @param solution
+	 * @return
+	 */
+	public boolean verifSousTours(ArrayList<NodeCouple> solution, int nbNode){
+		ArrayList<Integer> listNoeudDansSolution = new ArrayList<Integer>();
+		int i=0;
+		for(NodeCouple nc : solution){
+			if(!listNoeudDansSolution.contains(nc.getN1())){
+				if(!verifSousTours_recursif(solution, listNoeudDansSolution, i, nbNode)){
+					return false;
+				}
+			}
+			listNoeudDansSolution.clear();
+			i++;
+		}
+		return true;
+	}
+	
+	
+
+	private boolean verifSousTours_recursif(ArrayList<NodeCouple> solution, ArrayList<Integer> listNoeudDansSolution, int i, int nbNode) {
+		//System.out.println("listNoeud=" + listNoeudDansSolution);
+		if(listNoeudDansSolution.contains(solution.get(i).getN2())){
+			// circuit hamiltonien
+			if(listNoeudDansSolution.size() == nbNode){
+				return true;
+			}
+			// il y a sous tour
+			return false;
+		}
+		else{
+			listNoeudDansSolution.add(solution.get(i).getN1());
+			int pos = NodeCouple.listContainsN1(solution, solution.get(i).getN2());
+			if(pos == -1){
+				return true;
+			}
+			else{
+				return verifSousTours_recursif(solution, listNoeudDansSolution, pos, nbNode);
+			}
+		}
 	}
 
 	public double getPathCost() {

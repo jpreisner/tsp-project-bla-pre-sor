@@ -40,8 +40,12 @@ public class SolutionVNS {
 		this.graph_scenario = g.clone();
 		this.pathChosen = (ArrayList<Integer>) pathChosen.clone();
 		this.pathCost = pathCost;
-		this.penaliteLambda = penaliteLambda.clone();
-		this.penaliteRo = penaliteRo.clone();
+		if(penaliteLambda != null){
+			this.penaliteLambda = penaliteLambda.clone();	
+		}
+		if(penaliteRo != null){
+			this.penaliteRo = penaliteRo.clone();
+		}
 	}
 
 

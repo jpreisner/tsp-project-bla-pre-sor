@@ -22,6 +22,7 @@ import pne.project.tsp.utils.FileReader;
 import pne.project.tsp.view.Choix_fichier;
 import pne.project.tsp.view.MainView;
 import pne.project.tsp.view.NodeView;
+import ps.project.tsp.vns.SolutionVNS;
 
 public class MainControler {
 
@@ -165,15 +166,13 @@ public class MainControler {
 					double tmax = 100;	// on le défini comment?
 					GraphManager gm = new GraphManager();
 					// Attention : k doit être inférieur à nbNoeud/2
-					ArrayList<Integer> result = gm.resolutionTSP_vns(g, aleas, nbScenario, Kmax, tmax);
+					SolutionVNS sol = gm.resolutionTSP_vns(g, aleas, nbScenario, Kmax, tmax);
 					
-					int tabResult[] = new int[result.size()];
-					for(int i=0; i<result.size()-1; i++){
-						tabResult[result.get(i)] = result.get(i+1);
+					int tabResult[] = new int[sol.getPathChosen().size()];
+					for(int i=0; i<sol.getPathChosen().size()-1; i++){
+						tabResult[sol.getPathChosen().get(i)] = sol.getPathChosen().get(i+1);
 					}
-					tabResult[result.get(result.size()-1)] = result.get(0);
-					
-					System.out.println("tabResult = " + tabResult);
+					tabResult[sol.getPathChosen().get(sol.getPathChosen().size()-1)] = sol.getPathChosen().get(0);
 					
 					// passer le resultat dans la fonction d'affichage
 					mv.getGraphCanvas().setTabResult(tabResult);

@@ -115,7 +115,13 @@ public class Graph {
 	public Graph clone(){
 		double[][] tab_copy = tabAdja.clone();
 		int nbNode_copy = nbNode;
-		boolean[][] tabStoch_copy = tabStoch.clone();
+		boolean[][] tabStoch_copy;
+		if(tabStoch != null){
+			tabStoch_copy = tabStoch.clone();
+		}
+		else{
+			tabStoch_copy = null;
+		}
 		int percentageDeterministEdges_copy = percentageDeterministEdges;
 		return new Graph(tab_copy, nbNode_copy, tabStoch_copy, percentageDeterministEdges_copy);
 	}

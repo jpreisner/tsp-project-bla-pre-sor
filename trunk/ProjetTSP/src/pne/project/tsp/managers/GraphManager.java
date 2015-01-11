@@ -131,13 +131,8 @@ public class GraphManager {
 			return fusion;
 		}
 	}
-	
-	private double fonctionObjective(SolutionVNS fusion) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
 
-	private double calculCostGraph(Graph g, ArrayList<Integer> listFusion){
+	public double calculCostGraph(Graph g, ArrayList<Integer> listFusion){
 		double result = 0;
 		
 		for (int i = 0; i < listFusion.size()-1; i++) {

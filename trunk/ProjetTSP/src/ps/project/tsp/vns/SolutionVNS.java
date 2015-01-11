@@ -253,7 +253,7 @@ public class SolutionVNS {
 		}
 	}
 
-	public void appliquePenalite(SolutionVNS solReference, int beta){
+	public void calculPenalite(SolutionVNS solReference, int beta){
 		int i,j;
 		int n = graph_scenario.getNbNode();
 		

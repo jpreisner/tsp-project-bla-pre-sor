@@ -77,11 +77,11 @@ public class ButtonsCanvas extends Component {
 		if (isResolved) {
 			// dessiner le bouton startMenu
 			msg = "Recommencer";
-			val = 60;
+			val = 73;
 		} else {
 			// dessiner le bouton solve
 			msg = "Résoudre";
-			val = 15;
+			val = 38;
 			
 			
 		}
@@ -93,7 +93,7 @@ public class ButtonsCanvas extends Component {
 				+ solve_or_startMenu.height / 2 + 10);
 
 		// dessiner le bouton quit
-		g.drawString("Quitter", quit.x + quit.width / 3 + 10, quit.y + quit.height / 2 + 10);
+		g.drawString("Quitter", quit.x + quit.width / 3 -10 , quit.y + quit.height / 2 + 10);
 	}
 
 	public void setSolve_or_startMenu(Rectangle solve_or_startMenu) {

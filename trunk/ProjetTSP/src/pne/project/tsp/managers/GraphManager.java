@@ -32,7 +32,7 @@ public class GraphManager {
 	 * @param g
 	 * @param aleas : pourcentage d'aretes deterministes
 	 */
-	public ArrayList<Integer> resolutionTSP_vns(Graph g, int aleas, int nbScenario, int Kmax, double tmax){
+	public SolutionVNS resolutionTSP_vns(Graph g, int aleas, int nbScenario, int Kmax, double tmax){
 		long startTime = System.nanoTime();
 
 		if(aleas < 0){
@@ -54,7 +54,13 @@ public class GraphManager {
 			// Résolution avec la méthode VNS du problème deterministe
 			VNSDeterminist vnsD = new VNSDeterminist(Kmax);
 			vnsD.getListSolutions().add(solutionInitiale);
-			return vnsD.vnsAlgorithm(solutionInitiale, tmax).getPathChosen();
+			SolutionVNS sol = vnsD.vnsAlgorithm(solutionInitiale, tmax);
+			
+			long stopTime = System.nanoTime();
+			this.solutionValue = sol.getPathCost();
+			this.resolutionDuration = (int) ((stopTime - startTime) / 1000000000);
+			
+			return sol;
 		}
 		// Stochastique
 		else{
@@ -130,14 +136,14 @@ public class GraphManager {
 		 * --> ou est ce que la condition d'arret ce que tous les scenarios ait les memes aretes det (1er while)
 		 */
 		
-			System.out.println("FIN STOCHA");
-			System.out.println("Calcul Cout fusion : "+calculCostFusion(vnsS, fusion));
+//			System.out.println("FIN STOCHA");
+//			System.out.println("Calcul Cout fusion : "+calculCostFusion(vnsS, fusion));
 			long stopTime = System.nanoTime();
 
 			this.solutionValue = calculCostGraph(g, fusion);
 			this.resolutionDuration = (int) ((stopTime - startTime) / 1000000000);
-
-			return fusion;
+			SolutionVNS solFusion = new SolutionVNS(g, fusion, solutionValue);
+			return solFusion;
 		}
 	}
 	

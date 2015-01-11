@@ -32,8 +32,7 @@ public class GraphManager {
 	 * @param g
 	 * @param aleas : pourcentage d'aretes deterministes
 	 */
-	public ArrayList<Integer> resolutionTSP_vns(Graph g, int aleas, int nbScenario, int Kmax){
-		double tmax = 100;		// ???
+	public ArrayList<Integer> resolutionTSP_vns(Graph g, int aleas, int nbScenario, int Kmax, double tmax){
 		if(aleas < 0){
 			aleas = 0;
 		}
@@ -100,9 +99,11 @@ public class GraphManager {
 					vnsS.setSolutionScenario(i, sol_scenario);
 					
 					// Calcul fonction obj (?!)
+					// UTILISER LES PROBA !
 				}
 				
 				// Fusionner toutes les solutions
+				fusion.clear();
 				fusion = fusionSolutionsScenarios(vnsS);
 				
 				// Mise a jour de la solution de reference (?!)

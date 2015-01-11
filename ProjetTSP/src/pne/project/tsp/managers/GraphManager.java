@@ -92,6 +92,7 @@ public class GraphManager {
 						vnsS.getSolutionScenario(i).calculPenalite(vnsS.getSolutionRef(), 2);
 					}
 					
+					//System.out.println("lambda = " + vnsS.getSolutionScenario(i).getPenaliteLambda()[0][1]);
 					// Appel de VNS
 					sol_scenario = vnsS.vnsAlgorithm(vnsS.getSolutionScenario(i), tmax);
 					
@@ -198,14 +199,15 @@ public class GraphManager {
 	public ArrayList<NodeCouple> listAretesDeter(ArrayList<Integer> solution, Graph g){
 		ArrayList<NodeCouple> list = new ArrayList<NodeCouple>();
 		int n1, n2;
-		for(int i=0; i<list.size()-1; i++){
+		for(int i=0; i<solution.size()-1; i++){
 			n1 = solution.get(i);
 			n2 = solution.get(i+1);
 			if(!g.getTabStoch()[n1][n2]){
 				list.add(new NodeCouple(n1, n2));
 			}
 		}
-		n1 = solution.get(list.size()-1);
+
+		n1 = solution.get(solution.size()-1);
 		n2 = solution.get(0);
 		if(!g.getTabStoch()[n1][n2]){
 			list.add(new NodeCouple(n1, n2));

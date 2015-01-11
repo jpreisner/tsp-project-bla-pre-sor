@@ -36,6 +36,15 @@ public class SolutionVNS {
 	}
 	
 	
+	public SolutionVNS(Graph g, ArrayList<Integer> pathChosen, double pathCost, double[][] penaliteLambda, double[][] penaliteRo) {
+		this.graph_scenario = g.clone();
+		this.pathChosen = (ArrayList<Integer>) pathChosen.clone();
+		this.pathCost = pathCost;
+		this.penaliteLambda = penaliteLambda.clone();
+		this.penaliteRo = penaliteRo.clone();
+	}
+
+
 	/**
 	 * Faire les méthodes pour savoir si circuit hamiltonien
 	 * 		- sous méthode sur les aretes entrantes
@@ -213,7 +222,49 @@ public class SolutionVNS {
 		cost+=graph_scenario.getTabAdja()[pathChosen.get(n-1)][pathChosen.get(0)];
 		return cost;
 	}
-
+	
+	/**
+	 * Les penalites s'applique aux aretes deterministes de la solution
+	 * @param solRef
+	 * @return
+	 */
+	public double calculPathCostWithPenalty(SolutionVNS solRef){
+		double cost = 0.0;		
+		int n = pathChosen.size();
+		int n1, n2;
+		for(int i=0; i<n-1; i++){
+			n1=pathChosen.get(i);
+			n2=pathChosen.get(i+1);
+			
+			// cas ou c'est une arete deterministe --> il faut appliquer les penalites
+			if(!graph_scenario.isEdgeStochastic(n1, n2)){
+				cost = cost + graph_scenario.getTabAdja()[n1][n2] + penaliteLambda[n1][n2] + penaliteRo[n1][n2]/2 + penaliteRo[n1][n2]*areteDansSolution(solRef.getPathChosen(), n1, n2); 
+			}
+			
+			// cas ou c'est une arete stochastique --> pas de penalite
+			else{
+				cost+=graph_scenario.getTabAdja()[n1][n2];
+			}
+		}
+		n1 = pathChosen.get(n-1);
+		n2 = pathChosen.get(0);
+		
+		// cas ou c'est une arete deterministe --> il faut appliquer les penalites
+		if(!graph_scenario.isEdgeStochastic(n1, n2)){
+			cost = cost + graph_scenario.getTabAdja()[n1][n2] + penaliteLambda[n1][n2] + penaliteRo[n1][n2]/2 + penaliteRo[n1][n2]*areteDansSolution(solRef.getPathChosen(), n1, n2); 
+		}
+		// cas ou c'est une arete stochastique --> pas de penalite
+		else{
+			cost+=graph_scenario.getTabAdja()[n1][n2];
+		}
+		
+		return cost;
+	}
+	
+	/**
+	 * Initialise les attributs des penalites en (i,j) pour les aretes deterministes
+	 * @param graphInitial
+	 */
 	public void initPenalite(Graph graphInitial){
 		int n = graph_scenario.getNbNode();
 		penaliteLambda = new double[n][n];
@@ -310,7 +361,8 @@ public class SolutionVNS {
 	}
 	
 	public SolutionVNS clone(){
-		return new SolutionVNS(graph_scenario, pathChosen, pathCost);
+		return new SolutionVNS(graph_scenario, pathChosen, pathCost, penaliteLambda, penaliteRo);
+		
 	}
 	
 	public int areteDansSolution(ArrayList<Integer> sol, int i, int j){
@@ -330,5 +382,21 @@ public class SolutionVNS {
 		pathChosen = sol_scenario.getPathChosen();
 		pathCost = sol_scenario.getPathCost();
 		
+	}
+
+	public double[][] getPenaliteLambda() {
+		return penaliteLambda;
+	}
+
+	public void setPenaliteLambda(double[][] penaliteLambda) {
+		this.penaliteLambda = penaliteLambda;
+	}
+
+	public double[][] getPenaliteRo() {
+		return penaliteRo;
+	}
+
+	public void setPenaliteRo(double[][] penaliteRo) {
+		this.penaliteRo = penaliteRo;
 	}
 }

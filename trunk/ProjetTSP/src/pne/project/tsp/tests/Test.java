@@ -14,14 +14,13 @@ import pne.project.tsp.view.MainView;
 public class Test {
 	public static void main(String[] args) {
 		System.out.println("TEST");
-		int aleas = 100;
-		int nbScenario = 1;
+		int aleas = 10;
+		int nbScenario = 10;
 		int Kmax = 4;
-		Graph g = FileReader.buildGraphFromXml("data/XML/" + "brazil58" + ".xml");
+		Graph g = FileReader.buildGraphFromXml("data/XML/" + "gr17" + ".xml");
 		GraphManager gm = new GraphManager();
-		int k = 5;
 		// Attention : k doit être inférieur à nbNoeud/2
-		gm.resolutionTSP_vns(g, aleas, nbScenario, 5);
+		gm.resolutionTSP_vns(g, aleas, nbScenario, Kmax);
 		
 		//MainControler c = new MainControler(new MainView("Problème du voyageur de commerce", 1000, 600));
 

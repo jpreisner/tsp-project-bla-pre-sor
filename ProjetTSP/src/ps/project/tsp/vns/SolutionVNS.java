@@ -226,28 +226,18 @@ public class SolutionVNS {
 		 * 		--> c peut etre que pour les aretes deterministes de la solution
 		 */
 		
-		// initialisation de lambda
+		// initialisation de lambda et de ro
 		for(i=0; i<n; i++){
 			for(j=0; j<n; j++){
 				// on veut (i,j) deterministe
 				if(i!=j && !graph_scenario.getTabStoch()[i][j]){
 					penaliteLambda[i][j] = 2*coutMax;
-				}
-				else{
-					penaliteLambda[i][j] = -1;	// par defaut
-				}
-			}
-		}
-		
-		// initialisation de ro
-		for(i=0; i<n; i++){
-			for(j=0; j<n; j++){
-				// on veut (i,j) deterministe
-				if(i!=j && !graph_scenario.getTabStoch()[i][j]){
 					penaliteRo[i][j] = graphInitial.getTabAdja()[i][j]/2;
 				}
+				// (i,j) n'est pas deterministe : on attribut -1 par defaut
 				else{
-					penaliteRo[i][j] = -1;	// par defaut
+					penaliteLambda[i][j] = -1;
+					penaliteRo[i][j] = -1;
 				}
 			}
 		}
@@ -260,26 +250,43 @@ public class SolutionVNS {
 		/**
 		 * !! Les penalites sappliquent a toutes les aretes deterministes
 		 * 		--> c peut etre que pour les aretes deterministes de la solution
+		 * 
+		 * Laquelle de ces penalites doit on appliquer?
 		 */
 		
-		// itération sur lambda
+		/**
+		// Cette partie --> les penalites s'appliquent a l'ensemble des aretes deterministes du GRAPHE
+		// itération sur lambda et ro
 		for(i=0; i<n; i++){
 			for(j=0; j<n; j++){
 				// on veut (i,j) deterministe
 				if(i!=j && !graph_scenario.getTabStoch()[i][j]){
 					penaliteLambda[i][j] = penaliteLambda[i][j] + penaliteRo[i][j]*(areteDansSolution(pathChosen, i, j) - areteDansSolution(solReference.getPathChosen(), i, j));
+					penaliteRo[i][j] *= beta;
 				}
 			}
 		}
 		
-		// itération sur ro
-		for(i=0; i<n; i++){
-			for(j=0; j<n; j++){
-				// on veut (i,j) deterministe
-				if(i!=j && !graph_scenario.getTabStoch()[i][j]){
-					penaliteRo[i][j] *= beta;
-				}
+		*/
+		
+		
+		// Cette partie --> les penalites s'appliquent a l'ensemble des aretes deterministes de la SOLUTION
+		// itération sur lambda et de ro
+		int n1, n2;
+		for(i=0; i<solReference.getPathChosen().size()-1; i++){
+			n1 = solReference.getPathChosen().get(i);
+			n2 = solReference.getPathChosen().get(i+1);
+			// on veut (n1,n2) deterministe
+			if(!graph_scenario.getTabStoch()[n1][n2]){
+				penaliteLambda[n1][n2] = penaliteLambda[n1][n2] + penaliteRo[n1][n2]*(areteDansSolution(pathChosen, n1, n2) - areteDansSolution(solReference.getPathChosen(), n1, n2));
+				penaliteRo[n1][n2] *= beta;
 			}
+		}
+		n1 = solReference.getPathChosen().get(solReference.getPathChosen().size()-1);
+		n2 = solReference.getPathChosen().get(0);
+		if(!graph_scenario.getTabStoch()[n1][n2]){
+			penaliteLambda[n1][n2] = penaliteLambda[n1][n2] + penaliteRo[n1][n2]*(areteDansSolution(pathChosen, n1, n2) - areteDansSolution(solReference.getPathChosen(), n1, n2));
+			penaliteRo[n1][n2] *= beta;
 		}
 	}
 	

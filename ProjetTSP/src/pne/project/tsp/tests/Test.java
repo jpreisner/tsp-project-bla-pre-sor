@@ -23,7 +23,7 @@ public class Test {
 		// Attention : k doit être inférieur à nbNoeud/2
 		gm.resolutionTSP_vns(g, aleas, nbScenario, Kmax, tmax);
 		
-		//MainControler c = new MainControler(new MainView("Problème du voyageur de commerce", 1000, 600));
+		MainControler c = new MainControler(new MainView("Problème du voyageur de commerce", 1000, 600));
 
 		// ctrl shift c
 //		System.out.println("test");

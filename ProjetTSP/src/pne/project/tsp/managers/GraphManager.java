@@ -33,6 +33,8 @@ public class GraphManager {
 	 * @param aleas : pourcentage d'aretes deterministes
 	 */
 	public ArrayList<Integer> resolutionTSP_vns(Graph g, int aleas, int nbScenario, int Kmax, double tmax){
+		long startTime = System.nanoTime();
+
 		if(aleas < 0){
 			aleas = 0;
 		}
@@ -130,6 +132,11 @@ public class GraphManager {
 		
 			System.out.println("FIN STOCHA");
 			System.out.println("Calcul Cout fusion : "+calculCostFusion(vnsS, fusion));
+			long stopTime = System.nanoTime();
+
+			this.solutionValue = calculCostFusion(vnsS, fusion);
+			this.resolutionDuration = (int) ((stopTime - startTime) / 1000000000);
+
 			return fusion;
 		}
 	}

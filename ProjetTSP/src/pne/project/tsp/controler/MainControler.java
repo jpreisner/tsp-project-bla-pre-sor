@@ -149,18 +149,32 @@ public class MainControler {
 			 */
 			else if(mv.getButtonCanvas().getSolve_or_startMenu().contains(p) && mv.getVns().isSelected()){
 				// pour le moment j'ai mis le code branch and band en fermant la fenetre.c là que l on doit appele vns 
-				mv.dispose();
-				System.out.println("Pourcentage = " + mv.getPou_aret_deter().getValue());
+				//mv.dispose();
+
 
 				/**
-				 * A REMPLACER PAR VNS
+				 * VNS
 				 */
 				// cas ou le graphe n'est pas resolu
 				if (!solved ) {
 					solved = true;
 					// lancer la résolution
+					int aleas = mv.getPou_aret_deter().getValue();
+					int nbScenario = 1;
+					int Kmax = g.getNbNode()/2;
+					double tmax = 100;	// on le défini comment?
 					GraphManager gm = new GraphManager();
-					int[] tabResult = gm.writeLinearProgram(g, "tests/lpex1.lp", "tests/results.txt");
+					// Attention : k doit être inférieur à nbNoeud/2
+					ArrayList<Integer> result = gm.resolutionTSP_vns(g, aleas, nbScenario, Kmax, tmax);
+					
+					int tabResult[] = new int[result.size()];
+					for(int i=0; i<result.size()-1; i++){
+						tabResult[result.get(i)] = result.get(i+1);
+					}
+					tabResult[result.get(result.size()-1)] = result.get(0);
+					
+					System.out.println("tabResult = " + tabResult);
+					
 					// passer le resultat dans la fonction d'affichage
 					mv.getGraphCanvas().setTabResult(tabResult);
 					mv.getGraphCanvas().setIsResolved(true);

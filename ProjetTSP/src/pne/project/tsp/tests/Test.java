@@ -1,8 +1,10 @@
 package pne.project.tsp.tests;
 
 import pne.project.tsp.beans.Graph;
+import pne.project.tsp.controler.MainControler;
 import pne.project.tsp.managers.GraphManager;
 import pne.project.tsp.utils.FileReader;
+import pne.project.tsp.view.MainView;
 import ps.project.tsp.vns.SolutionVNS;
 
 public class Test {
@@ -21,6 +23,6 @@ public class Test {
 		System.out.println("sol finale = " + sol.getPathChosen());
 		System.out.println("cout = " + sol.getPathCost());
 		
-		//MainControler c = new MainControler(new MainView("Problème du voyageur de commerce", 1000, 600));
+		MainControler c = new MainControler(new MainView("Problème du voyageur de commerce", 1000, 600));
 	}
 }

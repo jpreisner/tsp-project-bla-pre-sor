@@ -52,11 +52,11 @@ public class GraphManager {
 			// Résolution avec la méthode VNS du problème deterministe
 			VNSDeterminist vnsD = new VNSDeterminist(Kmax);
 			vnsD.getListSolutions().add(solutionInitiale);
-			vnsD.vnsAlgorithm(solutionInitiale, tmax);
-			
+			return vnsD.vnsAlgorithm(solutionInitiale, tmax).getPathChosen();
 		}
 		// Stochastique
 		else{
+			System.out.println("STOCHA");
 			double proba_scenario = 1/nbScenario;
 			ArrayList<Integer> fusion = new ArrayList<Integer>();
 			
@@ -85,18 +85,24 @@ public class GraphManager {
 			int t=0;
 			// Recherche d'une solution
 			do{
+				System.out.println("Recherche sol + " + t + " nbS = " + nbScenario);
 				for(int i=1; i<=nbScenario; i++){
+					System.out.println("---------------------------------------------------");
+					System.out.println("scenario + " + i);
+					System.out.println("---------------------------------------------------");
+					
 					// Application des pénalités
 					if(t!=0){
 						vnsS.getSolutionScenario(i).calculPenalite(vnsS.getSolutionRef(), 2);
 					}
 					
-					//System.out.println("lambda = " + vnsS.getSolutionScenario(i).getPenaliteLambda()[0][1]);
 					// Appel de VNS
 					sol_scenario = vnsS.vnsAlgorithm(vnsS.getSolutionScenario(i), tmax);
 					
 					// le nouveau chemin et le nouveau cout sont sauvegardé
 					vnsS.setSolutionScenario(i, sol_scenario);
+					
+					
 					
 					// Calcul fonction obj (?!)
 					// UTILISER LES PROBA !
@@ -106,21 +112,25 @@ public class GraphManager {
 				fusion.clear();
 				fusion = fusionSolutionsScenarios(vnsS);
 				
+				System.out.println("---------------------------> fusion = " + fusion);
+				
 				// Mise a jour de la solution de reference (?!)
+				//vnsS.getListSolutions().get(0).setPathChosen(fusion);
 				
 				t++;
-			}while(!allScenarioOntMemesAretesDeter(vnsS.getSolutionRef(), vnsS.getListSolutions()));
-			//}while(!aLesMemesAretesDeter(vnsS.getSolutionRef(), fusion));	// La condition d'arret : si la fusion possede les memes aretes deterministes que la sol de ref
+			} while(!allScenarioOntMemesAretesDeter(vnsS.getSolutionRef(), vnsS.getListSolutions()));
+			
+		 // }while(!aLesMemesAretesDeter(vnsS.getSolutionRef(), fusion));	// La condition d'arret : si la fusion possede les memes aretes deterministes que la sol de ref
+		
 		/**
 		 * PB ici : je sais pas lequel des 2 while mettre
 		 * 	--> est ce que la condition d'arret c'est que la fusion ait les memes aretes det (2eme while)
 		 * --> ou est ce que la condition d'arret ce que tous les scenarios ait les memes aretes det (1er while)
 		 */
 		
+			System.out.println("FIN STOCHA");
+			return fusion;
 		}
-		
-		
-		return null;	// a modifier
 	}
 	
 	private void initAllPenalites(VNSStochastic vnsS) {

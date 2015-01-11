@@ -244,8 +244,7 @@ public class SolutionVNS {
 	}
 
 	public void calculPenalite(SolutionVNS solReference, int beta){
-		int i,j;
-		int n = graph_scenario.getNbNode();
+		int i;
 		
 		/**
 		 * !! Les penalites sappliquent a toutes les aretes deterministes
@@ -257,6 +256,8 @@ public class SolutionVNS {
 		/**
 		// Cette partie --> les penalites s'appliquent a l'ensemble des aretes deterministes du GRAPHE
 		// itération sur lambda et ro
+		int j;
+		int n = graph_scenario.getNbNode();
 		for(i=0; i<n; i++){
 			for(j=0; j<n; j++){
 				// on veut (i,j) deterministe
@@ -273,7 +274,8 @@ public class SolutionVNS {
 		// Cette partie --> les penalites s'appliquent a l'ensemble des aretes deterministes de la SOLUTION
 		// itération sur lambda et de ro
 		int n1, n2;
-		for(i=0; i<solReference.getPathChosen().size()-1; i++){
+		int n = solReference.getPathChosen().size();
+		for(i=0; i<n-1; i++){
 			n1 = solReference.getPathChosen().get(i);
 			n2 = solReference.getPathChosen().get(i+1);
 			// on veut (n1,n2) deterministe
@@ -282,7 +284,7 @@ public class SolutionVNS {
 				penaliteRo[n1][n2] *= beta;
 			}
 		}
-		n1 = solReference.getPathChosen().get(solReference.getPathChosen().size()-1);
+		n1 = solReference.getPathChosen().get(n-1);
 		n2 = solReference.getPathChosen().get(0);
 		if(!graph_scenario.getTabStoch()[n1][n2]){
 			penaliteLambda[n1][n2] = penaliteLambda[n1][n2] + penaliteRo[n1][n2]*(areteDansSolution(pathChosen, n1, n2) - areteDansSolution(solReference.getPathChosen(), n1, n2));

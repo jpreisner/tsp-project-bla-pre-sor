@@ -134,12 +134,25 @@ public class GraphManager {
 			System.out.println("Calcul Cout fusion : "+calculCostFusion(vnsS, fusion));
 			long stopTime = System.nanoTime();
 
-			this.solutionValue = calculCostFusion(vnsS, fusion);
+			this.solutionValue = calculCostGraph(g, fusion);
 			this.resolutionDuration = (int) ((stopTime - startTime) / 1000000000);
 
 			return fusion;
 		}
 	}
+	
+	private double calculCostGraph(Graph g, ArrayList<Integer> listFusion){
+		double result = 0;
+		
+		for (int i = 0; i < listFusion.size()-1; i++) {
+			result+=g.getTabAdja()[listFusion.get(i)][listFusion.get(i+1)];
+		}		
+		result+=g.getTabAdja()[listFusion.get(listFusion.size()-1)][listFusion.get(0)];
+
+		return result;
+		
+	}
+
 	
 	private double calculCostFusion(VNSStochastic vnsS, ArrayList<Integer> listFusion){
 		int nbScenarios = vnsS.getListSolutions().size()-1;

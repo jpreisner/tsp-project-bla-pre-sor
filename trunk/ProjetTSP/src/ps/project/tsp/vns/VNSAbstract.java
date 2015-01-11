@@ -73,6 +73,8 @@ public abstract class VNSAbstract {
 			combinaison.add(new NodeCouple(i, i+1));
 			searchCombinaisonRecursive(i, i+2, n, k-1, combinaison, listCombinaison);
 		}
+		
+		System.out.println("listCombinaison = " + listCombinaison);
 
 		return k_transformation(x, k, listCombinaison);
 	}
@@ -112,6 +114,7 @@ public abstract class VNSAbstract {
 		else{
 			// on ajoute que si on a respecter la condition k-opt (on a k permutation si k=0 ici)
 			if(k==0){
+				//listCombinaison.add(combinaison);
 				listCombinaison.add((ArrayList<NodeCouple>) combinaison.clone());
 			}
 		}

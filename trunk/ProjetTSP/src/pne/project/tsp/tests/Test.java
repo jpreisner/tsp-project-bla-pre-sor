@@ -15,7 +15,7 @@ public class Test {
 	public static void main(String[] args) {
 		System.out.println("TEST");
 		int aleas = 10;
-		int nbScenario = 2;
+		int nbScenario = 3;
 		int Kmax = 4;
 		double tmax = 100;	// on le défini comment?
 		Graph g = FileReader.buildGraphFromXml("data/XML/" + "gr17" + ".xml");

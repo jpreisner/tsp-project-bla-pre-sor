@@ -184,7 +184,7 @@ public class GraphManager {
 		}
 			
 		
-		return tabOccurence[indiceMax][1];
+		return tabOccurence[indiceMax][0];
 	}
 
 	public boolean allScenarioOntMemesAretesDeter(SolutionVNS solReference, ArrayList<SolutionVNS> listSolScenario){

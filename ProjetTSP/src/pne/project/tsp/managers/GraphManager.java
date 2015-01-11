@@ -89,7 +89,7 @@ public class GraphManager {
 				for(int i=1; i<=nbScenario; i++){
 					// Application des pénalités
 					if(t!=0){
-						vnsS.getSolutionScenario(i).appliquePenalite(vnsS.getSolutionRef(), 2);
+						vnsS.getSolutionScenario(i).calculPenalite(vnsS.getSolutionRef(), 2);
 					}
 					
 					// Appel de VNS
@@ -133,10 +133,14 @@ public class GraphManager {
 	 */
 	private ArrayList<Integer> fusionSolutionsScenarios(VNSStochastic vnsS) {
 		ArrayList<Integer> result = new ArrayList<Integer>();
-		for(int i=0;i<vnsS.getListSolutions().get(0).getGraph_scenario().getNbNode();i++){
+		int nbNode = vnsS.getListSolutions().get(0).getGraph_scenario().getNbNode();
+		SolutionVNS solVns;
+		for(int i=0;i<nbNode;i++){
+			
 			/* on s'occupe de l'element i*/
 			ArrayList<Integer> tmp = new ArrayList<Integer>();
-			for (SolutionVNS solVns : vnsS.getListSolutions()) {
+			for(int j=1; j<vnsS.getListSolutions().size(); j++){
+				solVns = vnsS.getSolutionScenario(j);	
 				tmp.add(solVns.getPathChosen().get(i));
 			}
 			result.add(getMaxNode(tmp,result));

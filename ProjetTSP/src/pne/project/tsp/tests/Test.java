@@ -17,7 +17,7 @@ public class Test {
 		int aleas = 100;
 		int nbScenario = 1;
 		int Kmax = 4;
-		Graph g = FileReader.buildGraphFromXml("data/XML/" + "gr17" + ".xml");
+		Graph g = FileReader.buildGraphFromXml("data/XML/" + "brazil58" + ".xml");
 		GraphManager gm = new GraphManager();
 		int k = 5;
 		// Attention : k doit être inférieur à nbNoeud/2

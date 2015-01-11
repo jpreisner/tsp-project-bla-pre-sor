@@ -129,8 +129,33 @@ public class GraphManager {
 		 */
 		
 			System.out.println("FIN STOCHA");
+			System.out.println("Calcul Cout fusion : "+calculCostFusion(vnsS, fusion));
 			return fusion;
 		}
+	}
+	
+	private double calculCostFusion(VNSStochastic vnsS, ArrayList<Integer> listFusion){
+		int nbScenarios = vnsS.getListSolutions().size()-1;
+		double result = 0;
+		ArrayList<SolutionVNS> listSolutions = vnsS.getListSolutions();
+		/* tous les elements de la liste fusionnee*/
+		for (int i = 0; i < listFusion.size()-1; i++) {
+			double sumCostEdge = 0;
+			for (int j = 1; j < listSolutions.size(); j++) {
+				sumCostEdge+= listSolutions.get(j).getGraph_scenario().getTabAdja()[listFusion.get(i)][listFusion.get(i+1)];
+			}
+			System.out.println("cout moyen de l'arête : "+listFusion.get(i)+","+listFusion.get(i+1)+" : "+(sumCostEdge/nbScenarios));
+			result += (sumCostEdge/nbScenarios);
+		}
+		
+		/* dernier element pour faire le cycle*/
+		double sumCostEdge2 = 0;
+		for (int j = 1; j < listSolutions.size(); j++) {
+			sumCostEdge2+= listSolutions.get(j).getGraph_scenario().getTabAdja()[listFusion.get(listFusion.size()-1)][listFusion.get(0)];
+		}
+		result += (sumCostEdge2/nbScenarios);
+		
+		return result;		
 	}
 	
 	private void initAllPenalites(VNSStochastic vnsS) {

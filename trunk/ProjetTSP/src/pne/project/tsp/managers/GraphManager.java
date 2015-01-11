@@ -109,7 +109,7 @@ public class GraphManager {
 				// Fusionner toutes les solutions
 				fusion.getPathChosen().clear();
 				fusion.setPathChosen(fusionSolutionsScenarios(vnsS));
-				fusion.setPathCost(fonctionObjective(fusion));
+				fusion.setPathCost(calculCostFusion(vnsS, fusion.getPathChosen()));
 								
 				// Mise a jour de la solution de reference (?!)
 				vnsS.getListSolutions().get(0).setPathChosen(fusion.getPathChosen());
@@ -150,24 +150,37 @@ public class GraphManager {
 	}
 
 	
-	private double calculCostFusion(VNSStochastic vnsS, ArrayList<Integer> listFusion){
+	public double calculCostFusion(VNSStochastic vnsS, ArrayList<Integer> listFusion){
 		int nbScenarios = vnsS.getListSolutions().size()-1;
 		double result = 0;
+		int n1, n2;
 		ArrayList<SolutionVNS> listSolutions = vnsS.getListSolutions();
 		/* tous les elements de la liste fusionnee*/
 		for (int i = 0; i < listFusion.size()-1; i++) {
 			double sumCostEdge = 0;
 			for (int j = 1; j < listSolutions.size(); j++) {
-				sumCostEdge+= listSolutions.get(j).getGraph_scenario().getTabAdja()[listFusion.get(i)][listFusion.get(i+1)];
+				sumCostEdge += listSolutions.get(j).getPathCost();
+				n1 = listFusion.get(i);
+				n2 = listFusion.get(i+1);
+				// cas ou c'est une arete deterministe
+				if(!listSolutions.get(j).getGraph_scenario().getTabStoch()[n1][n2]){
+					sumCostEdge = sumCostEdge + (listSolutions.get(j).getPenaliteLambda()[n1][n2]+listSolutions.get(j).getPenaliteRo()[n1][n2]/2)*SolutionVNS.areteDansSolution(vnsS.getSolutionRef().getPathChosen(), n1, n2); 
+				}
 			}
-			System.out.println("cout moyen de l'arête : "+listFusion.get(i)+","+listFusion.get(i+1)+" : "+(sumCostEdge/nbScenarios));
+			//System.out.println("cout moyen de l'arête : "+listFusion.get(i)+","+listFusion.get(i+1)+" : "+(sumCostEdge/nbScenarios));
 			result += (sumCostEdge/nbScenarios);
 		}
 		
 		/* dernier element pour faire le cycle*/
 		double sumCostEdge2 = 0;
 		for (int j = 1; j < listSolutions.size(); j++) {
-			sumCostEdge2+= listSolutions.get(j).getGraph_scenario().getTabAdja()[listFusion.get(listFusion.size()-1)][listFusion.get(0)];
+			sumCostEdge2 += listSolutions.get(j).getPathCost();
+			n1 = listFusion.get(listFusion.size()-1);
+			n2 = listFusion.get(0);
+			// cas ou c'est une arete deterministe
+			if(!listSolutions.get(j).getGraph_scenario().getTabStoch()[n1][n2]){
+				sumCostEdge2 = sumCostEdge2 + (listSolutions.get(j).getPenaliteLambda()[n1][n2]+listSolutions.get(j).getPenaliteRo()[n1][n2]/2)*SolutionVNS.areteDansSolution(vnsS.getSolutionRef().getPathChosen(), n1, n2); 
+			}
 		}
 		result += (sumCostEdge2/nbScenarios);
 		

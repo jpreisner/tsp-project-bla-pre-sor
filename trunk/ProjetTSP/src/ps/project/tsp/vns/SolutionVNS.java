@@ -242,7 +242,7 @@ public class SolutionVNS {
 			
 			// cas ou c'est une arete deterministe --> il faut appliquer les penalites
 			if(!graph_scenario.isEdgeStochastic(n1, n2)){
-				cost = cost + graph_scenario.getTabAdja()[n1][n2] + penaliteLambda[n1][n2] + penaliteRo[n1][n2]/2 + penaliteRo[n1][n2]*areteDansSolution(solRef.getPathChosen(), n1, n2); 
+				cost = cost + graph_scenario.getTabAdja()[n1][n2] + penaliteLambda[n1][n2] + penaliteRo[n1][n2]/2 - penaliteRo[n1][n2]*areteDansSolution(solRef.getPathChosen(), n1, n2); 
 			}
 			
 			// cas ou c'est une arete stochastique --> pas de penalite
@@ -369,7 +369,7 @@ public class SolutionVNS {
 		
 	}
 	
-	public int areteDansSolution(ArrayList<Integer> sol, int i, int j){
+	public static int areteDansSolution(ArrayList<Integer> sol, int i, int j){
 		for(int a=0; a<sol.size()-1; a++){
 			if(sol.get(a) == i){
 				if(sol.get(a+1) == j)	return 1;

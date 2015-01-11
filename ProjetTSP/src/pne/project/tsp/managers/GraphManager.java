@@ -66,7 +66,7 @@ public class GraphManager {
 		else{
 			System.out.println("STOCHA");
 			double proba_scenario = 1/nbScenario;
-			ArrayList<Integer> fusion = new ArrayList<Integer>();
+			SolutionVNS fusion = new SolutionVNS(g);
 			
 			// Initialisation des arêtes déterministes
 			initAretesDeterministes(g, aleas);
@@ -93,12 +93,7 @@ public class GraphManager {
 			int t=0;
 			// Recherche d'une solution
 			do{
-				System.out.println("Recherche sol + " + t + " nbS = " + nbScenario);
 				for(int i=1; i<=nbScenario; i++){
-					System.out.println("---------------------------------------------------");
-					System.out.println("scenario + " + i);
-					System.out.println("---------------------------------------------------");
-					
 					// Application des pénalités
 					if(t!=0){
 						vnsS.getSolutionScenario(i).calculPenalite(vnsS.getSolutionRef(), 2);
@@ -109,44 +104,39 @@ public class GraphManager {
 					
 					// le nouveau chemin et le nouveau cout sont sauvegardé
 					vnsS.setSolutionScenario(i, sol_scenario);
-					
-					
-					
-					// Calcul fonction obj (?!)
-					// UTILISER LES PROBA !
 				}
 				
 				// Fusionner toutes les solutions
-				fusion.clear();
-				fusion = fusionSolutionsScenarios(vnsS);
-				
-				System.out.println("---------------------------> fusion = " + fusion);
-				
+				fusion.getPathChosen().clear();
+				fusion.setPathChosen(fusionSolutionsScenarios(vnsS));
+				fusion.setPathCost(fonctionObjective(fusion));
+								
 				// Mise a jour de la solution de reference (?!)
-				//vnsS.getListSolutions().get(0).setPathChosen(fusion);
+				vnsS.getListSolutions().get(0).setPathChosen(fusion.getPathChosen());
 				
 				t++;
 			} while(!allScenarioOntMemesAretesDeter(vnsS.getSolutionRef(), vnsS.getListSolutions()));
-			
-		 // }while(!aLesMemesAretesDeter(vnsS.getSolutionRef(), fusion));	// La condition d'arret : si la fusion possede les memes aretes deterministes que la sol de ref
+			// }while(!aLesMemesAretesDeter(vnsS.getSolutionRef(), fusion));	// La condition d'arret : si la fusion possede les memes aretes deterministes que la sol de ref
 		
-		/**
-		 * PB ici : je sais pas lequel des 2 while mettre
-		 * 	--> est ce que la condition d'arret c'est que la fusion ait les memes aretes det (2eme while)
-		 * --> ou est ce que la condition d'arret ce que tous les scenarios ait les memes aretes det (1er while)
-		 */
-		
-//			System.out.println("FIN STOCHA");
-//			System.out.println("Calcul Cout fusion : "+calculCostFusion(vnsS, fusion));
+			/**
+			 * PB ici : je sais pas lequel des 2 while mettre
+			 * 	--> est ce que la condition d'arret c'est que la fusion ait les memes aretes det (2eme while)
+			 * --> ou est ce que la condition d'arret ce que tous les scenarios ait les memes aretes det (1er while)
+			 */
+
 			long stopTime = System.nanoTime();
 
-			this.solutionValue = calculCostGraph(g, fusion);
+			this.solutionValue = calculCostGraph(g, fusion.getPathChosen());
 			this.resolutionDuration = (int) ((stopTime - startTime) / 1000000000);
-			SolutionVNS solFusion = new SolutionVNS(g, fusion, solutionValue);
-			return solFusion;
+			return fusion;
 		}
 	}
 	
+	private double fonctionObjective(SolutionVNS fusion) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 	private double calculCostGraph(Graph g, ArrayList<Integer> listFusion){
 		double result = 0;
 		

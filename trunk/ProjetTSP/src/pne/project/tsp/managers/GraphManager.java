@@ -126,7 +126,7 @@ public class GraphManager {
 
 			long stopTime = System.nanoTime();
 
-			this.solutionValue = calculCostGraph(g, fusion.getPathChosen());
+			this.solutionValue = calculCostFusion(vnsS, fusion.getPathChosen());
 			this.resolutionDuration = (int) ((stopTime - startTime) / 1000000000);
 			return fusion;
 		}

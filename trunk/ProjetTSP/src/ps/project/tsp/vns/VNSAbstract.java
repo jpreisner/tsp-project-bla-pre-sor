@@ -14,12 +14,12 @@ public abstract class VNSAbstract {
 	}
 
 	public SolutionVNS vnsAlgorithm(SolutionVNS solutionInitiale, double tmax) {
-		double t;
+		double t = System.currentTimeMillis();
+		double t2;
 		SolutionVNS x = solutionInitiale.clone();
 		SolutionVNS y;
 		int k;
-		do {
-			k = 2;
+		k = 2;
 			do {
 			/*	System.out.println("DANS VNS : k=" + k + " et kmax = " + Kmax);
 				System.out.println("-----------------------");
@@ -40,12 +40,10 @@ public abstract class VNSAbstract {
 				else{
 					k++;
 				}				
-				
-			} while (k <= Kmax);
+				t2 = System.currentTimeMillis(); 
 
-			t = System.currentTimeMillis();
-		} while (t <= tmax);
-//		System.out.println("VNS --> solFinale = " + x.getPathChosen());
+			} while (k <= Kmax && t2-t <= tmax);
+
 		return x;
 	}
 

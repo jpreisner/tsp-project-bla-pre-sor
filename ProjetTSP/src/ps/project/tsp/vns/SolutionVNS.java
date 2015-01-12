@@ -120,13 +120,13 @@ public class SolutionVNS {
 		 * Remarque : on souhaite que la solution soit de la forme 1-2-3-4 et non (1,2) (2,3) (3,4) (4,1)
 		 */
 		ArrayList<NodeCouple> result = sortSolution(tmpSolution);
-		System.out.println("result = " + result);
+//		System.out.println("result = " + result);
 
 		ArrayList<Integer> solution = new ArrayList<Integer>();
 		for(NodeCouple nc : result){
 			solution.add(nc.getN1());
 		}
-		System.out.println("solution : "+solution);
+//		System.out.println("solution : "+solution);
 		
 		return solution;
 	}

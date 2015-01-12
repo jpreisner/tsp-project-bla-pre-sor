@@ -163,7 +163,7 @@ public class MainControler {
 					int aleas = mv.getPou_aret_deter().getValue();
 					int nbScenario = 1;
 					int Kmax = g.getNbNode()/2;
-					double tmax = 100;	// on le défini comment?
+					double tmax = 0.1;	// on le défini comment?
 					GraphManager gm = new GraphManager();
 					// Attention : k doit être inférieur à nbNoeud/2
 					SolutionVNS sol = gm.resolutionTSP_vns(g, aleas, nbScenario, Kmax, tmax);

@@ -50,7 +50,7 @@ public class GraphManager {
 			// Enregistrement de de la solution gloutonne
 			solutionInitiale.setPathChosen(solutionInitiale.gloutonAlgorithm());
 			
-			System.out.println("GM --> solInit = " + solutionInitiale.getPathChosen());
+//			System.out.println("GM --> solInit = " + solutionInitiale.getPathChosen());
 			// Résolution avec la méthode VNS du problème deterministe
 			VNSDeterminist vnsD = new VNSDeterminist(Kmax);
 			vnsD.getListSolutions().add(solutionInitiale);

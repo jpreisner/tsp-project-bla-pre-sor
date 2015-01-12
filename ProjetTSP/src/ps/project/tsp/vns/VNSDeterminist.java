@@ -146,8 +146,8 @@ public class VNSDeterminist extends VNSAbstract {
 			 * Si la solution s recherchée est meilleure que la solution initiale x, on renvoie s
 			 */
 			if(s.getPathCost()<x.getPathCost()){
-				System.out.println("Changement ! pour k="+k + " et cout="+s.getPathCost());
-				System.out.println("------combinaison choisie = " + combinaison);
+			/*	System.out.println("Changement ! pour k="+k + " et cout="+s.getPathCost());
+				System.out.println("------combinaison choisie = " + combinaison);*/
 				return s;
 			}
 			

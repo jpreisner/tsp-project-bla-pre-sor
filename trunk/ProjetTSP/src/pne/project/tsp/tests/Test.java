@@ -9,12 +9,12 @@ import ps.project.tsp.vns.SolutionVNS;
 
 public class Test {
 	public static void main(String[] args) {
-		System.out.println("TEST");
-		int aleas = 10;
+		//System.out.println("TEST");
+		int aleas = 100;
 		int nbScenario = 3;
 		int Kmax = 4;
 		double tmax = 100;	// on le défini comment?
-		Graph g = FileReader.buildGraphFromXml("data/XML/" + "gr17" + ".xml");
+		Graph g = FileReader.buildGraphFromXml("data/XML/" + "a280" + ".xml");
 		GraphManager gm = new GraphManager();
 		
 		// Attention : k doit être inférieur à nbNoeud/2
@@ -22,7 +22,8 @@ public class Test {
 		
 		System.out.println("sol finale = " + sol.getPathChosen());
 		System.out.println("cout = " + sol.getPathCost());
+		System.out.println("temps = "+ gm.getResolutionDuration());
 		
-		MainControler c = new MainControler(new MainView("Problème du voyageur de commerce", 1000, 600));
+//		MainControler c = new MainControler(new MainView("Problème du voyageur de commerce", 1000, 600));
 	}
 }

@@ -301,14 +301,6 @@ public class SolutionVNS {
 	public void calculPenalite(SolutionVNS solReference, int beta){
 		int i;
 		
-		/**
-		 * !! Les penalites sappliquent a toutes les aretes deterministes
-		 * 		--> c peut etre que pour les aretes deterministes de la solution
-		 * 
-		 * Laquelle de ces penalites doit on appliquer?
-		 */
-		
-		/**
 		// Cette partie --> les penalites s'appliquent a l'ensemble des aretes deterministes du GRAPHE
 		// itération sur lambda et ro
 		int j;
@@ -323,9 +315,7 @@ public class SolutionVNS {
 			}
 		}
 		
-		*/
-		
-		
+		/**
 		// Cette partie --> les penalites s'appliquent a l'ensemble des aretes deterministes de la SOLUTION
 		// itération sur lambda et de ro
 		int n1, n2;
@@ -345,6 +335,8 @@ public class SolutionVNS {
 			penaliteLambda[n1][n2] = penaliteLambda[n1][n2] + penaliteRo[n1][n2]*(areteDansSolution(pathChosen, n1, n2) - areteDansSolution(solReference.getPathChosen(), n1, n2));
 			penaliteRo[n1][n2] *= beta;
 		}
+		
+		*/
 	}
 	
 	public ArrayList<Integer> getPathChosen() {
@@ -370,6 +362,8 @@ public class SolutionVNS {
 	}
 	
 	public static int areteDansSolution(ArrayList<Integer> sol, int i, int j){
+		if(sol.size() == 0)	return 0;
+		//System.out.println("Sol = " + sol);
 		for(int a=0; a<sol.size()-1; a++){
 			if(sol.get(a) == i){
 				if(sol.get(a+1) == j)	return 1;

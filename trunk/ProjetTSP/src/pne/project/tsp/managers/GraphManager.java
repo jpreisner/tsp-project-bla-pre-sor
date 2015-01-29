@@ -8,6 +8,8 @@ import ilog.cplex.IloCplex.DoubleParam;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 import pne.project.tsp.beans.Graph;
 import pne.project.tsp.beans.NodeCouple;
@@ -64,9 +66,11 @@ public class GraphManager {
 		}
 		// Stochastique
 		else{
-			System.out.println("STOCHA");
+			ArrayList<Integer> listPourcentage = new ArrayList<Integer>();
+			boolean continuer = true;
 			double proba_scenario = 1/nbScenario;
 			SolutionVNS fusion = new SolutionVNS(g);
+			int pourcentage;
 			
 			// Initialisation des arêtes déterministes
 			initAretesDeterministes(g, aleas);
@@ -74,14 +78,10 @@ public class GraphManager {
 			// Calcul de l'écart type des arêtes stochastiques
 			double ecartType = Stats.ecartType(g);
 			
-			// Solution de reference (glouton)
-			SolutionVNS solutionRef = new SolutionVNS(g);	
-			solutionRef.setPathChosen(solutionRef.gloutonAlgorithm());
+			VNSStochastic vnsS = new VNSStochastic(Kmax);	
 			
-			System.out.println("GM --> solInit = " + solutionRef.getPathChosen());
-			
-			VNSStochastic vnsS = new VNSStochastic(Kmax);
-			vnsS.getListSolutions().add(solutionRef);	
+			// Solution de reference qui va nous servir pour plus tard
+			vnsS.getListSolutions().add(new SolutionVNS(g));
 			
 			// Génération de tous les scénarios + glouton sur chaque scénario
 			generationAllScenarios(vnsS, g, nbScenario, ecartType);
@@ -90,14 +90,32 @@ public class GraphManager {
 			initAllPenalites(vnsS);
 			
 			SolutionVNS sol_scenario;
-			int t=0;
+			
+			/** DEBUT Resolution des K TSPs **/
+			
+			for(int i=1; i<=nbScenario; i++){
+				// Application des pénalités
+				vnsS.getSolutionScenario(i).calculPenalite(vnsS.getSolutionRef(), 2);
+				
+				// Appel de VNS
+				sol_scenario = vnsS.vnsAlgorithm(vnsS.getSolutionScenario(i), tmax);
+				
+				// le nouveau chemin et le nouveau cout sont sauvegardé
+				vnsS.setSolutionScenario(i, sol_scenario);
+			}
+			/** FIN Resolution des K TSPs **/
+			
+			// On construit la solution de reference
+			vnsS.getListSolutions().get(0).getPathChosen().clear();
+			vnsS.getListSolutions().get(0).setPathChosen(fusionSolutionsScenarios(vnsS));
+			vnsS.getListSolutions().get(0).setPathCost(calculCostFusion(vnsS, vnsS.getListSolutions().get(0).getPathChosen()));
+			
+			
 			// Recherche d'une solution
 			do{
 				for(int i=1; i<=nbScenario; i++){
 					// Application des pénalités
-					if(t!=0){
-						vnsS.getSolutionScenario(i).calculPenalite(vnsS.getSolutionRef(), 2);
-					}
+					vnsS.getSolutionScenario(i).calculPenalite(vnsS.getSolutionRef(), 2);
 					
 					// Appel de VNS
 					sol_scenario = vnsS.vnsAlgorithm(vnsS.getSolutionScenario(i), tmax);
@@ -106,30 +124,44 @@ public class GraphManager {
 					vnsS.setSolutionScenario(i, sol_scenario);
 				}
 				
-				// Fusionner toutes les solutions
+				// Fusionner toutes les solutions !! voir utiliser glouton?
 				fusion.getPathChosen().clear();
 				fusion.setPathChosen(fusionSolutionsScenarios(vnsS));
 				fusion.setPathCost(calculCostFusion(vnsS, fusion.getPathChosen()));
-								
-				// Mise a jour de la solution de reference (?!)
-				vnsS.getListSolutions().get(0).setPathChosen(fusion.getPathChosen());
-				
-				t++;
-			} while(!allScenarioOntMemesAretesDeter(vnsS.getSolutionRef(), vnsS.getListSolutions()));
-			// }while(!aLesMemesAretesDeter(vnsS.getSolutionRef(), fusion));	// La condition d'arret : si la fusion possede les memes aretes deterministes que la sol de ref
-		
-			/**
-			 * PB ici : je sais pas lequel des 2 while mettre
-			 * 	--> est ce que la condition d'arret c'est que la fusion ait les memes aretes det (2eme while)
-			 * --> ou est ce que la condition d'arret ce que tous les scenarios ait les memes aretes det (1er while)
-			 */
+					
+				// condition d'arret verifier
+				pourcentage = allScenarioOntMemesAretesDeter(vnsS.getSolutionRef(), vnsS.getListSolutions());
+				listPourcentage.add(pourcentage);
+				if(listPourcentage.size()>10){
+					listPourcentage.remove(listPourcentage.get(0));
+					if(memeValeur(listPourcentage)){
+						continuer = false;
+					}
+				}
+				if(pourcentage == 100){
+					continuer = false;
+				}
+				else{
+					// Mise a jour de la solution de reference
+					vnsS.getListSolutions().get(0).setPathChosen(fusion.getPathChosen());		
+				}
+			
+			} while(continuer);
 
 			long stopTime = System.nanoTime();
-
 			this.solutionValue = calculCostFusion(vnsS, fusion.getPathChosen());
 			this.resolutionDuration = (int) ((stopTime - startTime) / 1000000000);
 			return fusion;
 		}
+	}
+	
+	public boolean memeValeur(ArrayList<Integer> list){
+		for(int i=0; i<list.size()-1; i++){
+			if(list.get(i) != list.get(i+1)){
+				return false;
+			}
+		}
+		return true;
 	}
 
 	public double calculCostGraph(Graph g, ArrayList<Integer> listFusion){
@@ -153,6 +185,7 @@ public class GraphManager {
 		/* tous les elements de la liste fusionnee*/
 		for (int i = 0; i < listFusion.size()-1; i++) {
 			double sumCostEdge = 0;
+			// on somme l'arete (i,j) de chaque solution et on divise par le nb de scenarios
 			for (int j = 1; j < listSolutions.size(); j++) {
 				sumCostEdge += listSolutions.get(j).getPathCost();
 				n1 = listFusion.get(i);
@@ -236,25 +269,72 @@ public class GraphManager {
 		return tabOccurence[indiceMax][0];
 	}
 
-	public boolean allScenarioOntMemesAretesDeter(SolutionVNS solReference, ArrayList<SolutionVNS> listSolScenario){
-		SolutionVNS scenario;
-		for(int i=1; i<listSolScenario.size(); i++){
-			scenario = listSolScenario.get(i);
-			if(!aLesMemesAretesDeter(solReference, scenario.getPathChosen())){
-				return false;
+	/** Renvoie le % d'aretes deterministes en communes dans tous les scenarios
+	 * 
+	 * @param solReference
+	 * @param listSolScenario
+	 * @return
+	 */
+	public int allScenarioOntMemesAretesDeter(SolutionVNS solReference, ArrayList<SolutionVNS> listSolScenario){
+		/**
+		 * Le principe : on ajoute dans une liste toutes les aretes deterministes
+		 * Les doublons ne sont pas accepter
+		 * pourcentage = nbAretesDeterministes/taille de la liste
+		 */
+		
+		int pourcentage = 0;
+		int n;
+		int nbAretesDeter = 0; // par defaut
+		int t=0;
+		Set<NodeCouple> listAretesDeterministesTotal = new HashSet<NodeCouple>();
+		int cpt=1;
+		SolutionVNS sol;
+		for(int s=1; s<listSolScenario.size(); s++){
+			sol = listSolScenario.get(s);
+			//System.out.println("sol(" + cpt + ",taille=" + sol.getPathChosen().size() + ")= " + sol.getPathChosen());
+			cpt++;
+			n = sol.getPathChosen().size();
+			int n1, n2;
+			for(int i=0; i<n-1; i++){
+				n1 = sol.getPathChosen().get(i);
+				n2 = sol.getPathChosen().get(i+1);
+				if(!sol.getGraph_scenario().getTabStoch()[n1][n2]){
+					System.out.println("aretes deter pour cpt=" + (cpt-1));
+					listAretesDeterministesTotal.add(new NodeCouple(n1, n2));
+				}
 			}
+			System.out.println("n=" + n);
+			n1 = sol.getPathChosen().get(n-1);
+			n2 = sol.getPathChosen().get(0);
+			if(!sol.getGraph_scenario().getTabStoch()[n1][n2]){
+				listAretesDeterministesTotal.add(new NodeCouple(n1, n2));
+			}
+			if(t==0){
+				nbAretesDeter = listAretesDeterministesTotal.size();	// FAUX
+			}
+			t=1;
+			
 		}
-		return true;
+		System.out.println("hashset=" + listAretesDeterministesTotal);
+		System.out.println("size=" + listAretesDeterministesTotal.size());
+		if(listAretesDeterministesTotal.size() == 0){
+			pourcentage = 100;
+		}
+		else{
+			pourcentage = nbAretesDeter/listAretesDeterministesTotal.size();	
+		}
+		return pourcentage;	// changer		
 	}
-	public boolean aLesMemesAretesDeter(SolutionVNS solReference, ArrayList<Integer> solFusion){
-		ArrayList<NodeCouple> listSolRef = listAretesDeter(solReference.getPathChosen(), solReference.getGraph_scenario());
-		ArrayList<NodeCouple> listSolFus = listAretesDeter(solFusion, solReference.getGraph_scenario());
-		
-		Collections.sort(listSolRef);
-		Collections.sort(listSolFus);
-		
-		return listSolRef.equals(listSolFus);
-	}
+
+//	public boolean aLesMemesAretesDeter(SolutionVNS solReference, ArrayList<Integer> solFusion){
+//		ArrayList<NodeCouple> listSolRef = listAretesDeter(solReference.getPathChosen(), solReference.getGraph_scenario());
+//		ArrayList<NodeCouple> listSolFus = listAretesDeter(solFusion, solReference.getGraph_scenario());
+//		
+//		Collections.sort(listSolRef);
+//		Collections.sort(listSolFus);
+//		
+//		return listSolRef.equals(listSolFus);
+//	}
 	
 	public ArrayList<NodeCouple> listAretesDeter(ArrayList<Integer> solution, Graph g){
 		ArrayList<NodeCouple> list = new ArrayList<NodeCouple>();
@@ -272,6 +352,7 @@ public class GraphManager {
 		if(!g.getTabStoch()[n1][n2]){
 			list.add(new NodeCouple(n1, n2));
 		}
+		Collections.sort(list);
 		return list;
 	}
 	
@@ -347,6 +428,7 @@ public class GraphManager {
 			g.getTabStoch()[listEdge.get(edgeRandom).getN1()][listEdge.get(edgeRandom).getN2()] = false;
 			listEdge.remove(edgeRandom);
 		}
+		//System.out.println("listEdgeDansInitAretesDeter = " + listEdge);
 	}
 	
 	/** Méthode utile pour le tirage au sort des arêtes déterministes

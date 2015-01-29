@@ -10,11 +10,11 @@ import ps.project.tsp.vns.SolutionVNS;
 public class Test {
 	public static void main(String[] args) {
 		//System.out.println("TEST");
-		int aleas = 100;
-		int nbScenario = 3;
+		int aleas = 10;
+		int nbScenario = 10;
 		int Kmax = 4;
-		double tmax = 100;	// on le défini comment?
-		Graph g = FileReader.buildGraphFromXml("data/XML/" + "a280" + ".xml");
+		double tmax = 30;	// on le défini comment?
+		Graph g = FileReader.buildGraphFromXml("data/XML/" + "brazil58" + ".xml");
 		GraphManager gm = new GraphManager();
 		
 		// Attention : k doit être inférieur à nbNoeud/2

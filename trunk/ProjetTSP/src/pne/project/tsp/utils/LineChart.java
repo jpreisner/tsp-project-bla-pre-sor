@@ -14,7 +14,7 @@ public class LineChart {
 	public static void main(String[] args) {
 		ArrayList<Double> lambda = new ArrayList<Double>();
 		ArrayList<Double> ro = new ArrayList<Double>();
-		int n = 100;
+		int n = 1;
 		for (int i = 0; i < n; i++) {
 			lambda.add((double) (i*2));
 			ro.add((double) i);
@@ -24,9 +24,9 @@ public class LineChart {
 	}
 
 	public static void makeFirstChart(ArrayList<Double> lambdas, ArrayList<Double> ro, int nbIterations) {
-
 		double[][] model = new double[2][nbIterations];//{ { 0, 100, 20000 }, { 0, 1000, 20000 } }; // Create data array
-		
+
+		System.out.println("############# "+nbIterations);
 
 		for(int i=0;i<nbIterations;i++){
 			model[0][i] = lambdas.get(i);

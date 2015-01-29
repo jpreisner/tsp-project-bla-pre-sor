@@ -163,7 +163,7 @@ public class GraphManager {
 			} while(continuer);
 
 			/* IMAGE des pénalités */
-			LineChart.makeFirstChart(lambdasIteration, roIteration, nbIterations);
+//			LineChart.makeFirstChart(lambdasIteration, roIteration, nbIterations);
 			
 			long stopTime = System.nanoTime();
 			this.solutionValue = calculCostFusion(vnsS, fusion.getPathChosen());

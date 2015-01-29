@@ -13,6 +13,7 @@ import java.util.Set;
 
 import pne.project.tsp.beans.Graph;
 import pne.project.tsp.beans.NodeCouple;
+import pne.project.tsp.utils.LineChart;
 import pne.project.tsp.utils.Stats;
 import ps.project.tsp.vns.SolutionVNS;
 import ps.project.tsp.vns.VNSDeterminist;
@@ -111,8 +112,11 @@ public class GraphManager {
 			vnsS.getListSolutions().get(0).setPathCost(calculCostFusion(vnsS, vnsS.getListSolutions().get(0).getPathChosen()));
 			
 			
+			ArrayList<Double> lambdasIteration = new ArrayList<Double>();
+			ArrayList<Double> roIteration = new ArrayList<Double>();
+			int nbIterations = 0;
 			// Recherche d'une solution
-			do{
+			do{				
 				for(int i=1; i<=nbScenario; i++){
 					// Application des pénalités
 					vnsS.getSolutionScenario(i).calculPenalite(vnsS.getSolutionRef(), 2);
@@ -122,7 +126,17 @@ public class GraphManager {
 					
 					// le nouveau chemin et le nouveau cout sont sauvegardé
 					vnsS.setSolutionScenario(i, sol_scenario);
+					
+					/*recup lambda et ro pour graphe TODO valeurs arête stochastiques */
+					NodeCouple nc = getAreteDeterministe(g);
+					lambdasIteration.add(vnsS.getSolutionScenario(1).getPenaliteLambda()[nc.getN1()][nc.getN2()]);
+					roIteration.add(vnsS.getSolutionScenario(1).getPenaliteRo()[nc.getN1()][nc.getN2()]);
+					nbIterations++;
+
 				}
+				
+				
+
 				
 				// Fusionner toutes les solutions !! voir utiliser glouton?
 				fusion.getPathChosen().clear();
@@ -148,6 +162,9 @@ public class GraphManager {
 			
 			} while(continuer);
 
+			/* IMAGE des pénalités */
+			LineChart.makeFirstChart(lambdasIteration, roIteration, nbIterations);
+			
 			long stopTime = System.nanoTime();
 			this.solutionValue = calculCostFusion(vnsS, fusion.getPathChosen());
 			this.resolutionDuration = (int) ((stopTime - startTime) / 1000000000);
@@ -155,6 +172,23 @@ public class GraphManager {
 		}
 	}
 	
+	/**
+	 * 
+	 * @param graph
+	 * @return 0,0 par defaut
+	 */
+	private NodeCouple getAreteDeterministe(Graph g) {
+		for(int i=0;i<g.getNbNode();i++){
+			for(int j=0;j<g.getNbNode();j++){
+				if(!g.getTabStoch()[i][j]){
+					return new NodeCouple(i, j);
+				}
+
+			}
+		}
+		return new NodeCouple(0, 0);
+	}
+
 	public boolean memeValeur(ArrayList<Integer> list){
 		for(int i=0; i<list.size()-1; i++){
 			if(list.get(i) != list.get(i+1)){
@@ -299,7 +333,7 @@ public class GraphManager {
 				n1 = sol.getPathChosen().get(i);
 				n2 = sol.getPathChosen().get(i+1);
 				if(!sol.getGraph_scenario().getTabStoch()[n1][n2]){
-					System.out.println("aretes deter pour cpt=" + (cpt-1));
+//					System.out.println("aretes deter pour cpt=" + (cpt-1));
 					listAretesDeterministesTotal.add(new NodeCouple(n1, n2));
 				}
 			}
@@ -315,8 +349,8 @@ public class GraphManager {
 			t=1;
 			
 		}
-		System.out.println("hashset=" + listAretesDeterministesTotal);
-		System.out.println("size=" + listAretesDeterministesTotal.size());
+//		System.out.println("hashset=" + listAretesDeterministesTotal);
+//		System.out.println("size=" + listAretesDeterministesTotal.size());
 		if(listAretesDeterministesTotal.size() == 0){
 			pourcentage = 100;
 		}

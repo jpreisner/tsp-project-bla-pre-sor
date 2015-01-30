@@ -338,7 +338,7 @@ public class GraphManager {
 					listAretesDeterministesTotal.add(new NodeCouple(n1, n2));
 				}
 			}
-			System.out.println("n=" + n);
+
 			n1 = sol.getPathChosen().get(n-1);
 			n2 = sol.getPathChosen().get(0);
 			if(!sol.getGraph_scenario().getTabStoch()[n1][n2]){

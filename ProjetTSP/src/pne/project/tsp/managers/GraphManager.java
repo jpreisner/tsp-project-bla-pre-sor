@@ -117,6 +117,7 @@ public class GraphManager {
 			int nbIterations = 0;
 			// Recherche d'une solution
 			do{				
+				
 				for(int i=1; i<=nbScenario; i++){
 					// Application des pénalités
 					vnsS.getSolutionScenario(i).calculPenalite(vnsS.getSolutionRef(), 2);

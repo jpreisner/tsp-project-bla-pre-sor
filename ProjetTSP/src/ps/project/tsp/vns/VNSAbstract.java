@@ -21,15 +21,7 @@ public abstract class VNSAbstract {
 		int k;
 		k = 2;
 			do {
-			/*	System.out.println("DANS VNS : k=" + k + " et kmax = " + Kmax);
-				System.out.println("-----------------------");
-				System.out.println("Pour k=" + k);
-				System.out.println("---> x = " + x.getPathChosen());
-				System.out.println("---> cout = " + x.getPathCost());
-				System.out.println("-----------------------");
-			*/	
 				// on cherche des solutions differentes (et meilleure si possible) de x
-				//System.out.println("lambda = " + x.getPenaliteLambda()[0][1]);
 				y = findBetterSolution(x, k);
 				
 				// Changement de voisinage
